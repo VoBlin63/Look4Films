@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         layoutManagerFilms = new LinearLayoutManager(this);
-        adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList());
+        adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList(this));
         recyclerFilms.setHasFixedSize(true);
         recyclerFilms.setLayoutManager(layoutManagerFilms);
         recyclerFilms.setAdapter(adapterRecyclerFilms);

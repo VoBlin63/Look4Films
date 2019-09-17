@@ -1,15 +1,19 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
-    private String[] mDataset;
+    private FilmInApp[] films;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -17,40 +21,60 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     public static class RecyclerFilmsHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView name;
-        public RecyclerFilmsHolder(ConstraintLayout row) {
+        public ImageView picture;
+        public Button detailsButton;
+        RecyclerFilmsHolder(ConstraintLayout row) {
             super(row);
-            name = row.findViewById(R.id.recyclerFilmsName);
+            picture = row.findViewById(R.id.picture);
+            name = row.findViewById(R.id.name);
         }
 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerFilmsAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public RecyclerFilmsAdapter(FilmInApp[] dataset) {
+        films = dataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     public RecyclerFilmsHolder onCreateViewHolder(ViewGroup parent,
                                                   int viewType) {
-        ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+        ConstraintLayout filmRow = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_films_layout, parent, false);
-        //...тут onClick вешаем и тд
-        return new RecyclerFilmsHolder(v);
+        RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
+        filmRow.getViewById(R.id.detailsButton).setOnClickListener(view -> doClick(res.getAdapterPosition(), filmRow));
+        Log.d("MMS","res.isSelected = " );
+        return res;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.name.setText(mDataset[position]);
-
+        holder.itemView.setSelected(films[position].getSelected());
+        holder.picture.setImageDrawable(films[position].getPicture());
+        holder.name.setText(films[position].getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return films.length;
+    }
+
+    private void doClick(int position, ConstraintLayout layout) {
+        if (position != RecyclerView.NO_POSITION) {
+            if (films[position].getSelected())
+                return;
+            for (int i = 0; i < films.length; i++) {
+                if (films[i].getSelected()) {
+                    films[i].setSelected(false);
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+            films[position].setSelected(true);
+            notifyItemChanged(position);
+        }
     }
 }
