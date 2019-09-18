@@ -1,6 +1,8 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
-import android.util.Log;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,7 +12,11 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.activities.DetailsActivity;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+
+import static ru.buryachenko.hw_look4films.constants.Constants.FILM_PARAMETER;
+import static ru.buryachenko.hw_look4films.constants.Constants.REQUEST_DETAILS;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
     private FilmInApp[] films;
@@ -23,6 +29,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         public TextView name;
         public ImageView picture;
         public Button detailsButton;
+
         RecyclerFilmsHolder(ConstraintLayout row) {
             super(row);
             picture = row.findViewById(R.id.picture);
@@ -43,38 +50,45 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         ConstraintLayout filmRow = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_films_layout, parent, false);
         RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
-        filmRow.getViewById(R.id.detailsButton).setOnClickListener(view -> doClick(res.getAdapterPosition(), filmRow));
-        Log.d("MMS","res.isSelected = " );
+        Button detailsButton = (Button) filmRow.getViewById(R.id.detailsButton);
+        detailsButton.setOnClickListener(view -> doClick(res.getAdapterPosition(), detailsButton.getContext()));
         return res;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
         holder.itemView.setSelected(films[position].getSelected());
-        holder.picture.setImageDrawable(films[position].getPicture());
+        holder.picture.setImageDrawable(films[position].getPicture(holder.picture.getContext()));
         holder.name.setText(films[position].getName());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return films.length;
     }
 
-    private void doClick(int position, ConstraintLayout layout) {
+    private void doClick(int position, Context context) {
         if (position != RecyclerView.NO_POSITION) {
-            if (films[position].getSelected())
-                return;
-            for (int i = 0; i < films.length; i++) {
-                if (films[i].getSelected()) {
-                    films[i].setSelected(false);
-                    notifyItemChanged(i);
-                    break;
+            if (!films[position].getSelected()) {
+                //отменим предыдущий выбор
+                for (int i = 0; i < films.length; i++) {
+                    if (films[i].getSelected()) {
+                        films[i].setSelected(false);
+                        notifyItemChanged(i);
+                        break;
+                    }
                 }
             }
             films[position].setSelected(true);
+            callDetailsActivity(context, films[position]);
             notifyItemChanged(position);
         }
     }
+
+    private void callDetailsActivity(Context context, FilmInApp film) {
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra(FILM_PARAMETER, film);
+        ((Activity) context).startActivityForResult(intent, REQUEST_DETAILS);
+    }
+
 }

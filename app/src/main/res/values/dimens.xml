@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="toolbarHeight">39sp</dimen>
-    <dimen name="recyclerFilmsHeight">139sp</dimen>
+    <dimen name="toolbarHeight">39dp</dimen>
+    <dimen name="recyclerFilmsHeight">139dp</dimen>
+    <dimen name="imageSize">128dp</dimen>
 </resources>

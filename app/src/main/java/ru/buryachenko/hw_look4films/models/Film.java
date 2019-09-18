@@ -1,6 +1,8 @@
 package ru.buryachenko.hw_look4films.models;
 
-public class Film {
+import java.io.Serializable;
+
+public class Film implements Serializable {
     private String name;
 
     public Film(String name) {
