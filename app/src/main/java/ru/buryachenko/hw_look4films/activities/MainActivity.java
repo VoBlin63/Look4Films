@@ -20,6 +20,7 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
-        Log.d("MMS","Recieved " + film.getName() +" is " + film.getLiked());
         viewModel.put(film);
+        Log.d(LOGTAG,"Для фильма '" + film.getName() +"' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
     }
 
     @Override
