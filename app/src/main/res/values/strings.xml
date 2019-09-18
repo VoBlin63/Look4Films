@@ -3,4 +3,5 @@
     <string name="details_button_name">Детали</string>
     <string name="detailsOkButton">Ok</string>
     <string name="shareTitle">Пригласить друга</string>
+    <string name="likedCheckBox">Нравится</string>
 </resources>

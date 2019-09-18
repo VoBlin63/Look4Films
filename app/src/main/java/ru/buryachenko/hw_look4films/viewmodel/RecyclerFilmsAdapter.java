@@ -9,21 +9,28 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.activities.DetailsActivity;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
-import static ru.buryachenko.hw_look4films.constants.Constants.FILM_PARAMETER;
-import static ru.buryachenko.hw_look4films.constants.Constants.REQUEST_DETAILS;
+import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
+import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
-    private FilmInApp[] films;
+    private List<FilmInApp> films;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    public List<FilmInApp> getData() {
+        return films;
+    }
+
+    public void setData(List<FilmInApp> newFilms) {
+        films = newFilms;
+    }
+
     public static class RecyclerFilmsHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView name;
@@ -39,7 +46,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerFilmsAdapter(FilmInApp[] dataset) {
+    public RecyclerFilmsAdapter(List<FilmInApp> dataset) {
         films = dataset;
     }
 
@@ -57,30 +64,30 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
 
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
-        holder.itemView.setSelected(films[position].getSelected());
-        holder.picture.setImageDrawable(films[position].getPicture(holder.picture.getContext()));
-        holder.name.setText(films[position].getName());
+        holder.itemView.setSelected(films.get(position).getSelected());
+        holder.picture.setImageDrawable(films.get(position).getPicture(holder.picture.getContext()));
+        holder.name.setText(films.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return films.length;
+        return films.size();
     }
 
     private void doClick(int position, Context context) {
         if (position != RecyclerView.NO_POSITION) {
-            if (!films[position].getSelected()) {
+            if (!films.get(position).getSelected()) {
                 //отменим предыдущий выбор
-                for (int i = 0; i < films.length; i++) {
-                    if (films[i].getSelected()) {
-                        films[i].setSelected(false);
+                for (int i = 0; i < films.size(); i++) {
+                    if (films.get(i).getSelected()) {
+                        films.get(i).setSelected(false);
                         notifyItemChanged(i);
                         break;
                     }
                 }
             }
-            films[position].setSelected(true);
-            callDetailsActivity(context, films[position]);
+            films.get(position).setSelected(true);
+            callDetailsActivity(context, films.get(position));
             notifyItemChanged(position);
         }
     }

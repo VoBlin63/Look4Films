@@ -3,18 +3,23 @@ package ru.buryachenko.hw_look4films.viewmodel;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 public class FilmsViewModel extends ViewModel {
-//    private FilmInApp[] films;
+    private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
     private Map<Integer, FilmInApp> films;
     @SuppressLint("UseSparseArrays")
-    public FilmInApp[] getList(Context context) {
+    public List<FilmInApp> getList(Context context) {
         if (films == null) {
             films = new HashMap<>();
             //здесь фильмы будут откуда-то подгружаться
@@ -32,11 +37,12 @@ public class FilmsViewModel extends ViewModel {
                 films.put(filmInApp.getFilmId(), filmInApp);
             }
         }
-        return films.values().toArray(new FilmInApp[0]);
+        return new ArrayList(films.values());
     }
 
     public void put(FilmInApp film) {
         films.put(film.getFilmId(),film);
+        changedFilm.setValue(film);
     }
 
     public String getFilmToShare() {
@@ -48,5 +54,9 @@ public class FilmsViewModel extends ViewModel {
             }
         }
         return res;
+    }
+
+    public LiveData<FilmInApp> getChangedFilm() {
+        return changedFilm;
     }
 }

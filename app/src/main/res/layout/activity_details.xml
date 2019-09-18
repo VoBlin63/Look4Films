@@ -5,28 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DetailsActivity">
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/detailsOkButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <CheckBox
+        android:id="@+id/liked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/likedCheckBox"
+        app:layout_constraintBottom_toTopOf="@id/details"
+        app:layout_constraintStart_toEndOf="@id/picture">
+
+    </CheckBox>
+
     <ImageView
         android:id="@+id/picture"
         android:layout_width="@dimen/imageSize"
         android:layout_height="@dimen/imageSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </ImageView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/picture"
-        app:layout_constraintTop_toBottomOf="@id/picture">
-    </TextView>
-    <Button
-        android:id="@+id/done"
-        android:text="@string/detailsOkButton"
+        app:layout_constraintTop_toBottomOf="@id/picture" />
+
+    <TextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
-    </Button>
+
+    </EditText>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

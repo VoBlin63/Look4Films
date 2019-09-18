@@ -2,21 +2,25 @@ package ru.buryachenko.hw_look4films.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.utils.FilmsDiffUtilCallback;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 
-import static ru.buryachenko.hw_look4films.constants.Constants.FILM_PARAMETER;
-import static ru.buryachenko.hw_look4films.constants.Constants.REQUEST_DETAILS;
+import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
+import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerFilms.setHasFixedSize(true);
         recyclerFilms.setLayoutManager(layoutManagerFilms);
         recyclerFilms.setAdapter(adapterRecyclerFilms);
+
+        LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
+        changedFilm.observe(this, filmInApp -> {
+            FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(((RecyclerFilmsAdapter)adapterRecyclerFilms).getData(), viewModel.getList(this));
+            DiffUtil.DiffResult filmsDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback);
+            ((RecyclerFilmsAdapter)adapterRecyclerFilms).setData(viewModel.getList(this));
+            filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
+        });
     }
 
     @Override
@@ -50,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
+        Log.d("MMS","Recieved " + film.getName() +" is " + film.getLiked());
         viewModel.put(film);
     }
 
