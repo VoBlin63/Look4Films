@@ -32,25 +32,23 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     }
 
     public static class RecyclerFilmsHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         public TextView name;
         public ImageView picture;
-        public Button detailsButton;
+        public ImageView liked;
+        //public TextView details;
 
         RecyclerFilmsHolder(ConstraintLayout row) {
             super(row);
             picture = row.findViewById(R.id.picture);
             name = row.findViewById(R.id.name);
+            liked = row.findViewById(R.id.likedRow);
         }
-
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public RecyclerFilmsAdapter(List<FilmInApp> dataset) {
         films = dataset;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public RecyclerFilmsHolder onCreateViewHolder(ViewGroup parent,
                                                   int viewType) {
@@ -67,6 +65,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         holder.itemView.setSelected(films.get(position).getSelected());
         holder.picture.setImageDrawable(films.get(position).getPicture(holder.picture.getContext()));
         holder.name.setText(films.get(position).getName());
+        holder.liked.setImageResource(films.get(position).getLiked() ? R.drawable.liked : R.drawable.notliked);
     }
 
     @Override
