@@ -13,6 +13,7 @@ public class FilmInApp extends Film implements Serializable {
     private int pictureResource;
     private Boolean isSelected;
     private int filmId;
+
     public FilmInApp(String name, int pictureResource, String details, int filmId) {
         super(name);
         this.details = details;
@@ -64,7 +65,8 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public String getLinkToShare() {
-        return getName() + " " + (getLiked()?"*****":"*");
+        //потом здесь будет link
+        return getName() + " " + (getLiked() ? "***" : "*");
     }
 
 }

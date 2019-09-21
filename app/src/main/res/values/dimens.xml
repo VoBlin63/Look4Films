@@ -4,6 +4,12 @@
 
     <dimen name="recyclerFilmsHeight">139dp</dimen>
     <dimen name="recyclerImageSize">123dp</dimen>
+    <dimen name="recyclerGap">16dp</dimen>
+    <dimen name="recyclerHalfGap">8dp</dimen>
+    <dimen name="recyclerElevation">13dp</dimen>
+    <dimen name="recyclerCornerRadius">11dp</dimen>
+    <dimen name="recyclerSelectedBorder">1dp</dimen>
+    <dimen name="recyclerBorder">1dp</dimen>
 
     <dimen name="detailsImageSize">156dp</dimen>
     <dimen name="detailsPictureMarginTop">19dp</dimen>

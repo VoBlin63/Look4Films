@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
@@ -35,13 +36,15 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         public TextView name;
         public ImageView picture;
         public ImageView liked;
+        public CardView card;
         //public TextView details;
 
-        RecyclerFilmsHolder(ConstraintLayout row) {
+        RecyclerFilmsHolder(CardView row) {
             super(row);
             picture = row.findViewById(R.id.picture);
             name = row.findViewById(R.id.name);
             liked = row.findViewById(R.id.likedRow);
+            card = row;
         }
     }
 
@@ -52,22 +55,24 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     @Override
     public RecyclerFilmsHolder onCreateViewHolder(ViewGroup parent,
                                                   int viewType) {
-        ConstraintLayout filmRow = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+        CardView filmRow = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_films_layout, parent, false);
         RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
-        filmRow.getViewById(R.id.picture).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
-        filmRow.getViewById(R.id.likedRow).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
-        filmRow.getViewById(R.id.name).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
-        filmRow.getViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.picture).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.likedRow).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.name).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         return res;
     }
 
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
-        holder.itemView.setSelected(films.get(position).getSelected());
-        holder.picture.setImageDrawable(films.get(position).getPicture(holder.picture.getContext()));
-        holder.name.setText(films.get(position).getName());
-        holder.liked.setImageResource(films.get(position).getLiked() ? R.drawable.liked : R.drawable.notliked);
+        FilmInApp film =films.get(position);
+        holder.itemView.setSelected(film.getSelected());
+        holder.picture.setImageDrawable(film.getPicture(holder.picture.getContext()));
+        holder.name.setText(film.getName());
+        holder.liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
+        holder.card.setCardElevation(film.getSelected()? 0F : holder.card.getMaxCardElevation());
     }
 
     @Override

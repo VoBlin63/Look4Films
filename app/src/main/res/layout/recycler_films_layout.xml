@@ -1,59 +1,69 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardRecycler"
     android:layout_width="match_parent"
     android:layout_height="@dimen/recyclerFilmsHeight"
-    android:background="@drawable/selector_row_films"
-    tools:context=".activities.MainActivity">
-    <Button
-        android:id="@+id/detailsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/details_button_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name" />
-    <ImageView
-        android:id="@+id/likedRow"
-        android:src="@drawable/liked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/detailsPictureMarginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/detailsMarginSides"
-        tools:ignore="ContentDescription">
-    </ImageView>
-    <ImageView
-        android:id="@+id/notliked"
-        android:src="@drawable/notliked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/detailsPictureMarginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/detailsMarginSides"
-        tools:ignore="ContentDescription">
-    </ImageView>
-    <ImageView
-        android:id="@+id/picture"
-        android:layout_width="@dimen/recyclerImageSize"
-        android:layout_height="@dimen/recyclerImageSize"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+    android:layout_marginTop="@dimen/recyclerHalfGap"
+    android:layout_marginBottom="@dimen/recyclerHalfGap"
+    android:layout_marginStart="@dimen/recyclerGap"
+    android:layout_marginEnd="@dimen/recyclerGap"
+    android:minHeight="@dimen/recyclerFilmsHeight"
+    app:cardBackgroundColor="@color/recyclerBack"
+    app:cardCornerRadius="@dimen/recyclerCornerRadius"
+    app:cardElevation="@dimen/recyclerElevation"
+    app:cardPreventCornerOverlap="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[здесь имя]"
-        app:layout_constraintBottom_toTopOf="@+id/detailsButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/picture"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recyclerFilmsHeight"
+        android:background="@drawable/recycler_selector"
+        tools:context=".activities.MainActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/detailsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/details_button_name"
+            app:layout_constraintBottom_toBottomOf="@id/picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/detailsMarginSides"
+            />
+
+        <ImageView
+            android:id="@+id/likedRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            android:layout_marginEnd="@dimen/detailsMarginSides"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/picture"
+            android:layout_width="@dimen/recyclerImageSize"
+            android:layout_height="@dimen/recyclerImageSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[здесь имя]"
+            app:layout_constraintBottom_toTopOf="@+id/detailsButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/picture"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

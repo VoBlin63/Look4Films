@@ -35,13 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
-        DividerItemDecoration itemDecorator = new DividerItemDecoration(this.getApplicationContext(), DividerItemDecoration.VERTICAL);
-        itemDecorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.divider_recycler)));
-
         RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
         adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList(this));
-        recyclerFilms.addItemDecoration(itemDecorator);
         recyclerFilms.setHasFixedSize(true);
         recyclerFilms.setLayoutManager(layoutManagerFilms);
         recyclerFilms.setAdapter(adapterRecyclerFilms);
