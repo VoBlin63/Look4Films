@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbarHeight">39dp</dimen>
+
     <dimen name="recyclerFilmsHeight">139dp</dimen>
-    <dimen name="imageSize">128dp</dimen>
+    <dimen name="recyclerImageSize">123dp</dimen>
+
+    <dimen name="detailsImageSize">156dp</dimen>
+    <dimen name="detailsPictureMarginTop">19dp</dimen>
+    <dimen name="detailsMarginSides">9dp</dimen>
+    <dimen name="detailsMarginSidesBottomTexts">17dp</dimen>
 </resources>

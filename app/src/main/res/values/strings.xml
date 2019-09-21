@@ -4,4 +4,5 @@
     <string name="detailsOkButton">Ok</string>
     <string name="shareTitle">Пригласить друга</string>
     <string name="likedCheckBox">Нравится</string>
+    <string name="commentsHint">Комментарий</string>
 </resources>
