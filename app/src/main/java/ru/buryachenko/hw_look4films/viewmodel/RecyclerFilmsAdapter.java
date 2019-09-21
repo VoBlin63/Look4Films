@@ -92,12 +92,14 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                     }
                 }
             }
+            films.get(position).setSelected(true);
             if (view.getId() == R.id.likedRow) {
-                //если вызывали по лайку - сразу его сменим
+                //если вызывали по лайку - только его меняем не вызывая деталей
                 films.get(position).setLiked(!films.get(position).getLiked());
             }
-            films.get(position).setSelected(true);
-            callDetailsActivity(context, films.get(position));
+            else {
+                callDetailsActivity(context, films.get(position));
+            }
             notifyItemChanged(position);
         }
     }
