@@ -26,9 +26,7 @@ import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerFilms;
     private RecyclerView.Adapter adapterRecyclerFilms;
-    private RecyclerView.LayoutManager layoutManagerFilms;
     private FilmsViewModel viewModel;
 
     @Override
@@ -40,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration itemDecorator = new DividerItemDecoration(this.getApplicationContext(), DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.divider_recycler)));
 
-        recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
-        layoutManagerFilms = new LinearLayoutManager(this);
+        RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
+        RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
         adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList(this));
         recyclerFilms.addItemDecoration(itemDecorator);
         recyclerFilms.setHasFixedSize(true);
