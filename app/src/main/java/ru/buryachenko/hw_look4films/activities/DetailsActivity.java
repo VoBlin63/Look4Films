@@ -35,7 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.name)).setText(film.getName());
         ((EditText) findViewById(R.id.comment)).setText(film.getComment());
         ((ImageView) findViewById(R.id.picture)).setImageDrawable(film.getPicture(this));
-        findViewById(R.id.done).setOnClickListener((view) -> doSaveDetails(film));
+        findViewById(R.id.doneFloat).setOnClickListener((view) -> doSaveDetails(film));
     }
 
     private void doSaveDetails(FilmInApp film) {

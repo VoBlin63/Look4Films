@@ -6,85 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".activities.DetailsActivity">
 
-    <Button
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/detailsOkButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <CheckBox
-        android:id="@+id/liked"
-        style="@style/Details.Liked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/likedCheckBox"
-        app:layout_constraintBottom_toBottomOf="@id/picture"
-        app:layout_constraintStart_toEndOf="@id/picture">
-
-    </CheckBox>
-
     <ImageView
         android:id="@+id/picture"
         android:layout_width="@dimen/detailsImageSize"
         android:layout_height="@dimen/detailsImageSize"
-        android:layout_marginTop="@dimen/detailsPictureMarginTop"
         android:layout_marginStart="@dimen/detailsMarginSides"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/details"
-        style="@style/Details.Details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/detailsPictureMarginTop"
-        android:text="[здесь деталиljhl kfdjf dsjf lkdsnf lkdsnflds n flkdnslf ndslfn lkdsnf ldksnf lkdsnfl ndslknf ldnf lndslkf nldsns flkndkl fndslk fndlksn fldsnf lkndslkfn dklsnf lkdsnf lndslknf ]"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
-        android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-        app:layout_constraintTop_toBottomOf="@id/picture"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/name"
-        android:text="[здесь название]"
         style="@style/Details.Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/picture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/picture"
-        android:layout_marginEnd="@dimen/detailsMarginSides"
         android:layout_marginTop="@dimen/detailsPictureMarginTop"
-        tools:ignore="HardcodedText">
+        android:layout_marginEnd="@dimen/detailsMarginSides"
+        android:text="[здесь название]"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/picture"
+        app:layout_constraintTop_toTopOf="@id/picture"
+        tools:ignore="HardcodedText"/>
 
-    </TextView>
+        <CheckBox
+            android:id="@+id/liked"
+            android:theme="@style/Details.Liked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/likedCheckBox"
+            app:layout_constraintBottom_toBottomOf="@id/picture"
+            app:layout_constraintStart_toEndOf="@id/picture">
+
+        </CheckBox>
+
+        <TextView
+            android:id="@+id/details"
+            style="@style/Details.Details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            android:text="[здесь детали]"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/picture"
+            tools:ignore="HardcodedText" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/details"
-        app:layout_constraintBottom_toTopOf="@id/done"
+        android:layout_height="wrap_content"
         android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
         android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-        android:layout_height="wrap_content">
+        style="@style/Details.Comment"
+        android:theme="@style/Details.Comment"
+        app:layout_constraintBottom_toTopOf="@id/doneFloat">
 
         <EditText
             android:id="@+id/comment"
-            android:text="[здесь комментарий]"
-            android:hint="@string/commentsHint"
             style="@style/Details.Liked"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/detailsPictureMarginTop"
-            app:layout_constraintBottom_toTopOf="@id/done"
+            android:hint="@string/commentsHint"
+            android:maxLines="3"
             android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
             android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-            tools:ignore="HardcodedText">
+            android:text="[здесь комментарий]"
+            tools:ignore="Autofill,HardcodedText">
 
         </EditText>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/doneFloat"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_done">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </androidx.constraintlayout.widget.ConstraintLayout>

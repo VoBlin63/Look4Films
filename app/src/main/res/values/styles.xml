@@ -9,18 +9,21 @@
     </style>
 
     <style name="Details" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="editTextColor">@color/ordinaryText</item>
     </style>
     <style name="Details.Name" parent="Details">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">19sp</item>
     </style>
     <style name="Details.Details" parent="Details">
         <item name="android:textSize">15sp</item>
     </style>
     <style name="Details.Liked" parent="Details">
         <item name="android:textSize">17sp</item>
+        <item name="colorAccent">@color/ordinaryText</item>
     </style>
     <style name="Details.Comment" parent="Details">
         <item name="android:textSize">15sp</item>
+        <item name="colorAccent">@color/ordinaryText</item>
     </style>
 
 </resources>
