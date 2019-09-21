@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapterRecyclerFilms;
     private RecyclerView.LayoutManager layoutManagerFilms;
     private FilmsViewModel viewModel;
-    private Boolean possibleToShare = true; //TODO сделать false до того как будет выбран фильм, как из recycler adapter поменять значение тут?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,35 +66,4 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOGTAG,"Для фильма '" + film.getName() +"' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.shareSelectedFilm).setEnabled(possibleToShare);
-        return true;//super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.shareSelectedFilm: {
-                String shareThing = viewModel.getFilmToShare();
-                String mimeType = "text/plain";
-                ShareCompat.IntentBuilder
-                        .from(this)
-                        .setType(mimeType)
-                        .setChooserTitle(getString(R.string.shareTitle))
-                        .setText(shareThing)
-                        .startChooser();
-            }
-            break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + item.getItemId());
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void setPossibleToShare(Boolean possibleToShare) {
-        this.possibleToShare = possibleToShare;
-
-    }
 }

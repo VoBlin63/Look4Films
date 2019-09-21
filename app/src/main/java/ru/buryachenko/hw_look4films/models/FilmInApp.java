@@ -63,4 +63,8 @@ public class FilmInApp extends Film implements Serializable {
         return filmId;
     }
 
+    public String getLinkToShare() {
+        return getName() + " " + (getLiked()?"*****":"*");
+    }
+
 }

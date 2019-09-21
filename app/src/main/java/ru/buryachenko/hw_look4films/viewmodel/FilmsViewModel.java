@@ -45,17 +45,6 @@ public class FilmsViewModel extends ViewModel {
         changedFilm.setValue(film);
     }
 
-    public String getFilmToShare() {
-        String res = "nothing";
-        for (FilmInApp film : films.values()) {
-            if (film.getSelected()) {
-                res = film.getName();
-                break;
-            }
-        }
-        return res;
-    }
-
     public LiveData<FilmInApp> getChangedFilm() {
         return changedFilm;
     }
