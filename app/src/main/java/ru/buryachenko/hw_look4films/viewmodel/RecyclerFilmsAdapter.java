@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,8 +55,10 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         ConstraintLayout filmRow = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_films_layout, parent, false);
         RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
-        Button detailsButton = (Button) filmRow.getViewById(R.id.detailsButton);
-        detailsButton.setOnClickListener(view -> doClick(res.getAdapterPosition(), detailsButton.getContext()));
+        filmRow.getViewById(R.id.picture).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.getViewById(R.id.likedRow).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.getViewById(R.id.name).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.getViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         return res;
     }
 
@@ -73,7 +75,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         return films.size();
     }
 
-    private void doClick(int position, Context context) {
+    private void doClick(View view, int position, Context context) {
         if (position != RecyclerView.NO_POSITION) {
             if (!films.get(position).getSelected()) {
                 //отменим предыдущий выбор
@@ -84,6 +86,10 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                         break;
                     }
                 }
+            }
+            if (view.getId() == R.id.likedRow) {
+                //если вызывали по лайку - сразу его сменим
+                films.get(position).setLiked(!films.get(position).getLiked());
             }
             films.get(position).setSelected(true);
             callDetailsActivity(context, films.get(position));

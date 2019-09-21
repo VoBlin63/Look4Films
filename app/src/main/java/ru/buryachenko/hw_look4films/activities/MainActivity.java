@@ -3,14 +3,15 @@ package ru.buryachenko.hw_look4films.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ShareCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
@@ -36,9 +37,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this.getApplicationContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.divider_recycler)));
+
         recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         layoutManagerFilms = new LinearLayoutManager(this);
         adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList(this));
+        recyclerFilms.addItemDecoration(itemDecorator);
         recyclerFilms.setHasFixedSize(true);
         recyclerFilms.setLayoutManager(layoutManagerFilms);
         recyclerFilms.setAdapter(adapterRecyclerFilms);
