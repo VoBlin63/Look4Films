@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.activities.DetailsActivity;
@@ -43,7 +42,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
             super(row);
             picture = row.findViewById(R.id.picture);
             name = row.findViewById(R.id.name);
-            liked = row.findViewById(R.id.likedRow);
+            liked = row.findViewById(R.id.likedStar);
             card = row;
         }
     }
@@ -59,7 +58,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                 .inflate(R.layout.recycler_films_layout, parent, false);
         RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
         filmRow.findViewById(R.id.picture).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
-        filmRow.findViewById(R.id.likedRow).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.likedStar).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         filmRow.findViewById(R.id.name).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         filmRow.findViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         return res;
@@ -93,7 +92,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                 }
             }
             films.get(position).setSelected(true);
-            if (view.getId() == R.id.likedRow) {
+            if (view.getId() == R.id.likedStar) {
                 //если вызывали по лайку - только его меняем не вызывая деталей
                 films.get(position).setLiked(!films.get(position).getLiked());
             }

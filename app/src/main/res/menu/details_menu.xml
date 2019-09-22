@@ -5,7 +5,7 @@
     <item
         android:id="@+id/shareSelectedFilm"
         android:icon="@drawable/ic_share"
-        android:title="Поделиться"
+        android:title="@string/shareTitle"
         app:showAsAction="always" >
     </item>
 </menu>

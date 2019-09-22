@@ -8,6 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Recycler" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="editTextColor">@color/ordinaryText</item>
+    </style>
+    <style name="Recycler.Name" parent="Recycler">
+        <item name="android:textSize">19sp</item>
+    </style>
+    <style name="Recycler.ButtonDetails" parent="Recycler">
+        <item name="android:textColor">#051D53</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
     <style name="Details" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="editTextColor">@color/ordinaryText</item>
     </style>
