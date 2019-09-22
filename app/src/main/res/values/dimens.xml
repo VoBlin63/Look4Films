@@ -15,4 +15,6 @@
     <dimen name="detailsPictureMarginTop">19dp</dimen>
     <dimen name="detailsMarginSides">9dp</dimen>
     <dimen name="detailsMarginSidesBottomTexts">17dp</dimen>
+
+    <integer name="pushDetailsTime">1800</integer>
 </resources>

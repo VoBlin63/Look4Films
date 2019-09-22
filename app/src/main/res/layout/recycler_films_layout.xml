@@ -54,6 +54,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/details"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/recyclerImageSize"
+            app:layout_constraintTop_toTopOf="@id/picture"
+            app:layout_constraintBottom_toBottomOf="@id/picture"
+            app:layout_constraintStart_toEndOf="@id/picture"
+            app:layout_constraintEnd_toEndOf="@id/detailsButton"
+            android:layout_margin="@dimen/recyclerHalfGap"
+            android:visibility="gone"
+            >
+
+        </TextView>
 
         <TextView
             android:id="@+id/name"
