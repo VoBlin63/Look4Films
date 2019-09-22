@@ -18,7 +18,9 @@
         <item name="android:textColor">#051D53</item>
         <item name="android:textSize">15sp</item>
     </style>
-
+    <style name="Recycler.Details" parent="Recycler">
+        <item name="android:textSize">11sp</item>
+    </style>
 
     <style name="Details" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="editTextColor">@color/ordinaryText</item>

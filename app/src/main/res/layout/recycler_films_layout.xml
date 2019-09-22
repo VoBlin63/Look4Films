@@ -63,6 +63,7 @@
             app:layout_constraintStart_toEndOf="@id/picture"
             app:layout_constraintEnd_toEndOf="@id/detailsButton"
             android:layout_margin="@dimen/recyclerHalfGap"
+            style="@style/Recycler.Details"
             android:visibility="gone"
             >
 

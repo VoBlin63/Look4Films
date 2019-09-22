@@ -1,6 +1,7 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -40,7 +41,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         films = newFilms;
     }
 
-    public static class RecyclerFilmsHolder extends RecyclerView.ViewHolder {
+    static class RecyclerFilmsHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView picture;
         ImageView liked;
@@ -74,70 +75,85 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         Point size = new Point();
         display.getSize(size);
         rightSide = size.x;
-        View[] slaves = {filmRow.findViewById(R.id.likedStar), filmRow.findViewById(R.id.name), filmRow.findViewById(R.id.detailsButton)};
-        TextView details = filmRow.findViewById(R.id.details);
-        filmRow.findViewById(R.id.picture).setOnClickListener(view -> doAnimationPush(details, false, slaves));
+
+        filmRow.findViewById(R.id.picture).setOnClickListener(view -> doChangeDisclosed(filmRow, res.getAdapterPosition()));
         filmRow.findViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
-        details.setOnClickListener(view -> doAnimationPush(details, false, slaves));
+        //здесь клик возможен только на раскрытых деталях и логично в детали пойти
+        filmRow.findViewById(R.id.details).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
         return res;
     }
 
-    private void doAnimationPush(View major, boolean instantMode, View... slaves) {
-        boolean onScreen = (major.getVisibility() == View.VISIBLE);
-        major.setAlpha(onScreen ? 1F : 0F);
-        if (!onScreen)
-            major.setVisibility(View.VISIBLE);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(major, "alpha", onScreen ? 0F : 1F);
-        final AnimatorSet set = new AnimatorSet();
-        set.play(alpha);
-        set.setDuration(instantMode ? 0 : DURATION_DETAILS_ANIMAYION);
-        set.start();
-        set.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (onScreen) {
-                    major.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-        for (View slave : slaves) {
-            pushRightView(slave, instantMode, onScreen);
+    private void doChangeDisclosed(CardView filmRow, int position) {
+        if (position != RecyclerView.NO_POSITION) {
+            boolean newDisclosed = !films.get(position).isDisclosed();
+            doAnimationPicture(filmRow.findViewById(R.id.picture));
+            doAnimationPushRight(!newDisclosed, filmRow.findViewById(R.id.likedStar), filmRow.findViewById(R.id.name), filmRow.findViewById(R.id.detailsButton));
+            doAnimationDetails(!newDisclosed, filmRow.findViewById(R.id.details));
+            films.get(position).setDisclosed(newDisclosed);
         }
     }
 
-    private void pushRightView(View view, boolean instandMode, boolean returnBack) {
-        ObjectAnimator push = ObjectAnimator.ofFloat(view, "translationX", returnBack ? 0 : rightSide);
-        final AnimatorSet set = new AnimatorSet();
-        set.play(push);
-        set.setDuration(instandMode ? 0 : DURATION_DETAILS_ANIMAYION);
+    private void doAnimationDetails(boolean returnBack, View view) {
+        float from = 1F;
+        float to = 0F;
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(view, View.ALPHA, returnBack ? from : to, returnBack ? to : from);
+        AnimatorSet set = new AnimatorSet();
+        set.play(alpha);
+        set.setDuration(DURATION_DETAILS_ANIMAYION);
+        if (returnBack) {
+            set.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
+
         set.start();
+    }
+
+    private void doAnimationPicture(View view) {
+        float from = 1F;
+        float to = 0.87F;
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, View.SCALE_X, from, to);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, View.SCALE_Y, from, to);
+        AnimatorSet setForward = new AnimatorSet();
+        setForward.playTogether(scaleX, scaleY);
+        setForward.setDuration(DURATION_DETAILS_ANIMAYION / 4);
+        ObjectAnimator scaleXBack = ObjectAnimator.ofFloat(view, View.SCALE_X, to, from);
+        ObjectAnimator scaleYBack = ObjectAnimator.ofFloat(view, View.SCALE_Y, to, from);
+        AnimatorSet setBack = new AnimatorSet();
+        setBack.playTogether(scaleXBack, scaleYBack);
+        setBack.setDuration(DURATION_DETAILS_ANIMAYION / 3);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(setForward, setBack);
+        set.start();
+    }
+
+    private void doAnimationPushRight(boolean returnBack, View... views) {
+        for (View view : views) {
+            ObjectAnimator push = ObjectAnimator.ofFloat(view, "translationX", returnBack ? 0 : rightSide);
+            AnimatorSet set = new AnimatorSet();
+            set.play(push);
+            set.setDuration(DURATION_DETAILS_ANIMAYION);
+            set.start();
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
         FilmInApp film = films.get(position);
-        boolean detailsShowed = (holder.details.getVisibility() == View.VISIBLE);
-        if (detailsShowed) {
-            doAnimationPush(holder.details, true, holder.name, holder.liked, holder.detailsButton);
-        }
-        holder.itemView.setSelected(film.getSelected());
+        holder.itemView.setSelected(film.isSelected());
         holder.picture.setImageDrawable(film.getPicture(holder.picture.getContext()));
         holder.name.setText(film.getName());
         holder.liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
-        holder.card.setCardElevation(film.getSelected() ? 0F : holder.card.getMaxCardElevation());
+        holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation());
         holder.details.setText(film.getDetails());
+        doAnimationPushRight(!film.isDisclosed(), holder.liked, holder.name, holder.detailsButton);
+        doAnimationDetails(!film.isDisclosed(), holder.details);
     }
 
     @Override
@@ -147,10 +163,10 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
 
     private void doClick(View view, int position, Context context) {
         if (position != RecyclerView.NO_POSITION) {
-            if (!films.get(position).getSelected()) {
+            if (!films.get(position).isSelected()) {
                 //отменим предыдущий выбор
                 for (int i = 0; i < films.size(); i++) {
-                    if (films.get(i).getSelected()) {
+                    if (films.get(i).isSelected()) {
                         films.get(i).setSelected(false);
                         notifyItemChanged(i);
                         break;

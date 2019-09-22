@@ -11,8 +11,9 @@ public class FilmInApp extends Film implements Serializable {
     private String details;
     private String comment;
     private int pictureResource;
-    private Boolean isSelected;
+    private Boolean selected;
     private int filmId;
+    private boolean disclosed;
 
     public FilmInApp(String name, int pictureResource, String details, int filmId) {
         super(name);
@@ -20,8 +21,9 @@ public class FilmInApp extends Film implements Serializable {
         this.liked = false;
         this.comment = "";
         this.pictureResource = pictureResource;
-        this.isSelected = false;
+        this.selected = false;
         this.filmId = filmId;
+        this.disclosed = false;
     }
 
     public Boolean getLiked() {
@@ -40,8 +42,8 @@ public class FilmInApp extends Film implements Serializable {
         return (BitmapDrawable) context.getResources().getDrawable(pictureResource);
     }
 
-    public Boolean getSelected() {
-        return isSelected;
+    public Boolean isSelected() {
+        return selected;
     }
 
     public void setLiked(Boolean liked) {
@@ -57,7 +59,7 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public void setSelected(Boolean selected) {
-        isSelected = selected;
+        this.selected = selected;
     }
 
     public int getFilmId() {
@@ -69,4 +71,11 @@ public class FilmInApp extends Film implements Serializable {
         return getName() + " " + (getLiked() ? "***" : "*");
     }
 
+    public boolean isDisclosed() {
+        return disclosed;
+    }
+
+    public void setDisclosed(boolean disclosed) {
+        this.disclosed = disclosed;
+    }
 }
