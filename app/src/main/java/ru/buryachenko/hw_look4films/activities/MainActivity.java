@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.Objects;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
@@ -44,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, filmInApp -> {
-            FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(((RecyclerFilmsAdapter)adapterRecyclerFilms).getData(), viewModel.getList(this));
+            FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(((RecyclerFilmsAdapter) adapterRecyclerFilms).getData(), viewModel.getList(this));
             DiffUtil.DiffResult filmsDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback);
-            ((RecyclerFilmsAdapter)adapterRecyclerFilms).setData(viewModel.getList(this));
+            ((RecyclerFilmsAdapter) adapterRecyclerFilms).setData(viewModel.getList(this));
             filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
         });
     }
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         }
         FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
         viewModel.put(film);
-        Log.d(LOGTAG,"Для фильма '" + film.getName() +"' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
+        Log.d(LOGTAG, "Для фильма '" + film.getName() + "' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
     }
 
 }
