@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Поиск фильмов</string>
     <string name="details_button_name"><u>детали</u></string>
-    <string name="shareTitle">Пригласить друга</string>
+    <string name="detailsShareMenu">Пригласить друга</string>
+    <string name="detailsBackMenu">Назад без сохранения</string>
     <string name="likedCheckBox">нравится</string>
     <string name="commentsHint">Комментарий</string>
 

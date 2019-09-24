@@ -5,7 +5,15 @@
     <item
         android:id="@+id/shareSelectedFilm"
         android:icon="@drawable/ic_share"
-        android:title="@string/shareTitle"
+        android:title="@string/detailsShareMenu"
+        android:orderInCategory="101"
         app:showAsAction="always" >
+    </item>
+    <item
+        android:id="@+id/backToMainScreen"
+        android:icon="@drawable/ic_back"
+        android:title="@string/detailsBackMenu"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom">
     </item>
 </menu>

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
@@ -26,6 +27,9 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         film = (FilmInApp) intent.getSerializableExtra(FILM_PARAMETER);
         CheckBox liked = findViewById(R.id.liked);
@@ -36,6 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.comment)).setText(film.getComment());
         ((ImageView) findViewById(R.id.picture)).setImageDrawable(film.getPicture(this));
         findViewById(R.id.doneFloat).setOnClickListener((view) -> doSaveDetails(film));
+
     }
 
     private void doSaveDetails(FilmInApp film) {
@@ -62,11 +67,16 @@ public class DetailsActivity extends AppCompatActivity {
                 ShareCompat.IntentBuilder
                         .from(this)
                         .setType(mimeType)
-                        .setChooserTitle(getString(R.string.shareTitle))
+                        .setChooserTitle(getString(R.string.detailsShareMenu))
                         .setText(shareThing)
                         .startChooser();
-            }
-            break;
+                }
+                break;
+            case R.id.backToMainScreen:
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
