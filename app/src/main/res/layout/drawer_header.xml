@@ -2,34 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="175dp"
+    android:layout_height="@dimen/drawerHeaderHeight"
     android:background="@drawable/ic_launcher_foreground"
     android:gravity="bottom"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
+    android:paddingStart="@dimen/drawerHeaderPaddling"
+    android:paddingEnd="@dimen/drawerHeaderPaddling"
+    android:paddingTop="@dimen/drawerHeaderPaddling"
+    android:paddingBottom="@dimen/drawerHeaderPaddling"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     >
     <ImageView
         android:id="@+id/navigation_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="BlaBlaBla"
-        android:paddingTop="11dp"
+        android:paddingTop="@dimen/drawerPaddingTop"
         android:src="@drawable/ic_film"/>
     <TextView
         android:id="@+id/navHeaderTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="11dp"
-        android:text="после картинки в navigation_header"
+        android:paddingTop="@dimen/drawerPaddingTop"
+        android:text="@string/drawerHeader"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     <TextView
         android:id="@+id/navHeaderSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="субтитул"/>
+        android:text="@string/drawerSubHeader"/>
 
 
 </LinearLayout>

@@ -16,5 +16,10 @@
     <dimen name="detailsMarginSides">9dp</dimen>
     <dimen name="detailsMarginSidesBottomTexts">17dp</dimen>
 
-    <integer name="pushDetailsTime">1800</integer>
+    <dimen name="drawerPaddingTop">11dp</dimen>
+    <dimen name="drawerHeaderHeight">137dp</dimen>
+    <dimen name="drawerHeaderPaddling">17dp</dimen>
+
+    <integer name="pushDetailsTime">379</integer>
+
 </resources>

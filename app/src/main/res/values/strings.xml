@@ -5,7 +5,13 @@
     <string name="likedCheckBox">нравится</string>
     <string name="commentsHint">Комментарий</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- это для слабовидящих когда-то могут произноситься, когда ? -->
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <string name="drawerHeader">Поиск фильмов</string>
+    <string name="drawerSubHeader">лучше поискать сейчас, чем никогда!</string>
+    <string name="drawer_menu_MainScreen">Главный экран</string>
+    <string name="drawer_menu_About">О приложении</string>
 
 </resources>

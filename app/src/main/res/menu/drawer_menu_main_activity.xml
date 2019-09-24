@@ -5,10 +5,8 @@
     <group android:checkableBehavior="single"/>
     <item
         android:id="@+id/mainScreen"
-        android:icon="@drawable/ic_done"
-        android:title="Главный экран"/>
+        android:title="@string/drawer_menu_MainScreen"/>
     <item
         android:id="@+id/aboutApplication"
-        android:icon="@drawable/ic_share"
-        android:title="О приложении"/>
+        android:title="@string/drawer_menu_About"/>
 </menu>

@@ -8,4 +8,5 @@
     <color name="recyclerSelectedBack">#DBD5D5</color>
     <color name="recyclerSelectedBorder">#C4C4C4</color>
     <color name="recyclerBorder">#FFFFFF</color>
+    <color name="drawerHead">#246854</color>
 </resources>

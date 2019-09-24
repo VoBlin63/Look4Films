@@ -1,17 +1,18 @@
 package ru.buryachenko.hw_look4films.activities;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
@@ -37,15 +38,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_drawer_layout);
+        setContentView(R.layout.drawer_main_layout);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-
-//        System.out.println( "R.id.toolbar     >>>>>>>>>>>>>>>>>>>> " +findViewById(R.id.toolbar).getClass());
-//        System.out.println( "toolbar          >>>>>>>>>>>>>>>>>>>> " +toolbar.getClass());
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
@@ -68,6 +64,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            navigationView.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
+        }
+        else {
+            navigationView.getHeaderView(0).setBackgroundColor(Color.CYAN);
+        }
     }
 
     @Override
@@ -96,37 +100,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.navigation_menu, menu);
+        getMenuInflater().inflate(R.menu.right_menu_main_activity, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
+        switch (item.getItemId()) {
+            case R.id.addNewFilm:
+                Log.d(LOGTAG,"Добавляем новый фильм...");
+                break;
+            default:
+                Log.d(LOGTAG,"Беда - в правом меню необрабатываемый пункт!");
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.mainScreen) {
-
-        } else if (id == R.id.aboutApplication) {
-
+        switch (item.getItemId()) {
+            case R.id.mainScreen:
+                Log.d(LOGTAG,"Основной экран позвался...");
+                break;
+            case R.id.aboutApplication:
+                Log.d(LOGTAG,"Неужели целый экран о рограмме делать ?");
+                break;
+            default:
+                Log.d(LOGTAG,"Беда - в меню drawer необрабатываемый пункт!");
         }
-
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
