@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.main_drawer_layout);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
 
-        System.out.println( "R.id.toolbar>>>>>>>>>>>>>>>>>>>>" +findViewById(R.id.toolbar).getClass());
-        System.out.println( "toolbar>>>>>>>>>>>>>>>>>>>>" +toolbar.getClass());
+//        System.out.println( "R.id.toolbar     >>>>>>>>>>>>>>>>>>>> " +findViewById(R.id.toolbar).getClass());
+//        System.out.println( "toolbar          >>>>>>>>>>>>>>>>>>>> " +toolbar.getClass());
 
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
@@ -64,7 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, /*toolbar*/ null, R.string.navigation_drawer_open , R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open , R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
     }
 
     @Override

@@ -7,13 +7,13 @@
     tools:context=".activities.MainActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-<!--        android:theme="@style/AppTheme.AppBarOverlay" -->
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
-<!--            app:popupTheme="@style/AppTheme.AppBarOverlay" -->
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.AppBarOverlay"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/activity_main" />
