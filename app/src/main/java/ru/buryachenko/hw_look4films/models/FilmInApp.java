@@ -2,20 +2,23 @@ package ru.buryachenko.hw_look4films.models;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
+
+import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
     private Boolean liked;
     private String details;
     private String comment;
-    private int pictureResource;
+    private Integer pictureResource;
     private Boolean selected;
     private int filmId;
     private boolean disclosed;
 
-    public FilmInApp(String name, int pictureResource, String details, int filmId) {
+    public FilmInApp(String name, Integer pictureResource, String details, int filmId) {
         super(name);
         this.details = details;
         this.liked = false;
@@ -38,8 +41,12 @@ public class FilmInApp extends Film implements Serializable {
         return comment;
     }
 
-    public BitmapDrawable getPicture(Context context) {
-        return (BitmapDrawable) context.getResources().getDrawable(pictureResource);
+    public Drawable getPicture(Context context) {
+        if (pictureResource == null) {
+            return RandomPicture.make();
+        } else {
+            return context.getResources().getDrawable(pictureResource);
+        }
     }
 
     public Boolean isSelected() {

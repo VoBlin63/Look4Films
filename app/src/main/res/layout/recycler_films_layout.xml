@@ -48,8 +48,9 @@
 
         <ImageView
             android:id="@+id/picture"
-            android:layout_width="@dimen/recyclerImageSize"
-            android:layout_height="@dimen/recyclerImageSize"
+            android:layout_width="@dimen/recyclerImageWidth"
+            android:layout_height="@dimen/recyclerImageHeight"
+            android:layout_marginStart="@dimen/recyclerHalfGap"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -57,7 +58,7 @@
         <TextView
             android:id="@+id/details"
             android:layout_width="0dp"
-            android:layout_height="@dimen/recyclerImageSize"
+            android:layout_height="@dimen/recyclerImageHeight"
             app:layout_constraintTop_toTopOf="@id/picture"
             app:layout_constraintBottom_toBottomOf="@id/picture"
             app:layout_constraintStart_toEndOf="@id/picture"

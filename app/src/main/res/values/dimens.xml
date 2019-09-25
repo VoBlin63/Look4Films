@@ -3,7 +3,8 @@
     <dimen name="toolbarHeight">39dp</dimen>
 
     <dimen name="recyclerFilmsHeight">139dp</dimen>
-    <dimen name="recyclerImageSize">123dp</dimen>
+    <dimen name="recyclerImageHeight">123dp</dimen>
+    <dimen name="recyclerImageWidth">101dp</dimen>
     <dimen name="recyclerGap">16dp</dimen>
     <dimen name="recyclerHalfGap">8dp</dimen>
     <dimen name="recyclerElevation">13dp</dimen>
