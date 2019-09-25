@@ -4,7 +4,7 @@
 
     <dimen name="recyclerFilmsHeight">139dp</dimen>
     <dimen name="recyclerImageHeight">123dp</dimen>
-    <dimen name="recyclerImageWidth">101dp</dimen>
+    <dimen name="recyclerImageWidth">82dp</dimen>
     <dimen name="recyclerGap">16dp</dimen>
     <dimen name="recyclerHalfGap">8dp</dimen>
     <dimen name="recyclerElevation">13dp</dimen>

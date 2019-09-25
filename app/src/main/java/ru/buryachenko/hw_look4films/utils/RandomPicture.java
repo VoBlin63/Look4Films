@@ -13,29 +13,28 @@ import java.util.Random;
 
 public class RandomPicture {
 
-    public static Drawable make() {
-        return make(200, (int) (1024 + Math.round(Math.random()*1024)));
+    public static Drawable make(int width, int height) {
+        return make(2048, width, height);
     }
 
-    private static Drawable make(int size, int linesCount) {
+    private static Drawable make(int linesCount, int sizeX, int sizeY) {
         Path path = new Path();
         Random random = new Random();
-        int destX = size/2;
-        int destY = size/2;
+        int destX = sizeX/2;
+        int destY = sizeY/2;
         path.moveTo(destX, destY);
-        for (int i = 0; i < linesCount + 64; i++) {
-            int distance = random.nextInt(size/2)+1;
-            destX = constraint(destX + distance/2 - random.nextInt(distance), 0 , size);
-            destY = constraint(destY + distance/2 - random.nextInt(distance), 0 , size);
+        for (int i = 0; i < linesCount ; i++) {
+            int distance = random.nextInt(27)+7;
+            int diffX = random.nextInt(distance) - distance/2;
+            int diffY = random.nextInt(distance) - distance/2;
+            destX = constraint(destX + diffX, 0 , sizeX);
+            destY = constraint(destY + diffY, 0 , sizeY);
             path.lineTo(destX,destY);
             path.addCircle(destX,destY,random.nextInt(5)+1, Path.Direction.CW);
         }
-        for (int i = 0; i < linesCount/4; i++) {
-            path.lineTo(random.nextInt(size),random.nextInt(size));
-        }
-        ShapeDrawable drawable = new ShapeDrawable(new PathShape(path, size, size));
-        drawable.setIntrinsicHeight(size);
-        drawable.setIntrinsicWidth(size);
+        ShapeDrawable drawable = new ShapeDrawable(new PathShape(path, sizeX, sizeY));
+        drawable.setIntrinsicHeight(sizeY);
+        drawable.setIntrinsicWidth(sizeX);
         drawable.getPaint().setColor(Color.BLACK);
         drawable.getPaint().setStyle(Paint.Style.STROKE);
         return drawable;

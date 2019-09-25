@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
 
+import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
 public class FilmInApp extends Film implements Serializable {
@@ -43,7 +44,7 @@ public class FilmInApp extends Film implements Serializable {
 
     public Drawable getPicture(Context context) {
         if (pictureResource == null) {
-            return RandomPicture.make();
+            return RandomPicture.make(context.getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth),context.getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight));
         } else {
             return context.getResources().getDrawable(pictureResource);
         }
