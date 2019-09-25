@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawer_main_layout);
+        setContentView(R.layout.activity_main_with_drawer);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
