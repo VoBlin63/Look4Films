@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -121,10 +122,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mainScreen:
-                Toast.makeText(getApplicationContext(), "Основной экран позвался...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Мы на основном экране...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.aboutApplication:
-                showToast("Неужели целый экран о программе делать?");
+                showToast("Тут будет о программе");
                 break;
             default:
                 Log.d(LOGTAG, "Беда - в меню drawer необрабатываемый пункт!");
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void showToast(String message) {
         Toast toast = Toast.makeText(getApplicationContext(),
                 message, Toast.LENGTH_LONG);
-        //toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         LinearLayout toastContainer = (LinearLayout) toast.getView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toastContainer.setBackground(getApplicationContext().getDrawable(R.drawable.about_app));

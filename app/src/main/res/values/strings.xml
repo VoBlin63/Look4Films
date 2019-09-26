@@ -17,5 +17,7 @@
 
     <string name="newFilmNameHint">название фильма</string>
     <string name="newFilmDetailsHint">описание фильма</string>
+    <string name="titleWindowNewFilm">Новый фильм</string>
+    <string name="titleWindowDetails">Подробности</string>
 
 </resources>

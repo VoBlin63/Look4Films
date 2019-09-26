@@ -28,6 +28,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         Toolbar toolbar = findViewById(R.id.detailsToolbar);
+        toolbar.setTitle(getString(R.string.titleWindowDetails));
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();

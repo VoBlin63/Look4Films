@@ -25,11 +25,10 @@ public class NewFilmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_film);
 
         Toolbar toolbar = findViewById(R.id.newFilmToolbar);
+        toolbar.setTitle(getString(R.string.titleWindowNewFilm));
         setSupportActionBar(toolbar);
+
         ImageView pictureNewFilm = findViewById(R.id.pictureNewFilm);
-
-        //Intent intent = getIntent();
-
         pictureNewFilm.setImageDrawable(RandomPicture.make(getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth), getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight)));
 
         findViewById(R.id.doneFloat).setOnClickListener((view) -> makeNewFilm());
