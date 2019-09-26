@@ -1,7 +1,6 @@
 package ru.buryachenko.hw_look4films.models;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
@@ -56,7 +55,7 @@ public class FilmInApp extends Film implements Serializable {
 
     public Drawable getPicture(Context context) {
         if (pictureResource == null) {
-            return RandomPicture.make(context.getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth),context.getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight));
+            return RandomPicture.make(context.getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth), context.getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight));
         } else {
             return context.getResources().getDrawable(pictureResource);
         }

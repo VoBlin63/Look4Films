@@ -1,24 +1,19 @@
 package ru.buryachenko.hw_look4films.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ShareCompat;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
-import ru.buryachenko.hw_look4films.R;
-import ru.buryachenko.hw_look4films.models.FilmInApp;
-import ru.buryachenko.hw_look4films.utils.RandomPicture;
-import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 
@@ -35,7 +30,7 @@ public class NewFilmActivity extends AppCompatActivity {
 
         //Intent intent = getIntent();
 
-        pictureNewFilm.setImageDrawable(RandomPicture.make(getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth),getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight)));
+        pictureNewFilm.setImageDrawable(RandomPicture.make(getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth), getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight)));
 
         findViewById(R.id.doneFloat).setOnClickListener((view) -> makeNewFilm());
     }
@@ -47,9 +42,9 @@ public class NewFilmActivity extends AppCompatActivity {
         if (newFilm == null) {
             //TODO пожалуй, ошибку надо из create вытащить в будущем
             Snackbar.make(name, "Обязательно заполните "
-                            + (name.getText().toString().trim().isEmpty()?"название": "")
-                            + (details.getText().toString().trim().isEmpty() && name.getText().toString().trim().isEmpty()?" и ": "")
-                            + (details.getText().toString().trim().isEmpty()?"описание": "")
+                            + (name.getText().toString().trim().isEmpty() ? "название" : "")
+                            + (details.getText().toString().trim().isEmpty() && name.getText().toString().trim().isEmpty() ? " и " : "")
+                            + (details.getText().toString().trim().isEmpty() ? "описание" : "")
                             + " фильма!"
                     , Snackbar.LENGTH_LONG).show();
             return;

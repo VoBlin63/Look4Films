@@ -1,21 +1,16 @@
 package ru.buryachenko.hw_look4films.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +33,7 @@ import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView.Adapter adapterRecyclerFilms;
     private FilmsViewModel viewModel;
@@ -68,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open , R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -76,8 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             navigationView.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
-        }
-        else {
+        } else {
             navigationView.getHeaderView(0).setBackgroundColor(Color.CYAN);
         }
     }
@@ -118,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 callNewFilmActivity();
                 break;
             default:
-                Log.d(LOGTAG,"Беда - в правом меню необрабатываемый пункт!");
+                Log.d(LOGTAG, "Беда - в правом меню необрабатываемый пункт!");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -127,13 +121,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mainScreen:
-                Toast.makeText(getApplicationContext(),"Основной экран позвался...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Основной экран позвался...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.aboutApplication:
                 showToast("Неужели целый экран о программе делать?");
                 break;
             default:
-                Log.d(LOGTAG,"Беда - в меню drawer необрабатываемый пункт!");
+                Log.d(LOGTAG, "Беда - в меню drawer необрабатываемый пункт!");
         }
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
