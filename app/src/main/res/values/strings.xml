@@ -15,7 +15,7 @@
     <string name="drawer_menu_MainScreen">Главный экран</string>
     <string name="drawer_menu_About">О приложении</string>
 
-    <string name="newFilmNameHint">название</string>
-    <string name="newFilmDetailsHint">описание</string>
+    <string name="newFilmNameHint">название фильма</string>
+    <string name="newFilmDetailsHint">описание фильма</string>
 
 </resources>

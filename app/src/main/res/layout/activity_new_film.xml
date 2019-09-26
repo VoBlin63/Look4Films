@@ -15,20 +15,23 @@
 
         <ImageView
             android:id="@+id/pictureNewFilm"
-            android:layout_width="@dimen/detailsImageSize"
-            android:layout_height="@dimen/detailsImageSize"
-            android:layout_marginStart="@dimen/detailsMarginSides"
+            android:layout_width="@dimen/detailsImageWidth"
+            android:layout_height="@dimen/detailsImageHeight"
+            android:layout_marginStart="@dimen/detailsPictureMarginTop"
             android:layout_marginTop="@dimen/detailsPictureMarginTop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            android:background="@drawable/picture_border"/>
 
         <CheckBox
             android:id="@+id/likedNewFilm"
             android:theme="@style/Details.Liked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detailsMarginSides"
             android:text="@string/likedCheckBox"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/pictureNewFilm"
             app:layout_constraintStart_toEndOf="@id/pictureNewFilm">
 
@@ -42,14 +45,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
             android:id="@+id/wrapNameNewFilm">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameNewFilm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLines="1"
+                android:imeOptions="actionDone"
                 android:hint="@string/newFilmNameHint"
                 android:windowSoftInputMode="adjustResize"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -59,8 +64,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
             android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
             style="@style/Details.Details"
-            android:maxLines="1"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,9 +77,6 @@
             android:layout_height="wrap_content"
             android:maxLines="5"
             android:inputType="text"
-            android:layout_marginTop="@dimen/detailsPictureMarginTop"
-            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
-            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
             android:text=""
             android:hint="@string/newFilmDetailsHint"
             android:windowSoftInputMode="adjustResize"/>

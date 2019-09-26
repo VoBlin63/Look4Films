@@ -16,13 +16,13 @@
 
     <ImageView
         android:id="@+id/picture"
-        android:layout_width="@dimen/detailsImageSize"
-        android:layout_height="@dimen/detailsImageSize"
+        android:layout_width="@dimen/detailsImageWidth"
+        android:layout_height="@dimen/detailsImageHeight"
         android:layout_marginStart="@dimen/detailsMarginSides"
         android:layout_marginTop="@dimen/detailsPictureMarginTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/name"
@@ -42,6 +42,7 @@
             android:theme="@style/Details.Liked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detailsMarginSides"
             android:text="@string/likedCheckBox"
             app:layout_constraintBottom_toBottomOf="@id/picture"
             app:layout_constraintStart_toEndOf="@id/picture">

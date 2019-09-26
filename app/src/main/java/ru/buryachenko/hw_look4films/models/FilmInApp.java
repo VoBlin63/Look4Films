@@ -36,6 +36,9 @@ public class FilmInApp extends Film implements Serializable {
         if (name.isEmpty()) {
             return null;
         }
+        if (details.isEmpty()) {
+            return null;
+        }
         return new FilmInApp(name, null, details, -1);
     }
 

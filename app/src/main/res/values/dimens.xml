@@ -12,7 +12,8 @@
     <dimen name="recyclerSelectedBorder">1dp</dimen>
     <dimen name="recyclerBorder">1dp</dimen>
 
-    <dimen name="detailsImageSize">156dp</dimen>
+    <dimen name="detailsImageHeight">156dp</dimen>
+    <dimen name="detailsImageWidth">127dp</dimen>
     <dimen name="detailsPictureMarginTop">19dp</dimen>
     <dimen name="detailsMarginSides">9dp</dimen>
     <dimen name="detailsMarginSidesBottomTexts">17dp</dimen>

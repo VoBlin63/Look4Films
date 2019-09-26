@@ -7,10 +7,15 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -122,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mainScreen:
-                Log.d(LOGTAG,"Основной экран позвался...");
+                Toast.makeText(getApplicationContext(),"Основной экран позвался...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.aboutApplication:
-                Log.d(LOGTAG,"Неужели целый экран о рограмме делать ?");
+                showToast("Неужели целый экран о программе делать?");
                 break;
             default:
                 Log.d(LOGTAG,"Беда - в меню drawer необрабатываемый пункт!");
@@ -133,6 +138,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(getApplicationContext(),
+                message, Toast.LENGTH_LONG);
+        //toast.setGravity(Gravity.CENTER, 0, 0);
+        LinearLayout toastContainer = (LinearLayout) toast.getView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toastContainer.setBackground(getApplicationContext().getDrawable(R.drawable.about_app));
+        }
+        toast.show();
     }
 
     private void callNewFilmActivity() {

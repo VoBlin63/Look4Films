@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 
 public class NewFilmActivity extends AppCompatActivity {
@@ -39,9 +41,17 @@ public class NewFilmActivity extends AppCompatActivity {
     }
 
     private void makeNewFilm() {
-        FilmInApp newFilm = FilmInApp.create(((TextView)findViewById(R.id.nameNewFilm)).getText().toString(), ((TextView)findViewById(R.id.detailsNewFilm)).getText().toString());
+        TextView name = findViewById(R.id.nameNewFilm);
+        TextView details = findViewById(R.id.detailsNewFilm);
+        FilmInApp newFilm = FilmInApp.create(name.getText().toString(), details.getText().toString());
         if (newFilm == null) {
-            //сообщить что не получилось
+            //TODO пожалуй, ошибку надо из create вытащить в будущем
+            Snackbar.make(name, "Обязательно заполните "
+                            + (name.getText().toString().trim().isEmpty()?"название": "")
+                            + (details.getText().toString().trim().isEmpty() && name.getText().toString().trim().isEmpty()?" и ": "")
+                            + (details.getText().toString().trim().isEmpty()?"описание": "")
+                            + " фильма!"
+                    , Snackbar.LENGTH_LONG).show();
             return;
         }
         Intent intent = new Intent();
