@@ -30,6 +30,15 @@ public class FilmInApp extends Film implements Serializable {
         this.disclosed = false;
     }
 
+    public static FilmInApp create(String name, String details) {
+        name = name.trim();
+        details = details.trim();
+        if (name.isEmpty()) {
+            return null;
+        }
+        return new FilmInApp(name, null, details, -1);
+    }
+
     public Boolean getLiked() {
         return liked;
     }
@@ -85,5 +94,13 @@ public class FilmInApp extends Film implements Serializable {
 
     public void setDisclosed(boolean disclosed) {
         this.disclosed = disclosed;
+    }
+
+    public void setPictureResource(Integer pictureResource) {
+        this.pictureResource = pictureResource;
+    }
+
+    public void setFilmId(int filmId) {
+        this.filmId = filmId;
     }
 }

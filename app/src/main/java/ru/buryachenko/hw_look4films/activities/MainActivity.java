@@ -1,5 +1,7 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -26,6 +28,7 @@ import ru.buryachenko.hw_look4films.utils.FilmsDiffUtilCallback;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.ADD_NEW_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
@@ -77,15 +80,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != REQUEST_DETAILS) {
-            return;
-        }
         if (resultCode != RESULT_OK) {
             return;
         }
-        FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
-        viewModel.put(film);
-        Log.d(LOGTAG, "Для фильма '" + film.getName() + "' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
+        if ((requestCode == REQUEST_DETAILS) || (requestCode == ADD_NEW_FILM)) {
+            FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
+            viewModel.put(film);
+            Log.d(LOGTAG, "Для фильма '" + film.getName() + "' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
+        }
     }
 
     @Override
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addNewFilm:
-                Log.d(LOGTAG,"Добавляем новый фильм...");
+                callNewFilmActivity();
                 break;
             default:
                 Log.d(LOGTAG,"Беда - в правом меню необрабатываемый пункт!");
@@ -133,4 +135,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    private void callNewFilmActivity() {
+        Intent intent = new Intent(this, NewFilmActivity.class);
+        startActivityForResult(intent, ADD_NEW_FILM);
+    }
 }

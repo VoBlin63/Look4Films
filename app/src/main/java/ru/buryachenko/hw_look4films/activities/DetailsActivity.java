@@ -54,7 +54,6 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.right_menu_details_activity, menu);
-        menu.findItem(R.id.shareSelectedFilm).setEnabled(true);
         return true;//super.onCreateOptionsMenu(menu);
     }
 

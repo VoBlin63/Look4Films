@@ -38,6 +38,6 @@ public class FilmsDiffUtilCallback extends DiffUtil.Callback {
         FilmInApp newFilmInApp = newList.get(newItemPosition);
         return oldFilmInApp.getName().equals(newFilmInApp.getName())
                 && oldFilmInApp.getComment().equals(newFilmInApp.getComment())
-                && oldFilmInApp.getLiked() == newFilmInApp.getLiked(); //TODO все может изменяться ?
+                && oldFilmInApp.getLiked() == newFilmInApp.getLiked();
     }
 }

@@ -1,0 +1,72 @@
+package ru.buryachenko.hw_look4films.activities;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ShareCompat;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
+import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.utils.RandomPicture;
+import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
+
+public class NewFilmActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_film);
+
+        Toolbar toolbar = findViewById(R.id.newFilmToolbar);
+        setSupportActionBar(toolbar);
+        ImageView pictureNewFilm = findViewById(R.id.pictureNewFilm);
+
+        //Intent intent = getIntent();
+
+        pictureNewFilm.setImageDrawable(RandomPicture.make(getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth),getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight)));
+
+        findViewById(R.id.doneFloat).setOnClickListener((view) -> makeNewFilm());
+    }
+
+    private void makeNewFilm() {
+        FilmInApp newFilm = FilmInApp.create(((TextView)findViewById(R.id.nameNewFilm)).getText().toString(), ((TextView)findViewById(R.id.detailsNewFilm)).getText().toString());
+        if (newFilm == null) {
+            //сообщить что не получилось
+            return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(FILM_PARAMETER, newFilm);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.right_menu_new_film_activity, menu);
+        return true;//super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.backToMainScreen:
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

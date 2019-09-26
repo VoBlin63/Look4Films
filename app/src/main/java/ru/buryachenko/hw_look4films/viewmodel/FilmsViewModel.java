@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,10 @@ public class FilmsViewModel extends ViewModel {
     }
 
     public void put(FilmInApp film) {
+        if (film.getFilmId() < 0 ) {
+            int newId = Collections.max(films.keySet()) + 1;
+            film.setFilmId(newId);
+        }
         films.put(film.getFilmId(),film);
         changedFilm.setValue(film);
     }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/new_film_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.NewFilmActivity">
+
+        <ImageView
+            android:id="@+id/pictureNewFilm"
+            android:layout_width="@dimen/detailsImageSize"
+            android:layout_height="@dimen/detailsImageSize"
+            android:layout_marginStart="@dimen/detailsMarginSides"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <CheckBox
+            android:id="@+id/likedNewFilm"
+            android:theme="@style/Details.Liked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/likedCheckBox"
+            app:layout_constraintBottom_toBottomOf="@id/pictureNewFilm"
+            app:layout_constraintStart_toEndOf="@id/pictureNewFilm">
+
+        </CheckBox>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            style="@style/Details.Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
+            android:id="@+id/wrapNameNewFilm">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameNewFilm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
+                android:hint="@string/newFilmNameHint"
+                android:windowSoftInputMode="adjustResize"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            style="@style/Details.Details"
+            android:maxLines="1"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wrapNameNewFilm">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/detailsNewFilm"
+            style="@style/Details.Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:inputType="text"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            android:text=""
+            android:hint="@string/newFilmDetailsHint"
+            android:windowSoftInputMode="adjustResize"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <include
+            layout="@layout/fab_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+        </include>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+
+<!--
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+            style="@style/Details.Details"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            style="@style/Details.Name"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            android:layout_marginEnd="@dimen/detailsMarginSides"
+            android:maxLines="1"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
+            android:hint="@string/newFilmNameHint"
+            android:windowSoftInputMode="adjustResize"/>
+        </com.google.android.material.textfield.TextInputLayout>
+-->
