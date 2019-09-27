@@ -1,5 +1,8 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -112,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.addNewFilm:
                 callNewFilmActivity();
                 break;
-            default:
-                Log.d(LOGTAG, "Беда - в правом меню необрабатываемый пункт!");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mainScreen:
-                Toast.makeText(getApplicationContext(), "Мы на основном экране...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.messageWeAlredyInMainScreen), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.aboutApplication:
-                showToast("Тут будет о программе");
+                showToast(getApplicationContext().getString(R.string.messageAboutApp));
                 break;
-            default:
-                Log.d(LOGTAG, "Беда - в меню drawer необрабатываемый пункт!");
+            case R.id.exitApp:
+                tryToExit(getApplicationContext());
         }
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -149,5 +151,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void callNewFilmActivity() {
         Intent intent = new Intent(this, NewFilmActivity.class);
         startActivityForResult(intent, ADD_NEW_FILM);
+    }
+
+    public void tryToExit(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        DialogInterface.OnClickListener listener =
+                (dialog, which) -> {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        finish();
+                    }
+                    dialog.dismiss();
+                };
+        builder.setMessage(context.getString(R.string.exitDialogQuestion));
+        builder.setNegativeButton(context.getString(R.string.exitDialogKeep), listener);
+        builder.setPositiveButton(context.getString(R.string.exitDialogExit), listener);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }

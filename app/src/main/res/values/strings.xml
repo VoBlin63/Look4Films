@@ -12,12 +12,25 @@
 
     <string name="drawerHeader">Поиск фильмов</string>
     <string name="drawerSubHeader">лучше поискать сейчас, чем никогда!</string>
-    <string name="drawer_menu_MainScreen">Главный экран</string>
-    <string name="drawer_menu_About">О приложении</string>
+    <string name="drawerMenuMainScreen">Главный экран</string>
+    <string name="drawerMenuAbout">О приложении</string>
+    <string name="drawerMenuExit">Выход</string>
 
     <string name="newFilmNameHint">название фильма</string>
     <string name="newFilmDetailsHint">описание фильма</string>
+
     <string name="titleWindowNewFilm">Новый фильм</string>
     <string name="titleWindowDetails">Подробности</string>
+    <string name="exitDialogKeep">Остаться</string>
+    <string name="exitDialogExit">Выйти</string>
+    <string name="exitDialogQuestion">Вы хотите выйти?</string>
+    <string name="messageAboutApp">Тут будет о программе</string>
+    <string name="messageWeAlredyInMainScreen">Мы на основном экране...</string>
+    <string name="messageNeed4NEwFilm">Обязательно заполните</string>
+    <string name="messageNeed4NEwFilm_name">название</string>
+    <string name="messageNeed4NEwFilm_Details">описание</string>
+    <string name="messageNeed4NEwFilm_and">и</string>
+    <string name="messageNeed4NEwFilm_end">фильма!</string>
+    <string name="menuAddNewFilm">Добавить новый фильм</string>
 
 </resources>

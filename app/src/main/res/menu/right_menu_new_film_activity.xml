@@ -6,7 +6,6 @@
         android:id="@+id/backToMainScreen"
         android:icon="@drawable/ic_back"
         android:title="@string/detailsBackMenu"
-        android:orderInCategory="100"
         app:showAsAction="always">
     </item>
 </menu>

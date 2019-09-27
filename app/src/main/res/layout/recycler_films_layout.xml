@@ -74,12 +74,10 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[здесь имя]"
             style="@style/Recycler.Name"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/likedStar"
             app:layout_constraintStart_toEndOf="@+id/picture"
-            android:layout_marginTop="@dimen/recyclerHalfGap"
-            tools:ignore="HardcodedText" />
+            android:layout_marginTop="@dimen/recyclerHalfGap"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

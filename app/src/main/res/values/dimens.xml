@@ -21,6 +21,7 @@
     <dimen name="drawerPaddingTop">11dp</dimen>
     <dimen name="drawerHeaderHeight">137dp</dimen>
     <dimen name="drawerHeaderPaddling">17dp</dimen>
+    <dimen name="marginFAB">16dp</dimen>
 
     <integer name="pushDetailsTime">379</integer>
 

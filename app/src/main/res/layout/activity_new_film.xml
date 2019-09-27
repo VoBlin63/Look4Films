@@ -86,38 +86,10 @@
             layout="@layout/fab_done"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/marginFAB"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content">
         </include>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
-
-<!--
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
-            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-            style="@style/Details.Details"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
-            style="@style/Details.Name"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detailsPictureMarginTop"
-            android:layout_marginEnd="@dimen/detailsMarginSides"
-            android:maxLines="1"
-            android:text=""
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pictureNewFilm"
-            android:hint="@string/newFilmNameHint"
-            android:windowSoftInputMode="adjustResize"/>
-        </com.google.android.material.textfield.TextInputLayout>
--->
