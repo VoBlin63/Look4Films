@@ -38,10 +38,9 @@
             android:id="@+id/likedStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detailsPictureMarginTop"
             android:layout_marginEnd="@dimen/detailsMarginSides"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
             tools:ignore="ContentDescription">
 
         </ImageView>
