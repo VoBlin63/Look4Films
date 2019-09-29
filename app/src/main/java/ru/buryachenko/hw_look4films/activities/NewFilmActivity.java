@@ -40,11 +40,11 @@ public class NewFilmActivity extends AppCompatActivity {
         FilmInApp newFilm = FilmInApp.create(name.getText().toString(), details.getText().toString());
         if (newFilm == null) {
             //TODO пожалуй, ошибку надо из create вытащить в будущем
-            Snackbar.make(name, getString(R.string.messageNeed4NEwFilm)
-                            + (name.getText().toString().trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_name) : "")
-                            + (details.getText().toString().trim().isEmpty() && name.getText().toString().trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_and) : "")
+            Snackbar.make(name, getString(R.string.messageNeed4NEwFilm) + " "
+                            + (name.getText().toString().trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_name) + " " : "")
+                            + (details.getText().toString().trim().isEmpty() && name.getText().toString().trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_and)+ " " : "")
                             + (details.getText().toString().trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_Details) : "")
-                            + getString(R.string.messageNeed4NEwFilm_end)
+                            + " " + getString(R.string.messageNeed4NEwFilm_end)
                     , Snackbar.LENGTH_LONG).show();
             return;
         }
