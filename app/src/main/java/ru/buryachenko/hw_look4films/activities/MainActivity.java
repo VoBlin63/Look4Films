@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setBackground(getDrawable(R.drawable.kino_background));
+        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.kino_background));
+//        }
 
         RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
