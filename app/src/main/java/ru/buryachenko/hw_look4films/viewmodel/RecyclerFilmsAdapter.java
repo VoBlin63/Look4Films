@@ -4,9 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -21,12 +19,10 @@ import java.util.List;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
-import ru.buryachenko.hw_look4films.activities.DetailsActivity;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.callDetailsActivity;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
-import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
-import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
     private List<FilmInApp> films;
@@ -177,12 +173,6 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
             callDetailsActivity(context, films.get(position));
             notifyItemChanged(position);
         }
-    }
-
-    private void callDetailsActivity(Context context, FilmInApp film) {
-        Intent intent = new Intent(context, DetailsActivity.class);
-        intent.putExtra(FILM_PARAMETER, film);
-        ((Activity) context).startActivityForResult(intent, REQUEST_DETAILS);
     }
 
 }

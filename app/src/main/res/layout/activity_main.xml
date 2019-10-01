@@ -25,4 +25,13 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:id="@+id/bottomNavigation"
+        app:menu="@menu/bottom_navigation_menu"
+        android:layout_gravity="bottom"
+        android:background="@color/cardview_dark_background"
+        >
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

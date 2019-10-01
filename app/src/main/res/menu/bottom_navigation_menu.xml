@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottomNavQuit"
+        android:icon="@drawable/ic_back"
+        android:title="@string/bottomNavigationQuit" />
+
+    <item
+        android:id="@+id/bottomNavLookDetails"
+        android:icon="@drawable/ic_details"
+        android:title="@string/bottomNavigationDetails" />
+
+    <item
+        android:id="@+id/bottomNavAddFilm"
+        android:icon="@drawable/ic_add_film"
+        android:title="@string/bottomNavigationAddFilm" />
+</menu>

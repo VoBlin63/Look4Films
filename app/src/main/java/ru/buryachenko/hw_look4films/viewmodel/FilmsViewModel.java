@@ -52,4 +52,12 @@ public class FilmsViewModel extends ViewModel {
     public LiveData<FilmInApp> getChangedFilm() {
         return changedFilm;
     }
+
+    public FilmInApp getSelected() {
+        for (FilmInApp film : films.values()) {
+            if (film.isSelected())
+                return film;
+        }
+        return null;
+    }
 }

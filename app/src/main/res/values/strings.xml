@@ -32,5 +32,8 @@
     <string name="messageNeed4NEwFilm_and">и</string>
     <string name="messageNeed4NEwFilm_end">фильма!</string>
     <string name="menuAddNewFilm">Добавить новый фильм</string>
+    <string name="bottomNavigationQuit">Выход</string>
+    <string name="bottomNavigationDetails">Посмотреть</string>
+    <string name="bottomNavigationAddFilm">Добавить</string>
 
 </resources>

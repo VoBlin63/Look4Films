@@ -1,5 +1,6 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +15,10 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.setBackground(getDrawable(R.drawable.kino_background));
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.kino_background));
-//        }
+
+        BottomNavigationView navigation = findViewById(R.id.bottomNavigation);
+        navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
         RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
@@ -175,5 +178,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);
         dialog.show();
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavigationListener
+            = item -> {
+        switch (item.getItemId()) {
+            case R.id.bottomNavQuit:
+                tryToExit(this);
+                break;
+            case R.id.bottomNavLookDetails:
+                FilmInApp selectedFilm = viewModel.getSelected();
+                if (selectedFilm != null) {
+                    callDetailsActivity(this, selectedFilm);
+                }
+                break;
+            case R.id.bottomNavAddFilm:
+                callNewFilmActivity();
+                break;
+        }
+        return true;
+    };
+
+    public static void callDetailsActivity(Context context, FilmInApp film) {
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra(FILM_PARAMETER, film);
+        ((Activity) context).startActivityForResult(intent, REQUEST_DETAILS);
     }
 }
