@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DetailsActivity">
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="@dimen/detailsImageWidth"
+        android:layout_height="@dimen/detailsImageHeight"
+        android:layout_marginStart="@dimen/detailsMarginSides"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"/>
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/Details.Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/detailsMarginSides"
+        android:text="[здесь название]"
+        app:layout_constraintTop_toTopOf="@id/picture"
+        app:layout_constraintStart_toEndOf="@id/liked"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText"/>
+
+        <CheckBox
+            android:id="@+id/liked"
+            android:theme="@style/Details.Liked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detailsMarginSides"
+            android:text="@string/likedCheckBox"
+            app:layout_constraintTop_toTopOf="@id/picture"
+            app:layout_constraintStart_toEndOf="@id/picture">
+
+        </CheckBox>
+
+        <TextView
+            android:id="@+id/details"
+            style="@style/Details.Details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detailsMarginSides"
+            android:paddingStart="@dimen/detailsMarginSides"
+            android:paddingEnd="@dimen/detailsMarginSides"
+            android:text="[здесь детали]"
+            app:layout_constraintTop_toBottomOf="@id/picture"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="HardcodedText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="@dimen/commentWidthLand"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        style="@style/Details.Comment"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toStartOf="@id/liked">
+
+        <EditText
+            android:id="@+id/comment"
+            style="@style/Details.Liked"
+            android:layout_width="@dimen/commentWidthLand"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detailsPictureMarginTop"
+            android:hint="@string/commentsHint"
+            android:inputType="text"
+            android:maxLines="3"
+            android:text="[здесь комментарий]"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="Autofill,HardcodedText">
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+    <include
+        layout="@layout/fab_done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/marginFAB"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+    </include>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
