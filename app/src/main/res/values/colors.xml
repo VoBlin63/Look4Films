@@ -9,4 +9,7 @@
     <color name="recyclerSelectedBorder">#C4C4C4</color>
     <color name="recyclerBorder">#FFFFFF</color>
     <color name="drawerHead">#246854</color>
+    <color name="bottomNavigationBackground">#7A292828</color>
+    <color name="bottomNavigationItem">#C4FFFFFF</color>
+
 </resources>

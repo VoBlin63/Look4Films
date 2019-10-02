@@ -31,7 +31,9 @@
         android:id="@+id/bottomNavigation"
         app:menu="@menu/bottom_navigation_menu"
         android:layout_gravity="bottom"
-        android:background="@color/cardview_dark_background"
+        android:background="@color/bottomNavigationBackground"
+        app:itemIconTint="@color/bottomNavigationItem"
+        app:itemTextColor="@color/bottomNavigationItem"
         >
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
