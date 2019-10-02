@@ -26,4 +26,6 @@
 
     <integer name="pushDetailsTime">379</integer>
 
+    <dimen name="bottomSheetTextSize">15dp</dimen>
+
 </resources>

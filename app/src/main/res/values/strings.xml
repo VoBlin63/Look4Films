@@ -25,7 +25,7 @@
     <string name="exitDialogExit">Выйти</string>
     <string name="exitDialogQuestion">Вы хотите выйти?</string>
     <string name="messageAboutApp">Тут будет о программе</string>
-    <string name="messageWeAlredyInMainScreen">Мы на основном экране...</string>
+    <string name="messageWeAlredyInMainScreen">Мы на основном экране…</string>
     <string name="messageNeed4NEwFilm">Обязательно заполните</string>
     <string name="messageNeed4NEwFilm_name">название</string>
     <string name="messageNeed4NEwFilm_Details">описание</string>
@@ -35,5 +35,7 @@
     <string name="bottomNavigationQuit">Выход</string>
     <string name="bottomNavigationDetails">Посмотреть</string>
     <string name="bottomNavigationAddFilm">Добавить</string>
+    <string name="bottomSheetChangePictureStr">Поменять картинку</string>
+    <string name="bottomSheetMoreActionStr">Еще какое-то действие</string>
 
 </resources>

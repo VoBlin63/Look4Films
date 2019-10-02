@@ -6,4 +6,6 @@ public class Constants {
     public static final int REQUEST_DETAILS = 1001;
     public static final int ADD_NEW_FILM = 1002;
     public static final int DURATION_DETAILS_ANIMAYION = 300;
+    public static final String BOTTOM_SHEET_TAG = "ActionBottomDialog";
+
 }

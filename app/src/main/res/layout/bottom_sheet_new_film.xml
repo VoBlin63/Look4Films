@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/detailsPictureMarginTop"
+    >
+    <TextView
+        android:id="@+id/bottomSheetNewFilmChangePicture"
+        android:layout_marginTop="@dimen/detailsMarginSides"
+        android:drawableStart="@drawable/ic_refresh"
+        android:text="@string/bottomSheetChangePictureStr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/BottomSheetActions"
+        />
+    <TextView
+        android:id="@+id/bottomSheetNewFilmMoreAction"
+        android:drawableStart="@drawable/ic_more_action"
+        android:text="@string/bottomSheetMoreActionStr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomSheetNewFilmChangePicture"
+        style="@style/BottomSheetActions"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
