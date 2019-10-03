@@ -28,4 +28,7 @@
 
     <dimen name="bottomSheetTextSize">15dp</dimen>
 
+    <dimen name="collapsingTBLMarginEnd">64dp</dimen>
+    <dimen name="collapsingTBLMarginStart">48dp</dimen>
+
 </resources>

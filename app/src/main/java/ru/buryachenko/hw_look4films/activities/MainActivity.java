@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.setBackground(getDrawable(R.drawable.kino_background));
-        }
 
         BottomNavigationView navigation = findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
