@@ -2,14 +2,20 @@ package ru.buryachenko.hw_look4films.models;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final String separator = " ";
     private Boolean liked;
     private String details;
     private String comment;
@@ -104,5 +110,21 @@ public class FilmInApp extends Film implements Serializable {
 
     public void setFilmId(int filmId) {
         this.filmId = filmId;
+    }
+
+    public String toWidgetString() {
+        return filmId + separator + pictureResource + separator + liked;
+    }
+
+    public static Integer pictureResourceFromWidgetString(String str) {
+        if (str.isEmpty())
+            return null;
+        return Integer.parseInt(str.split(separator)[1]);
+    }
+
+    public static boolean likedFromWidgetString(String str) {
+        if (str.isEmpty())
+            return false;
+        return Boolean.parseBoolean(str.split(separator)[2]);
     }
 }
