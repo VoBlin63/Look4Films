@@ -7,17 +7,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,22 +38,15 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 import ru.buryachenko.hw_look4films.viewmodel.WidgetProvider;
 
-import static android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE;
-import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
-import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS;
 import static ru.buryachenko.hw_look4films.utils.Constants.ADD_NEW_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
-import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
-import static ru.buryachenko.hw_look4films.utils.Constants.SETTINGS_PREFERENCES;
-import static ru.buryachenko.hw_look4films.utils.Constants.WIDGET_ACTION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView.Adapter adapterRecyclerFilms;
     private FilmsViewModel viewModel;
-    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ((RecyclerFilmsAdapter) adapterRecyclerFilms).setData(viewModel.getList(this));
             filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
         });
+        viewModel.refreshSaved(this);
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -98,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             navigationView.getHeaderView(0).setBackgroundColor(Color.CYAN);
         }
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-                //getSharedPreferences(SETTINGS_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -161,12 +150,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPause() {
         super.onPause();
-        for (FilmInApp film : viewModel.getList(this)) {
-            if (film.isSelected()) {
-                saveSelectedFilm(film);
-                break;
-            }
-        }
+        refreshWidget();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOGTAG, "viewModel.refreshSaved   ");
+        viewModel.refreshSaved(this);
     }
 
     public void showToast(String message) {
@@ -227,12 +218,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((Activity) context).startActivityForResult(intent, REQUEST_DETAILS);
     }
 
-    public void saveSelectedFilm(FilmInApp film) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PREFERENCES_SELECTED_FILM, film.toWidgetString());
-        editor.apply();
+    public void refreshWidget() {
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
         WidgetProvider widget = new WidgetProvider();
-        widget.onUpdate(this, AppWidgetManager.getInstance(this),ids);
-     }
+        widget.onUpdate(this, AppWidgetManager.getInstance(this), ids);
+    }
+
 }

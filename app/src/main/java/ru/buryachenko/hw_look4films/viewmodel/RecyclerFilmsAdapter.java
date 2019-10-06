@@ -169,9 +169,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                     }
                 }
             }
-            films.get(position).setSelected(true);
             callDetailsActivity(context, films.get(position));
-            notifyItemChanged(position);
         }
     }
 

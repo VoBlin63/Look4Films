@@ -33,6 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         film = (FilmInApp) intent.getSerializableExtra(FILM_PARAMETER);
+        film.saveSelectedFilm(this);
         CheckBox liked = findViewById(R.id.liked);
         liked.setChecked(film.getLiked());
         liked.setOnCheckedChangeListener((checkbox, checked) -> film.setLiked(checked));
@@ -46,6 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void doSaveDetails(FilmInApp film) {
         film.setComment(((EditText) findViewById(R.id.comment)).getText().toString());
+        film.saveSelectedFilm(this); //могли поменять liked
         Intent intent = new Intent();
         intent.putExtra(FILM_PARAMETER, film);
         setResult(RESULT_OK, intent);

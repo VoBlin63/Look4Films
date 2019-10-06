@@ -1,7 +1,12 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
 import android.annotation.SuppressLint;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +19,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FilmsViewModel extends ViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
@@ -37,7 +45,25 @@ public class FilmsViewModel extends ViewModel {
                 films.put(filmInApp.getFilmId(), filmInApp);
             }
         }
-        return new ArrayList(films.values());
+
+        return new ArrayList<>(films.values());
+    }
+
+    public void refreshSaved(Context context) {
+        if (films == null)
+            return;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        if(settings.contains(PREFERENCES_SELECTED_FILM)) {
+            String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
+            int filmId = FilmInApp.filmIdFromWidgetString(savedData);
+            boolean liked = FilmInApp.likedFromWidgetString(savedData);
+            if (films.containsKey(filmId)) {
+                FilmInApp tmp = new FilmInApp(films.get(filmId));
+                tmp.setLiked(liked);
+                tmp.setSelected(true);
+                put(tmp);
+            }
+        }
     }
 
     public void put(FilmInApp film) {
