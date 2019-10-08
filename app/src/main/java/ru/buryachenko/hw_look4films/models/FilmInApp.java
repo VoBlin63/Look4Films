@@ -4,21 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String separator = " ";
+    private static final String separator = "&";
     private Boolean liked;
     private String details;
     private String comment;
@@ -48,6 +44,7 @@ public class FilmInApp extends Film implements Serializable {
         filmId = previous.filmId;
         disclosed = previous.disclosed;
     }
+
     public static FilmInApp create(String name, String details) {
         name = name.trim();
         details = details.trim();
@@ -126,7 +123,7 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public String toWidgetString() {
-        return filmId + separator + (pictureResource == null? 0 : pictureResource) + separator + liked;
+        return filmId + separator + (pictureResource == null ? 0 : pictureResource) + separator + liked;
     }
 
     public static int filmIdFromWidgetString(String str) {
@@ -156,6 +153,6 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public String toString() {
-        return " id" +filmId + " liked=" + liked + " selected=" + selected + " name=" + getName();
+        return " id" + filmId + " liked=" + liked + " selected=" + selected + " name=" + getName();
     }
 }

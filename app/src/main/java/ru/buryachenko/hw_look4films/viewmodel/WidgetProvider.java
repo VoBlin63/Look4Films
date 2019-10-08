@@ -15,10 +15,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
@@ -60,8 +56,15 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         int appWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, 0);
-        if (WIDGET_ACTION_CHANGE_LIKED.equals(intent.getAction())) {
-            changeLikedAndSaveWidgetData(context);
+        if (intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case WIDGET_ACTION_CHANGE_LIKED:
+                    changeLikedAndSaveWidgetData(context);
+                    break;
+                case WIDGET_ACTION_PICTURE:
+                    //что бы тут сделать ?
+                    break;
+            }
         }
         if (WIDGET_ACTION_CHANGE_LIKED.equals(intent.getAction())
                 || WIDGET_ACTION_PICTURE.equals(intent.getAction())) {
