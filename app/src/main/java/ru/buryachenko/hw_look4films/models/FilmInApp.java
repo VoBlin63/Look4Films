@@ -14,7 +14,6 @@ public class FilmInApp extends Film implements Serializable {
     private String details;
     private String comment;
     private Integer pictureResource;
-    private Boolean selected;
     private int filmId;
     private boolean disclosed;
 
@@ -24,7 +23,6 @@ public class FilmInApp extends Film implements Serializable {
         this.liked = false;
         this.comment = "";
         this.pictureResource = pictureResource;
-        this.selected = false;
         this.filmId = filmId;
         this.disclosed = false;
     }
@@ -61,10 +59,6 @@ public class FilmInApp extends Film implements Serializable {
         }
     }
 
-    public Boolean isSelected() {
-        return selected;
-    }
-
     public void setLiked(Boolean liked) {
         this.liked = liked;
     }
@@ -75,10 +69,6 @@ public class FilmInApp extends Film implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public void setSelected(Boolean selected) {
-        this.selected = selected;
     }
 
     public int getFilmId() {

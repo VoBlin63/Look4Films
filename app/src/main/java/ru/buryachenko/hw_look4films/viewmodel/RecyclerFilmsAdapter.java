@@ -142,11 +142,11 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
         FilmInApp film = films.get(position);
-        holder.itemView.setSelected(film.isSelected());
+//        holder.itemView.setSelected(film.isSelected()); //TODO вернуть признак
         holder.picture.setImageDrawable(film.getPicture(holder.picture.getContext()));
         holder.name.setText(film.getName());
         holder.liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
-        holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation());
+//        holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation()); //TODO вернуть признак
         holder.details.setText(film.getDetails());
         doAnimationPushRight(!film.isDisclosed(), holder.liked, holder.name, holder.detailsButton);
         doAnimationDetails(!film.isDisclosed(), holder.details);
@@ -159,17 +159,19 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
 
     private void doClick(View view, int position, Context context) {
         if (position != RecyclerView.NO_POSITION) {
-            if (!films.get(position).isSelected()) {
-                //отменим предыдущий выбор
-                for (int i = 0; i < films.size(); i++) {
-                    if (films.get(i).isSelected()) {
-                        films.get(i).setSelected(false);
-                        notifyItemChanged(i);
-                        break;
-                    }
-                }
-            }
-            films.get(position).setSelected(true);
+//TODO вернуть признак
+//            if (!films.get(position).isSelected()) {
+//                //отменим предыдущий выбор
+//                for (int i = 0; i < films.size(); i++) {
+//                    if (films.get(i).isSelected()) {
+//                        films.get(i).setSelected(false);
+//                        notifyItemChanged(i);
+//                        break;
+//                    }
+//                }
+//            }
+//            films.get(position).setSelected(true);
+
             callDetailsActivity(context, films.get(position));
             notifyItemChanged(position);
         }

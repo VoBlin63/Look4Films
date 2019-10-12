@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DiffUtil;
@@ -42,14 +43,20 @@ import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView.Adapter adapterRecyclerFilms;
-    private FilmsViewModel viewModel;
+    private static final String FRAGMENT_LIST ="ru.buryachenko.hw_look4films.ListOfFilm.Fragment";
+    private static final String FRAGMENT_DETAILS ="ru.buryachenko.hw_look4films.Details.Fragment";
+    private static final String FRAGMENT_CREATE_NEW ="ru.buryachenko.hw_look4films.CreateNew.Fragment";
+    private static FilmsViewModel viewModel;
+    private static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_with_drawer);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
+        viewModel.init();
+
+        fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,20 +65,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BottomNavigationView navigation = findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
-        RecyclerView recyclerFilms = findViewById(R.id.recyclerLayoutFilms);
-        RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(this);
-        adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList(this));
-        recyclerFilms.setHasFixedSize(true);
-        recyclerFilms.setLayoutManager(layoutManagerFilms);
-        recyclerFilms.setAdapter(adapterRecyclerFilms);
-
-        LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
-        changedFilm.observe(this, filmInApp -> {
-            FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(((RecyclerFilmsAdapter) adapterRecyclerFilms).getData(), viewModel.getList(this));
-            DiffUtil.DiffResult filmsDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback);
-            ((RecyclerFilmsAdapter) adapterRecyclerFilms).setData(viewModel.getList(this));
-            filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
-        });
+        FragmentListOfFilms listOfFilms = (FragmentListOfFilms) getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST);
+//        if (listOfFilms != null) {
+//            //а нужно ли это ?
+//            getSupportFragmentManager().beginTransaction().remove(listOfFilms).commit();
+//        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new FragmentListOfFilms(), FRAGMENT_LIST)
+                .addToBackStack(null)
+                .commit();
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -196,8 +199,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
 
     public static void callDetailsActivity(Context context, FilmInApp film) {
-        Intent intent = new Intent(context, DetailsActivity.class);
-        intent.putExtra(FILM_PARAMETER, film);
-        ((Activity) context).startActivityForResult(intent, REQUEST_DETAILS);
+        viewModel.setSelectedFilm(film);
+        FragmentDetails fragmentDetails = (FragmentDetails) fragmentManager.findFragmentByTag(FRAGMENT_DETAILS);
+        if (fragmentDetails != null) {
+            //а нужно ли это ?
+            fragmentManager.beginTransaction().remove(fragmentDetails).commit();
+        }
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.fragmentContainer, new FragmentDetails(), FRAGMENT_DETAILS)
+                .addToBackStack(null)
+                .commit();
     }
 }
