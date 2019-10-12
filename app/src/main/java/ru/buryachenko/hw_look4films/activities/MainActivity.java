@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String FRAGMENT_CREATE_NEW ="ru.buryachenko.hw_look4films.CreateNew.Fragment";
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
+    private static BottomNavigationView navigation;
+    public static final int BOTTOM_CAPABILITY_LIST_FILMS = 0;
+    public static final int BOTTOM_CAPABILITY_DETAILS = 1;
+    public static final int BOTTOM_CAPABILITY_CREATE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
 
-        BottomNavigationView navigation = findViewById(R.id.bottomNavigation);
+        navigation = findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
         FragmentListOfFilms listOfFilms = (FragmentListOfFilms) getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST);
@@ -197,10 +201,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //а нужно ли это ?
             fragmentManager.beginTransaction().remove(fragmentDetails).commit();
         }
+        setBottomBarCapability(BOTTOM_CAPABILITY_DETAILS);
         fragmentManager
                 .beginTransaction()
                 .add(R.id.fragmentContainer, new FragmentDetails(), FRAGMENT_DETAILS)
                 .addToBackStack(null)
                 .commit();
     }
+
+    public static void setBottomBarCapability(int type) {
+        Log.d(LOGTAG,"setBottomBarCapability type= " + type);
+        switch (type) {
+            case BOTTOM_CAPABILITY_LIST_FILMS:
+                setBottomBarCapabilityItems(true, true, true);
+                break;
+            case BOTTOM_CAPABILITY_DETAILS:
+                setBottomBarCapabilityItems(true, false, false);
+                break;
+            case BOTTOM_CAPABILITY_CREATE:
+                setBottomBarCapabilityItems(false, false, false);
+                break;
+            default:
+        }
+    }
+
+    private static void setBottomBarCapabilityItems(boolean canExit, boolean canDetails, boolean canCreate) {
+        Log.d(LOGTAG,"items: " + canExit + " " + canDetails + " " + canCreate);
+        setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavQuit),canExit);
+        setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavLookDetails),canDetails && (FilmInApp.getSelected() != null));
+        setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavAddFilm),canCreate);
+    }
+
+    private static void setCapabilityItem(MenuItem item, boolean isPossible) {
+        item.setEnabled(isPossible);
+        item.setVisible(isPossible);
+    }
+
 }

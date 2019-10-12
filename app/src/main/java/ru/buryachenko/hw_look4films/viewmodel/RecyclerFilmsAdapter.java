@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.BOTTOM_CAPABILITY_LIST_FILMS;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callDetailsFragment;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.setBottomBarCapability;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
@@ -160,8 +162,9 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
 
     private void callDetails(int position) {
         if (position != RecyclerView.NO_POSITION) {
+            Integer previousSelected = null;
             if (!films.get(position).isSelected()) {
-                Integer previousSelected = FilmInApp.getSelected();
+                previousSelected = FilmInApp.getSelected();
                 if (previousSelected != null) {
                     FilmInApp.clearSelected();
                     for (int i = 0; i < films.size(); i++) {
@@ -173,6 +176,8 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                 }
             }
             films.get(position).setSelected();
+            if (previousSelected == null)
+                setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
             callDetailsFragment();
             notifyItemChanged(position);
         }

@@ -17,6 +17,9 @@ import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.BOTTOM_CAPABILITY_LIST_FILMS;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.setBottomBarCapability;
+
 public class FragmentDetails extends Fragment {
     private FilmsViewModel viewModel;
 
@@ -47,6 +50,7 @@ public class FragmentDetails extends Fragment {
         film.setComment(((EditText) view.findViewById(R.id.comment)).getText().toString());
         film.setLiked(((CheckBox) view.findViewById(R.id.liked)).isChecked());
         viewModel.put(film);
+        setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 }

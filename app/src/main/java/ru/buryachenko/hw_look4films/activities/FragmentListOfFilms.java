@@ -1,6 +1,7 @@
 package ru.buryachenko.hw_look4films.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,10 @@ import ru.buryachenko.hw_look4films.utils.FilmsDiffUtilCallback;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.BOTTOM_CAPABILITY_LIST_FILMS;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.setBottomBarCapability;
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+
 public class FragmentListOfFilms extends Fragment {
 
     private RecyclerFilmsAdapter adapterRecyclerFilms;
@@ -34,13 +39,14 @@ public class FragmentListOfFilms extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
+        setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
+
         RecyclerView recyclerFilms = view.findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(view.getContext());
         adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList());
         recyclerFilms.setHasFixedSize(true);
         recyclerFilms.setLayoutManager(layoutManagerFilms);
         recyclerFilms.setAdapter(adapterRecyclerFilms);
-
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, filmInApp -> {
             FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(adapterRecyclerFilms.getData(), viewModel.getList());
@@ -49,6 +55,4 @@ public class FragmentListOfFilms extends Fragment {
             filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
         });
     }
-
-
 }
