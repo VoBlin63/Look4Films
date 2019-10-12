@@ -17,7 +17,6 @@ import ru.buryachenko.hw_look4films.models.FilmInApp;
 public class FilmsViewModel extends ViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
     private Map<Integer, FilmInApp> films;
-    private Integer selectedFilmId = null;
 
     public void init() {
         if (films == null) {
@@ -59,13 +58,12 @@ public class FilmsViewModel extends ViewModel {
     }
 
     public FilmInApp getSelected() {
-        if ((selectedFilmId == null) || (films == null))
+        if ((films == null) || (films.isEmpty()))
             return null;
-        return films.get(selectedFilmId);
-    }
-
-    public void setSelectedFilm(FilmInApp film) {
-        selectedFilmId = film.getFilmId();
+        Integer selectedId = FilmInApp.getSelected();
+        if (FilmInApp.getSelected() == null)
+            return null;
+        return films.get(selectedId);
     }
 
 }

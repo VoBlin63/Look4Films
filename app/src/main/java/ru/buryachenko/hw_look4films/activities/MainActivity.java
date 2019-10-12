@@ -1,6 +1,5 @@
 package ru.buryachenko.hw_look4films.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,16 +24,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
-import ru.buryachenko.hw_look4films.utils.FilmsDiffUtilCallback;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
-import ru.buryachenko.hw_look4films.viewmodel.RecyclerFilmsAdapter;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.ADD_NEW_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
@@ -188,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.bottomNavLookDetails:
                 FilmInApp selectedFilm = viewModel.getSelected();
                 if (selectedFilm != null) {
-                    callDetailsActivity(this, selectedFilm);
+                    callDetailsFragment();
                 }
                 break;
             case R.id.bottomNavAddFilm:
@@ -198,8 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     };
 
-    public static void callDetailsActivity(Context context, FilmInApp film) {
-        viewModel.setSelectedFilm(film);
+    public static void callDetailsFragment() {
         FragmentDetails fragmentDetails = (FragmentDetails) fragmentManager.findFragmentByTag(FRAGMENT_DETAILS);
         if (fragmentDetails != null) {
             //а нужно ли это ?

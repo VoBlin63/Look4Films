@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
-import static ru.buryachenko.hw_look4films.activities.MainActivity.callDetailsActivity;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.callDetailsFragment;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
@@ -73,9 +73,10 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         rightSide = size.x;
 
         filmRow.findViewById(R.id.picture).setOnClickListener(view -> doChangeDisclosed(filmRow, res.getAdapterPosition()));
-        filmRow.findViewById(R.id.detailsButton).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        View.OnClickListener detailsCallClick = view -> callDetails(res.getAdapterPosition());
+        filmRow.findViewById(R.id.detailsButton).setOnClickListener(detailsCallClick);
         //здесь клик возможен только на раскрытых деталях и логично в детали пойти
-        filmRow.findViewById(R.id.details).setOnClickListener(view -> doClick(view, res.getAdapterPosition(), parent.getContext()));
+        filmRow.findViewById(R.id.details).setOnClickListener(detailsCallClick);
         return res;
     }
 
@@ -142,11 +143,11 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     @Override
     public void onBindViewHolder(RecyclerFilmsHolder holder, int position) {
         FilmInApp film = films.get(position);
-//        holder.itemView.setSelected(film.isSelected()); //TODO вернуть признак
+        holder.itemView.setSelected(film.isSelected());
         holder.picture.setImageDrawable(film.getPicture(holder.picture.getContext()));
         holder.name.setText(film.getName());
         holder.liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
-//        holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation()); //TODO вернуть признак
+        holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation());
         holder.details.setText(film.getDetails());
         doAnimationPushRight(!film.isDisclosed(), holder.liked, holder.name, holder.detailsButton);
         doAnimationDetails(!film.isDisclosed(), holder.details);
@@ -157,24 +158,23 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         return films.size();
     }
 
-    private void doClick(View view, int position, Context context) {
+    private void callDetails(int position) {
         if (position != RecyclerView.NO_POSITION) {
-//TODO вернуть признак
-//            if (!films.get(position).isSelected()) {
-//                //отменим предыдущий выбор
-//                for (int i = 0; i < films.size(); i++) {
-//                    if (films.get(i).isSelected()) {
-//                        films.get(i).setSelected(false);
-//                        notifyItemChanged(i);
-//                        break;
-//                    }
-//                }
-//            }
-//            films.get(position).setSelected(true);
-
-            callDetailsActivity(context, films.get(position));
+            if (!films.get(position).isSelected()) {
+                Integer previousSelected = FilmInApp.getSelected();
+                if (previousSelected != null) {
+                    FilmInApp.clearSelected();
+                    for (int i = 0; i < films.size(); i++) {
+                        if (films.get(i).getFilmId() == previousSelected) {
+                            notifyItemChanged(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            films.get(position).setSelected();
+            callDetailsFragment();
             notifyItemChanged(position);
         }
     }
-
 }

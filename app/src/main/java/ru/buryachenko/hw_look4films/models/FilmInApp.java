@@ -16,6 +16,7 @@ public class FilmInApp extends Film implements Serializable {
     private Integer pictureResource;
     private int filmId;
     private boolean disclosed;
+    private static Integer selectedFilmId = null;
 
     public FilmInApp(String name, Integer pictureResource, String details, int filmId) {
         super(name);
@@ -41,6 +42,22 @@ public class FilmInApp extends Film implements Serializable {
 
     public Boolean getLiked() {
         return liked;
+    }
+
+    public Boolean isSelected() {
+        return selectedFilmId != null && filmId == selectedFilmId;
+    }
+
+    public void setSelected() {
+        selectedFilmId = filmId;
+    }
+
+    public static void clearSelected() {
+        selectedFilmId = null;
+    }
+
+    public static Integer getSelected() {
+        return selectedFilmId;
     }
 
     public String getDetails() {

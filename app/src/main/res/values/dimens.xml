@@ -22,6 +22,7 @@
     <dimen name="drawerHeaderHeight">137dp</dimen>
     <dimen name="drawerHeaderPaddling">17dp</dimen>
     <dimen name="marginFAB">16dp</dimen>
+    <dimen name="marginBottomFABWithBar">51dp</dimen>
     <dimen name="commentWidthLand">533dp</dimen>
 
     <integer name="pushDetailsTime">379</integer>
