@@ -1,16 +1,12 @@
 package ru.buryachenko.hw_look4films.models;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 
 import java.io.Serializable;
 
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
-
-import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -39,7 +35,6 @@ public class FilmInApp extends Film implements Serializable {
         details = previous.details;
         comment = previous.comment;
         pictureResource = previous.pictureResource;
-        selected = previous.selected;
         filmId = previous.filmId;
         disclosed = previous.disclosed;
     }
@@ -65,7 +60,11 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public void setSelected() {
+        Integer previousSelected = selectedFilmId;
         selectedFilmId = filmId;
+        if (!selectedFilmId.equals(previousSelected)) {
+            //saveSelectedFilm(context);
+        }
     }
 
     public static void clearSelected() {
@@ -151,15 +150,7 @@ public class FilmInApp extends Film implements Serializable {
         return Boolean.parseBoolean(str.split(separator)[2]);
     }
 
-    public void saveSelectedFilm(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = settings.edit();
-        this.setSelected(true);
-        editor.putString(PREFERENCES_SELECTED_FILM, this.toWidgetString());
-        editor.apply();
-    }
-
     public String toString() {
-        return " id" + filmId + " liked=" + liked + " selected=" + selected + " name=" + getName();
+        return " id" + filmId + " liked=" + liked + " selected=" + selectedFilmId + " name=" + getName();
     }
 }

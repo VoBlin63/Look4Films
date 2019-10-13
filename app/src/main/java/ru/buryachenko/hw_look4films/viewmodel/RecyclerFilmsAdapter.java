@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import static ru.buryachenko.hw_look4films.activities.MainActivity.BOTTOM_CAPABI
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callDetailsFragment;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.setBottomBarCapability;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
     private List<FilmInApp> films;
@@ -176,8 +178,8 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
                 }
             }
             films.get(position).setSelected();
-            if (previousSelected == null)
-                setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
+//            if (previousSelected == null)
+//                setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
             callDetailsFragment();
             notifyItemChanged(position);
         }

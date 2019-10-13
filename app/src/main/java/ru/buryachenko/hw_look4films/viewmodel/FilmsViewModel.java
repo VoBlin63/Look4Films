@@ -1,6 +1,10 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
-import android.annotation.SuppressLint;
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,17 +12,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
-public class FilmsViewModel extends ViewModel {
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
+
+public class FilmsViewModel extends AndroidViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
     private Map<Integer, FilmInApp> films;
 
+    public FilmsViewModel(@NonNull Application application) {
+        super(application);
+    }
+
     public void init() {
+        Log.d(LOGTAG, "init() " + (films == null ? "null":films.size()));
         if (films == null) {
             films = new HashMap<>();
             //здесь фильмы будут откуда-то подгружаться
@@ -35,35 +48,35 @@ public class FilmsViewModel extends ViewModel {
             for (FilmInApp filmInApp : filmsFromSomewhere) {
                 films.put(filmInApp.getFilmId(), filmInApp);
             }
+            loadSavedSelected();
         }
     }
 
-    @SuppressLint("UseSparseArrays")
     public List<FilmInApp> getList() {
-        init();
-        return new ArrayList(films.values());
-
+        if (films == null)
+            init();
         return new ArrayList<>(films.values());
     }
 
-    public void refreshSaved(Context context) {
-        if (films == null)
+    public void loadSavedSelected() {
+        if ((films == null) || (films.isEmpty()))
             return;
+        Context context = getApplication();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         if(settings.contains(PREFERENCES_SELECTED_FILM)) {
             String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
+            if ((savedData == null) || (savedData.isEmpty()))
+                return;
             int filmId = FilmInApp.filmIdFromWidgetString(savedData);
             boolean liked = FilmInApp.likedFromWidgetString(savedData);
             if (films.containsKey(filmId)) {
-                FilmInApp tmp = new FilmInApp(films.get(filmId));
-                tmp.setLiked(liked);
-                tmp.setSelected(true);
-                put(tmp);
+                films.get(filmId).setSelected();
+                films.get(filmId).setLiked(liked);
             }
         }
     }
 
-    public void put(FilmInApp film) {
+    public void putFilm(FilmInApp film) {
         if (film.getFilmId() < 0) {
             int newId = Collections.max(films.keySet()) + 1;
             film.setFilmId(newId);
@@ -80,9 +93,8 @@ public class FilmsViewModel extends ViewModel {
         if ((films == null) || (films.isEmpty()))
             return null;
         Integer selectedId = FilmInApp.getSelected();
-        if (FilmInApp.getSelected() == null)
+        if (selectedId == null)
             return null;
         return films.get(selectedId);
     }
-
 }

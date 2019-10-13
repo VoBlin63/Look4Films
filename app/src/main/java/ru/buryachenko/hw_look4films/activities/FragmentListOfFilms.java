@@ -38,9 +38,9 @@ public class FragmentListOfFilms extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(FilmsViewModel.class);
         setBottomBarCapability(BOTTOM_CAPABILITY_LIST_FILMS);
-
+        Log.d(LOGTAG, "FragmentListOfFilms onViewCreated");
         RecyclerView recyclerFilms = view.findViewById(R.id.recyclerLayoutFilms);
         RecyclerView.LayoutManager layoutManagerFilms = new LinearLayoutManager(view.getContext());
         adapterRecyclerFilms = new RecyclerFilmsAdapter(viewModel.getList());
@@ -49,10 +49,18 @@ public class FragmentListOfFilms extends Fragment {
         recyclerFilms.setAdapter(adapterRecyclerFilms);
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, filmInApp -> {
+            Log.d(LOGTAG,"changedFilm.observe  " + filmInApp);
             FilmsDiffUtilCallback productDiffUtilCallback = new FilmsDiffUtilCallback(adapterRecyclerFilms.getData(), viewModel.getList());
             DiffUtil.DiffResult filmsDiffResult = DiffUtil.calculateDiff(productDiffUtilCallback);
             adapterRecyclerFilms.setData(viewModel.getList());
             filmsDiffResult.dispatchUpdatesTo(adapterRecyclerFilms);
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadSavedSelected();
+    }
+
 }

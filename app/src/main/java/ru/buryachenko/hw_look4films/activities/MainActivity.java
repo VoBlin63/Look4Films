@@ -1,15 +1,18 @@
 package ru.buryachenko.hw_look4films.activities;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -31,10 +34,12 @@ import androidx.lifecycle.ViewModelProviders;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
+import ru.buryachenko.hw_look4films.viewmodel.WidgetProvider;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.ADD_NEW_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.FILM_PARAMETER;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 import static ru.buryachenko.hw_look4films.utils.Constants.REQUEST_DETAILS;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_with_drawer);
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
-        viewModel.init();
+        Log.d(LOGTAG, "MainActivity onCreate");
 
         fragmentManager = getSupportFragmentManager();
 
@@ -87,19 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
         } else {
             navigationView.getHeaderView(0).setBackgroundColor(Color.CYAN);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if ((requestCode == REQUEST_DETAILS) || (requestCode == ADD_NEW_FILM)) {
-            FilmInApp film = (FilmInApp) data.getSerializableExtra(FILM_PARAMETER);
-            viewModel.put(film);
-            Log.d(LOGTAG, "Для фильма '" + film.getName() + "' возвращено значение Нравится " + film.getLiked() + " и комментарий '" + film.getComment() + "'");
         }
     }
 
@@ -144,19 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        refreshWidget();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOGTAG, "viewModel.refreshSaved   ");
-        viewModel.refreshSaved(this);
     }
 
     public void showToast(String message) {
@@ -226,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setBottomBarCapability(int type) {
-        Log.d(LOGTAG,"setBottomBarCapability type= " + type);
         switch (type) {
             case BOTTOM_CAPABILITY_LIST_FILMS:
                 setBottomBarCapabilityItems(true, true, true);
@@ -242,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private static void setBottomBarCapabilityItems(boolean canExit, boolean canDetails, boolean canCreate) {
-        Log.d(LOGTAG,"items: " + canExit + " " + canDetails + " " + canCreate);
         setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavQuit),canExit);
         setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavLookDetails),canDetails && (FilmInApp.getSelected() != null));
         setCapabilityItem(navigation.getMenu().findItem(R.id.bottomNavAddFilm),canCreate);
@@ -251,13 +228,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static void setCapabilityItem(MenuItem item, boolean isPossible) {
         item.setEnabled(isPossible);
         item.setVisible(isPossible);
-    }
-
-
-    public void refreshWidget() {
-        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
-        WidgetProvider widget = new WidgetProvider();
-        widget.onUpdate(this, AppWidgetManager.getInstance(this), ids);
     }
 
 }
