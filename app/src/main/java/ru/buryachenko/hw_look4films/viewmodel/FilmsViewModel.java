@@ -42,6 +42,25 @@ public class FilmsViewModel extends ViewModel {
     public List<FilmInApp> getList() {
         init();
         return new ArrayList(films.values());
+
+        return new ArrayList<>(films.values());
+    }
+
+    public void refreshSaved(Context context) {
+        if (films == null)
+            return;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        if(settings.contains(PREFERENCES_SELECTED_FILM)) {
+            String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
+            int filmId = FilmInApp.filmIdFromWidgetString(savedData);
+            boolean liked = FilmInApp.likedFromWidgetString(savedData);
+            if (films.containsKey(filmId)) {
+                FilmInApp tmp = new FilmInApp(films.get(filmId));
+                tmp.setLiked(liked);
+                tmp.setSelected(true);
+                put(tmp);
+            }
+        }
     }
 
     public void put(FilmInApp film) {

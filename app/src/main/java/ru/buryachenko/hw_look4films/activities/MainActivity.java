@@ -1,6 +1,9 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -143,6 +146,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        refreshWidget();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOGTAG, "viewModel.refreshSaved   ");
+        viewModel.refreshSaved(this);
+    }
+
     public void showToast(String message) {
         Toast toast = Toast.makeText(getApplicationContext(),
                 message, Toast.LENGTH_LONG);
@@ -235,6 +251,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static void setCapabilityItem(MenuItem item, boolean isPossible) {
         item.setEnabled(isPossible);
         item.setVisible(isPossible);
+    }
+
+
+    public void refreshWidget() {
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), WidgetProvider.class));
+        WidgetProvider widget = new WidgetProvider();
+        widget.onUpdate(this, AppWidgetManager.getInstance(this), ids);
     }
 
 }

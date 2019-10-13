@@ -31,5 +31,6 @@
 
     <dimen name="collapsingTBLMarginEnd">64dp</dimen>
     <dimen name="collapsingTBLMarginStart">48dp</dimen>
+    <dimen name="widgetMargin">17dp</dimen>
 
 </resources>

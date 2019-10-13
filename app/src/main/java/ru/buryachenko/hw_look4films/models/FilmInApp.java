@@ -1,15 +1,20 @@
 package ru.buryachenko.hw_look4films.models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 
 import java.io.Serializable;
 
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
+
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final String separator = "&";
     private Boolean liked;
     private String details;
     private String comment;
@@ -26,6 +31,17 @@ public class FilmInApp extends Film implements Serializable {
         this.pictureResource = pictureResource;
         this.filmId = filmId;
         this.disclosed = false;
+    }
+
+    public FilmInApp(FilmInApp previous) {
+        super(previous.getName());
+        liked = previous.liked;
+        details = previous.details;
+        comment = previous.comment;
+        pictureResource = previous.pictureResource;
+        selected = previous.selected;
+        filmId = previous.filmId;
+        disclosed = previous.disclosed;
     }
 
     public static FilmInApp create(String name, String details) {
@@ -111,5 +127,39 @@ public class FilmInApp extends Film implements Serializable {
 
     public void setFilmId(int filmId) {
         this.filmId = filmId;
+    }
+
+    public String toWidgetString() {
+        return filmId + separator + (pictureResource == null ? 0 : pictureResource) + separator + liked;
+    }
+
+    public static int filmIdFromWidgetString(String str) {
+        if (str.isEmpty())
+            return 0;
+        return Integer.parseInt(str.split(separator)[0]);
+    }
+
+    public static int pictureResourceFromWidgetString(String str) {
+        if (str.isEmpty())
+            return 0;
+        return Integer.parseInt(str.split(separator)[1]);
+    }
+
+    public static boolean likedFromWidgetString(String str) {
+        if (str.isEmpty())
+            return false;
+        return Boolean.parseBoolean(str.split(separator)[2]);
+    }
+
+    public void saveSelectedFilm(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        this.setSelected(true);
+        editor.putString(PREFERENCES_SELECTED_FILM, this.toWidgetString());
+        editor.apply();
+    }
+
+    public String toString() {
+        return " id" + filmId + " liked=" + liked + " selected=" + selected + " name=" + getName();
     }
 }
