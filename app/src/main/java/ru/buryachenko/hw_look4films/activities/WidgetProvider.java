@@ -1,4 +1,4 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.activities;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -60,9 +60,6 @@ public class WidgetProvider extends AppWidgetProvider {
             switch (intent.getAction()) {
                 case WIDGET_ACTION_CHANGE_LIKED:
                     changeLikedAndSaveWidgetData(context);
-                    break;
-                case WIDGET_ACTION_PICTURE:
-                    //что бы тут сделать ?
                     break;
             }
         }
@@ -127,7 +124,7 @@ public class WidgetProvider extends AppWidgetProvider {
         ComponentName thisWidget = new ComponentName(context, WidgetProvider.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
         for (int widgetId : allWidgetIds) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_like);
             remoteViews.setImageViewResource(R.id.widgetLiked, FilmInApp.likedFromWidgetString(widgetData) ? R.drawable.liked : R.drawable.notliked);
             int picture = FilmInApp.pictureResourceFromWidgetString(widgetData);
             if (picture == 0) {
@@ -136,7 +133,7 @@ public class WidgetProvider extends AppWidgetProvider {
             } else
                 remoteViews.setImageViewResource(R.id.widgetPicture, picture);
             remoteViews.setOnClickPendingIntent(R.id.widgetLiked, new PendingInner(WIDGET_ACTION_CHANGE_LIKED, widgetId).result());
-            remoteViews.setOnClickPendingIntent(R.id.widgetPicture, new PendingInner(WIDGET_ACTION_PICTURE, widgetId).result());
+            remoteViews.setOnClickPendingIntent(R.id.widgetPicture, new PendingInner(WIDGET_ACTION_CHANGE_LIKED, widgetId).result());
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
         }
     }

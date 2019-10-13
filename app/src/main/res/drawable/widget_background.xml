@@ -3,7 +3,7 @@
     android:shape="rectangle">
     <solid android:color="@color/widgetBack" />
     <corners
-        android:radius="@dimen/recyclerCornerRadius">
+        android:radius="20dp">
     </corners>
     <stroke
         android:width="@dimen/recyclerBorder"

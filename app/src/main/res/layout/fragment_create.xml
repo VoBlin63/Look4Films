@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/frame_film_background">
+
+    <CheckBox
+        android:id="@+id/likedNewFilm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/detailsMarginSides"
+        android:text="@string/likedCheckBox"
+        android:theme="@style/Details.Liked"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/pictureNewFilm"
+        app:layout_constraintStart_toEndOf="@id/pictureNewFilm">
+
+    </CheckBox>
+
+    <ImageView
+        android:id="@+id/pictureNewFilm"
+        android:layout_width="@dimen/detailsImageWidth"
+        android:layout_height="@dimen/detailsImageHeight"
+        android:layout_marginStart="@dimen/detailsPictureMarginTop"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        android:background="@drawable/picture_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/wrapNameNewFilm"
+        style="@style/Details.Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+        android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pictureNewFilm">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameNewFilm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/newFilmNameHint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:windowSoftInputMode="adjustResize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Details.Details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        android:inputType="text"
+        android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+        android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wrapNameNewFilm">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/detailsNewFilm"
+            style="@style/Details.Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/newFilmDetailsHint"
+            android:inputType="text"
+            android:maxLines="5"
+            android:text=""
+            android:windowSoftInputMode="adjustResize" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <include
+        layout="@layout/fab_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/marginFAB"
+        android:layout_marginBottom="@dimen/marginBottomFABWithBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </include>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

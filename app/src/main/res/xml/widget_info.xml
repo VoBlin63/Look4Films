@@ -1,9 +1,9 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="110dp"
+    android:minWidth="40dp"
     android:minHeight="40dp"
     android:updatePeriodMillis="0"
     android:previewImage="@drawable/kino_background"
-    android:initialLayout="@layout/widget"
+    android:initialLayout="@layout/widget_like"
     android:resizeMode="none"
     android:widgetCategory="home_screen">
 </appwidget-provider>

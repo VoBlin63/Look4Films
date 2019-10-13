@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +18,6 @@ import androidx.lifecycle.MutableLiveData;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FilmsViewModel extends AndroidViewModel {
@@ -30,8 +28,7 @@ public class FilmsViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void init() {
-        Log.d(LOGTAG, "init() " + (films == null ? "null":films.size()));
+    private void init() {
         if (films == null) {
             films = new HashMap<>();
             //здесь фильмы будут откуда-то подгружаться
