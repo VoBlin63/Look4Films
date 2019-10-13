@@ -7,11 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import ru.buryachenko.hw_look4films.R;
@@ -21,7 +18,6 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_LIST;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;
-import static ru.buryachenko.hw_look4films.activities.MainActivity.navigation;
 
 public class FragmentCreate extends Fragment {
 
@@ -49,7 +45,7 @@ public class FragmentCreate extends Fragment {
     private void doCreateFilm(String name, String details) {
         FilmInApp newFilm = FilmInApp.create(name, details);
         if (newFilm == null) {
-            ((MainActivity)getActivity()).snackMessage( getString(R.string.messageNeed4NEwFilm) + " "
+            ((MainActivity) getActivity()).snackMessage(getString(R.string.messageNeed4NEwFilm) + " "
                     + (name.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_name) + " " : "")
                     + (details.trim().isEmpty() && name.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_and) + " " : "")
                     + (details.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_Details) : "")

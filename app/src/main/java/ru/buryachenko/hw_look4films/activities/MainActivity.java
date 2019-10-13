@@ -36,9 +36,11 @@ import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String FRAGMENT_LIST = "ru.buryachenko.hw_look4films.ListOfFilm.Fragment";
-    public static final String FRAGMENT_DETAILS = "ru.buryachenko.hw_look4films.Details.Fragment";
-    public static final String FRAGMENT_CREATE = "ru.buryachenko.hw_look4films.CreateNew.Fragment";
+    public static final String FRAGMENT_LIST = "ListOfFilm.F";
+    public static final String FRAGMENT_DETAILS = "Details.F";
+    public static final String FRAGMENT_CREATE = "CreateNew.F";
+    public static final String FRAGMENT_SAVER = "Saver.F";
+
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
     public static BottomNavigationView navigation;
@@ -58,7 +60,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigation = findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
-        callFragment(FRAGMENT_LIST);
+        callFragment("");
+
+        //callFragment(FRAGMENT_LIST); //запускаем чтоб что-то было гарантировано
+//        FragmentForSave saver = FragmentForSave.newInstance("");
+//        fragmentManager
+//                .beginTransaction()
+//                .add(R.id.fragmentContainer, saver, FRAGMENT_SAVER)
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                .addToBackStack(null)
+//                .commit();
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -167,6 +178,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
 
     public static void callFragment(String screenTag) {
+//        Log.d(LOGTAG, "callFragment : StCount = " + fragmentManager.getBackStackEntryCount());
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.fragmentContainer, FragmentForSave.newInstance(screenTag), FRAGMENT_SAVER)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+    }
+
+    public static void callFragmentFromSaver(String screenTag) {
         //Log.d(LOGTAG, "callFragment : fragmentManager.getBackStackEntryCount() = " + fragmentManager.getBackStackEntryCount());
         Fragment toCall = fragmentManager.findFragmentByTag(screenTag);
         if (toCall != null) {
