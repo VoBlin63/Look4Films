@@ -15,11 +15,13 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String FRAGMENT_CREATE = "ru.buryachenko.hw_look4films.CreateNew.Fragment";
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
-    private static BottomNavigationView navigation;
+    public static BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +198,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    public void snackMessage(String message) {
+        Snackbar snack = Snackbar.make(findViewById(R.id.mainLayout),
+                message, Snackbar.LENGTH_LONG);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                snack.getView().getLayoutParams();
+        params.setMargins(0, 0, 0, navigation.getHeight());
+        snack.getView().setLayoutParams(params);
+        snack.show();
     }
 
 }
