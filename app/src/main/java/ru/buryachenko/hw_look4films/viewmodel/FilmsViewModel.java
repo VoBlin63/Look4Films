@@ -48,7 +48,10 @@ public class FilmsViewModel extends AndroidViewModel {
             for (FilmInApp filmInApp : filmsFromSomewhere) {
                 films.put(filmInApp.getFilmId(), filmInApp);
             }
-            loadSavedSelected();
+            FilmInApp saved = loadSavedSelected();
+            if (saved != null) {
+                films.put(saved.getFilmId(), saved);
+            }
         }
     }
 
@@ -58,22 +61,25 @@ public class FilmsViewModel extends AndroidViewModel {
         return new ArrayList<>(films.values());
     }
 
-    public void loadSavedSelected() {
+    public FilmInApp loadSavedSelected() {
+        FilmInApp res = null;
         if ((films == null) || (films.isEmpty()))
-            return;
+            return res;
         Context context = getApplication();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         if(settings.contains(PREFERENCES_SELECTED_FILM)) {
             String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
             if ((savedData == null) || (savedData.isEmpty()))
-                return;
+                return res;
             int filmId = FilmInApp.filmIdFromWidgetString(savedData);
             boolean liked = FilmInApp.likedFromWidgetString(savedData);
             if (films.containsKey(filmId)) {
-                films.get(filmId).setSelected();
-                films.get(filmId).setLiked(liked);
+                res = new FilmInApp(films.get(filmId));
+                res.setSelected();
+                res.setLiked(liked);
             }
         }
+        return res;
     }
 
     public void putFilm(FilmInApp film) {

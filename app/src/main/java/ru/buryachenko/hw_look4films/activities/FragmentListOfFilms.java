@@ -60,7 +60,10 @@ public class FragmentListOfFilms extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.loadSavedSelected();
+        FilmInApp saved = viewModel.loadSavedSelected();
+        if (saved != null) {
+            viewModel.putFilm(saved);
+        }
     }
 
 }
