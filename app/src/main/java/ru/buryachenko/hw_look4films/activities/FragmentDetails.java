@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_LIST;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FragmentDetails extends Fragment {
@@ -50,7 +48,6 @@ public class FragmentDetails extends Fragment {
         //если присваивания в onViewCreated - беда, они переприсваиваются
         FilmInApp film = viewModel.getSelected();
         if (film == null) {
-            ((MainActivity) getActivity()).snackMessage(getActivity().getString(R.string.fragmentDetailsNoSelectedFilm));
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             callFragment(FRAGMENT_LIST);
         } else {

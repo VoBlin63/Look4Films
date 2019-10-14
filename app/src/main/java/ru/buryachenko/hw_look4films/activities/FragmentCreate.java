@@ -18,6 +18,7 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_LIST;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.snackMessage;
 
 public class FragmentCreate extends Fragment {
 
@@ -45,7 +46,7 @@ public class FragmentCreate extends Fragment {
     private void doCreateFilm(String name, String details) {
         FilmInApp newFilm = FilmInApp.create(name, details);
         if (newFilm == null) {
-            ((MainActivity) getActivity()).snackMessage(getString(R.string.messageNeed4NEwFilm) + " "
+            snackMessage(getString(R.string.messageNeed4NEwFilm) + " "
                     + (name.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_name) + " " : "")
                     + (details.trim().isEmpty() && name.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_and) + " " : "")
                     + (details.trim().isEmpty() ? getString(R.string.messageNeed4NEwFilm_Details) : "")

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,11 +42,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
     public static BottomNavigationView navigation;
+    private static View mainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_with_drawer);
+        mainView = findViewById(R.id.mainLayout);
+
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
@@ -157,7 +161,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.bottomNavLookDetails:
                 FilmInApp selectedFilm = viewModel.getSelected();
-                if (selectedFilm != null) {
+                if (selectedFilm == null) {
+                    snackMessage(mainView.getResources().getString(R.string.messageNoSelectedFilm));
+                } else {
                     callFragment(FRAGMENT_DETAILS);
                 }
                 break;
@@ -210,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void snackMessage(String message) {
-        Snackbar snack = Snackbar.make(findViewById(R.id.mainLayout),
+    public static void snackMessage(String message) {
+        Snackbar snack = Snackbar.make(mainView,
                 message, Snackbar.LENGTH_LONG);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 snack.getView().getLayoutParams();
