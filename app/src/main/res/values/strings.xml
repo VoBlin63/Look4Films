@@ -36,5 +36,6 @@
     <string name="bottomNavigationDetails">Детали</string>
     <string name="bottomNavigationCreate">Создать</string>
     <string name="topMenuQuit">Выйти</string>
+    <string name="fragmentDetailsNoSelectedFilm">Еще не было выбранных фильмов</string>
 
 </resources>

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,8 +31,6 @@ import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String FRAGMENT_LIST = "ListOfFilm.F";
@@ -54,22 +51,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
+
 
         navigation = findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
-        callFragment("");
 
-        //callFragment(FRAGMENT_LIST); //запускаем чтоб что-то было гарантировано
-//        FragmentForSave saver = FragmentForSave.newInstance("");
-//        fragmentManager
-//                .beginTransaction()
-//                .add(R.id.fragmentContainer, saver, FRAGMENT_SAVER)
-//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-//                .addToBackStack(null)
-//                .commit();
+        callFragment("");
 
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -178,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
 
     public static void callFragment(String screenTag) {
-//        Log.d(LOGTAG, "callFragment : StCount = " + fragmentManager.getBackStackEntryCount());
         fragmentManager
                 .beginTransaction()
                 .add(R.id.fragmentContainer, FragmentForSave.newInstance(screenTag), FRAGMENT_SAVER)
@@ -187,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void callFragmentFromSaver(String screenTag) {
-        //Log.d(LOGTAG, "callFragment : fragmentManager.getBackStackEntryCount() = " + fragmentManager.getBackStackEntryCount());
+//        Log.d(LOGTAG, "callFragment '" + screenTag + "': StCount = " + fragmentManager.getBackStackEntryCount());
         Fragment toCall = fragmentManager.findFragmentByTag(screenTag);
         if (toCall != null) {
             fragmentManager

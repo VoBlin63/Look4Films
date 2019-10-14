@@ -50,6 +50,7 @@ public class FragmentDetails extends Fragment {
         //если присваивания в onViewCreated - беда, они переприсваиваются
         FilmInApp film = viewModel.getSelected();
         if (film == null) {
+            ((MainActivity) getActivity()).snackMessage(getActivity().getString(R.string.fragmentDetailsNoSelectedFilm));
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             callFragment(FRAGMENT_LIST);
         } else {
