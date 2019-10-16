@@ -8,8 +8,10 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -23,6 +25,7 @@ import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_
 public class FilmsViewModel extends AndroidViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
     private Map<Integer, FilmInApp> films;
+    private Set<Integer> favorites = new HashSet<>();
 
     public FilmsViewModel(@NonNull Application application) {
         super(application);
@@ -56,6 +59,17 @@ public class FilmsViewModel extends AndroidViewModel {
         if (films == null)
             init();
         return new ArrayList<>(films.values());
+    }
+
+    public void turnInFavorites(FilmInApp film) {
+        if (isFavorite(film))
+            favorites.remove(film.getFilmId());
+        else
+            favorites.add(film.getFilmId());
+    }
+
+    public boolean isFavorite(FilmInApp film) {
+        return favorites.contains(film.getFilmId());
     }
 
     public FilmInApp loadSavedSelected() {

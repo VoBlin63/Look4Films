@@ -54,6 +54,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
+        <ImageView
+            android:id="@+id/favoritePicture"
+            android:src="@drawable/ic_favorite"
+            android:layout_width="@dimen/serviceIconSize"
+            android:layout_height="@dimen/serviceIconSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/detailsMarginSides"
+            app:layout_constraintTop_toTopOf="@id/picture"
+            android:alpha="0.5"/>
         <TextView
             android:id="@+id/details"
             android:layout_width="0dp"

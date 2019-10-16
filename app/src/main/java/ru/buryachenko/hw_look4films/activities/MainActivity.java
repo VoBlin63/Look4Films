@@ -226,4 +226,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         snack.show();
     }
 
+    public static boolean isFavorite(FilmInApp film) {
+        return viewModel.isFavorite(film);
+    }
+
+    public static void turnInFavorites(FilmInApp film) {
+        viewModel.turnInFavorites(film);
+    }
+
+
 }

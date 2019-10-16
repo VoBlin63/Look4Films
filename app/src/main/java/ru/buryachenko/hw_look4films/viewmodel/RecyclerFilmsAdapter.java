@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
@@ -20,10 +21,13 @@ import java.util.List;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.activities.MainActivity;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_DETAILS;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.isFavorite;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.turnInFavorites;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
@@ -47,6 +51,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         CardView card;
         TextView details;
         TextView detailsButton;
+        ImageView favorite;
 
         RecyclerFilmsHolder(CardView row) {
             super(row);
@@ -55,6 +60,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
             liked = row.findViewById(R.id.likedStar);
             details = row.findViewById(R.id.details);
             detailsButton = row.findViewById(R.id.detailsButton);
+            favorite = row.findViewById(R.id.favoritePicture);
             card = row;
         }
     }
@@ -76,11 +82,20 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         rightSide = size.x;
 
         filmRow.findViewById(R.id.picture).setOnClickListener(view -> doChangeDisclosed(filmRow, res.getAdapterPosition()));
+        filmRow.findViewById(R.id.picture).setOnLongClickListener(view -> doTurnInFavorites(filmRow, res.getAdapterPosition()));
         View.OnClickListener detailsCallClick = view -> callDetails(res.getAdapterPosition());
         filmRow.findViewById(R.id.detailsButton).setOnClickListener(detailsCallClick);
         //здесь клик возможен только на раскрытых деталях и логично в детали пойти
         filmRow.findViewById(R.id.details).setOnClickListener(detailsCallClick);
         return res;
+    }
+
+    private boolean doTurnInFavorites(CardView filmRow, int position) {
+        if (position != RecyclerView.NO_POSITION) {
+            turnInFavorites(films.get(position));
+            notifyItemChanged(position);
+        }
+        return true;
     }
 
     private void doChangeDisclosed(CardView filmRow, int position) {
@@ -152,6 +167,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
         holder.liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
         holder.card.setCardElevation(film.isSelected() ? 0F : holder.card.getMaxCardElevation());
         holder.details.setText(film.getDetails());
+        holder.favorite.setVisibility(isFavorite(film) ? View.VISIBLE : View.GONE);
         doAnimationPushRight(!film.isDisclosed(), holder.liked, holder.name, holder.detailsButton);
         doAnimationDetails(!film.isDisclosed(), holder.details);
     }
