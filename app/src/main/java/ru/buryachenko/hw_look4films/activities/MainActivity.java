@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String FRAGMENT_DETAILS = "Details.F";
     public static final String FRAGMENT_CREATE = "CreateNew.F";
     public static final String FRAGMENT_SAVER = "Saver.F";
+    public static final String FRAGMENT_FAVORITES = "Favorites.F";
 
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
@@ -170,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.bottomNavAddFilm:
                 callFragment(FRAGMENT_CREATE);
                 break;
+            case R.id.bottomNavFavorite:
+                callFragment(FRAGMENT_FAVORITES);
+                break;
         }
         return true;
     };
@@ -202,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case FRAGMENT_LIST:
                 toCall = new FragmentList();
+                break;
+            case FRAGMENT_FAVORITES:
+                toCall = new FragmentFavorites();
                 break;
             default:
                 toCall = null;

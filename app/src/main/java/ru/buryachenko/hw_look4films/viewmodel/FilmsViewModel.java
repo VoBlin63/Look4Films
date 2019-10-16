@@ -68,6 +68,15 @@ public class FilmsViewModel extends AndroidViewModel {
             favorites.add(film.getFilmId());
     }
 
+    public List<FilmInApp> getFavorites() {
+        ArrayList<FilmInApp> res = new ArrayList<>();
+        for (FilmInApp film : films.values()) {
+            if (isFavorite(film))
+                res.add(film);
+        }
+        return res;
+    }
+
     public boolean isFavorite(FilmInApp film) {
         return favorites.contains(film.getFilmId());
     }

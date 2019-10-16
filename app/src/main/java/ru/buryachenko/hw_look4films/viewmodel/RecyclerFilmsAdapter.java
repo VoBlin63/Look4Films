@@ -4,10 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,6 @@ import java.util.List;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
-import ru.buryachenko.hw_look4films.activities.MainActivity;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_DETAILS;
@@ -29,7 +26,6 @@ import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.isFavorite;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.turnInFavorites;
 import static ru.buryachenko.hw_look4films.utils.Constants.DURATION_DETAILS_ANIMAYION;
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
 public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdapter.RecyclerFilmsHolder> {
     private List<FilmInApp> films;
@@ -73,7 +69,7 @@ public class RecyclerFilmsAdapter extends RecyclerView.Adapter<RecyclerFilmsAdap
     public RecyclerFilmsHolder onCreateViewHolder(ViewGroup parent,
                                                   int viewType) {
         CardView filmRow = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_films_layout, parent, false);
+                .inflate(R.layout.list_films_item, parent, false);
         RecyclerFilmsHolder res = new RecyclerFilmsHolder(filmRow);
         WindowManager wm = (WindowManager) parent.getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();

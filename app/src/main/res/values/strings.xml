@@ -35,6 +35,7 @@
     <string name="bottomNavigationList">Список</string>
     <string name="bottomNavigationDetails">Детали</string>
     <string name="bottomNavigationCreate">Создать</string>
+    <string name="bottomNavigationFavorites">Любимые</string>
     <string name="topMenuQuit">Выйти</string>
     <string name="messageNoSelectedFilm">Еще не было выбранных фильмов</string>
 
