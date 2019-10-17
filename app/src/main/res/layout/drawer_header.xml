@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawerHeaderHeight"
     android:background="@drawable/ic_launcher_foreground"
     android:gravity="bottom"
+    android:orientation="vertical"
     android:paddingStart="@dimen/drawerHeaderPaddling"
-    android:paddingEnd="@dimen/drawerHeaderPaddling"
     android:paddingTop="@dimen/drawerHeaderPaddling"
+    android:paddingEnd="@dimen/drawerHeaderPaddling"
     android:paddingBottom="@dimen/drawerHeaderPaddling"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    >
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
     <ImageView
         android:id="@+id/navigation_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/drawerPaddingTop"
-        android:src="@drawable/ic_film"/>
+        android:src="@drawable/ic_film" />
+
     <TextView
         android:id="@+id/navHeaderTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/drawerPaddingTop"
         android:text="@string/drawerHeader"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
     <TextView
         android:id="@+id/navHeaderSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/drawerSubHeader"/>
+        android:text="@string/drawerSubHeader" />
 
 
 </LinearLayout>

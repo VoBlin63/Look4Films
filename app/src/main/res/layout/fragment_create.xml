@@ -86,7 +86,6 @@
         android:layout_marginEnd="@dimen/marginFAB"
         android:layout_marginBottom="@dimen/marginBottomFABWithBar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-    </include>
+        app:layout_constraintEnd_toEndOf="parent"></include>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,6 +4,5 @@
     <solid android:color="@color/recyclerSelectedBack" />
     <stroke
         android:width="@dimen/recyclerSelectedBorder"
-        android:color="@color/recyclerSelectedBorder">
-    </stroke>
+        android:color="@color/recyclerSelectedBorder"></stroke>
 </shape>

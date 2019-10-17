@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/frame_film_background">
+
+    <CheckBox
+        android:id="@+id/liked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/detailsMarginSides"
+        android:text="@string/likedCheckBox"
+        android:theme="@style/Details.Liked"
+        app:layout_constraintBottom_toBottomOf="@id/picture"
+        app:layout_constraintStart_toEndOf="@id/picture">
+
+    </CheckBox>
 
     <ImageView
         android:id="@+id/picture"
@@ -14,7 +26,7 @@
         android:layout_marginTop="@dimen/detailsPictureMarginTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/name"
@@ -27,69 +39,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/picture"
         app:layout_constraintTop_toTopOf="@id/picture"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
-        <CheckBox
-            android:id="@+id/liked"
-            android:theme="@style/Details.Liked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/detailsMarginSides"
-            android:text="@string/likedCheckBox"
-            app:layout_constraintBottom_toBottomOf="@id/picture"
-            app:layout_constraintStart_toEndOf="@id/picture">
-
-        </CheckBox>
-
-        <TextView
-            android:id="@+id/details"
-            style="@style/Details.Details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detailsPictureMarginTop"
-            android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
-            android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-            android:text="[здесь детали]"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/picture"
-            tools:ignore="HardcodedText" />
+    <TextView
+        android:id="@+id/details"
+        style="@style/Details.Details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/detailsPictureMarginTop"
+        android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
+        android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
+        android:text="[здесь детали]"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/picture"
+        tools:ignore="HardcodedText" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Details.Comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
         android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
-        style="@style/Details.Comment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/details">
 
         <EditText
             android:id="@+id/comment"
             style="@style/Details.Liked"
-            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/detailsPictureMarginTop"
             android:hint="@string/commentsHint"
+            android:inputType="text"
             android:maxLines="3"
             android:paddingStart="@dimen/detailsMarginSidesBottomTexts"
             android:paddingEnd="@dimen/detailsMarginSidesBottomTexts"
             android:text="[здесь комментарий]"
-            tools:ignore="Autofill,HardcodedText"
+            android:windowSoftInputMode="adjustResize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details"
-            android:windowSoftInputMode="adjustResize">
+            tools:ignore="Autofill,HardcodedText">
 
         </EditText>
     </com.google.android.material.textfield.TextInputLayout>
+
     <include
         layout="@layout/fab_done"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/marginFAB"
         android:layout_marginBottom="@dimen/marginBottomFABWithBar"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
-    </include>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"></include>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
