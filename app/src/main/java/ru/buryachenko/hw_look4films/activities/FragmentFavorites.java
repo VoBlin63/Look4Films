@@ -9,10 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.viewmodel.FavoritesAdapter;
+import ru.buryachenko.hw_look4films.viewmodel.FavoritesTouch;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 public class FragmentFavorites extends Fragment {
@@ -32,9 +34,12 @@ public class FragmentFavorites extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         layout = view;
         viewModel = ViewModelProviders.of(getActivity()).get(FilmsViewModel.class);
-        recyclerView = layout.findViewById(R.id.recyclerLayoutFavorites);
+        recyclerView = layout.findViewById(R.id.recyclerFavorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(layout.getContext()));
-        recyclerView.setAdapter(new FavoritesAdapter(viewModel.getFavorites(), LayoutInflater.from(layout.getContext())));
+        FavoritesAdapter adapter = new FavoritesAdapter(LayoutInflater.from(layout.getContext()), viewModel);
+        ItemTouchHelper touch = new ItemTouchHelper(new FavoritesTouch(adapter));
+        touch.attachToRecyclerView(recyclerView);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

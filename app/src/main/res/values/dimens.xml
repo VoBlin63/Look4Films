@@ -12,6 +12,9 @@
     <dimen name="recyclerSelectedBorder">1dp</dimen>
     <dimen name="recyclerBorder">1dp</dimen>
 
+    <dimen name="recyclerFavoritesCornerRadius">51dp</dimen>
+    <dimen name="recyclerFavoritesItemHeight">83dp</dimen>
+
     <dimen name="detailsImageHeight">156dp</dimen>
     <dimen name="detailsImageWidth">127dp</dimen>
     <dimen name="detailsPictureMarginTop">19dp</dimen>

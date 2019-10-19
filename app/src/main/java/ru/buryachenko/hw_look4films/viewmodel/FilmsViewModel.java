@@ -29,6 +29,7 @@ public class FilmsViewModel extends AndroidViewModel {
 
     public FilmsViewModel(@NonNull Application application) {
         super(application);
+        init();
     }
 
     private void init() {
@@ -55,9 +56,7 @@ public class FilmsViewModel extends AndroidViewModel {
         }
     }
 
-    public List<FilmInApp> getList() {
-        if (films == null)
-            init();
+    List<FilmInApp> getList() {
         return new ArrayList<>(films.values());
     }
 
@@ -68,7 +67,7 @@ public class FilmsViewModel extends AndroidViewModel {
             favorites.add(film.getFilmId());
     }
 
-    public List<FilmInApp> getFavorites() {
+    List<FilmInApp> getFavorites() {
         ArrayList<FilmInApp> res = new ArrayList<>();
         for (FilmInApp film : films.values()) {
             if (isFavorite(film))
@@ -81,25 +80,25 @@ public class FilmsViewModel extends AndroidViewModel {
         return favorites.contains(film.getFilmId());
     }
 
-    public FilmInApp loadSavedSelected() {
-        FilmInApp res = null;
+    private FilmInApp loadSavedSelected() {
         if ((films == null) || (films.isEmpty()))
-            return res;
+            return null;
         Context context = getApplication();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         if(settings.contains(PREFERENCES_SELECTED_FILM)) {
             String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
             if ((savedData == null) || (savedData.isEmpty()))
-                return res;
+                return null;
             int filmId = FilmInApp.filmIdFromWidgetString(savedData);
             boolean liked = FilmInApp.likedFromWidgetString(savedData);
             if (films.containsKey(filmId)) {
-                res = new FilmInApp(films.get(filmId));
+                FilmInApp res = new FilmInApp(films.get(filmId));
                 res.setSelected();
                 res.setLiked(liked);
+                return res;
             }
         }
-        return res;
+        return null;
     }
 
     public void putFilm(FilmInApp film) {

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String FRAGMENT_LIST = "ListOfFilm.F";
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
-    public static BottomNavigationView navigation;
+    public static BottomNavigationView bottomNavigation;
     private static View mainView;
 
     @Override
@@ -54,16 +57,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
-        toolbar.setTitle("");
 
-
-        navigation = findViewById(R.id.bottomNavigation);
-        navigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
-
+        bottomNavigation = findViewById(R.id.bottomNavigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
         callFragment("");
 
@@ -72,12 +70,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationView drawerNavigation = findViewById(R.id.navigation_view);
+        //TODO не работает листенер этот - почему ?
+        drawerNavigation.setNavigationItemSelectedListener(this);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            navigationView.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
+            drawerNavigation.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
         } else {
-            navigationView.getHeaderView(0).setBackgroundColor(Color.CYAN);
+            drawerNavigation.getHeaderView(0).setBackgroundColor(Color.CYAN);
         }
     }
 
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(LOGTAG,"topMenuQuit");
         switch (item.getItemId()) {
             case R.id.topMenuQuit:
                 tryToExit(this);
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toCall = new FragmentCreate();
                 break;
             case FRAGMENT_LIST:
-                toCall = new FragmentList();
+                toCall = new FragmentListFilms();
                 break;
             case FRAGMENT_FAVORITES:
                 toCall = new FragmentFavorites();
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 message, Snackbar.LENGTH_LONG);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 snack.getView().getLayoutParams();
-        params.setMargins(0, 0, 0, navigation.getHeight());
+        params.setMargins(0, 0, 0, bottomNavigation.getHeight());
         snack.getView().setLayoutParams(params);
         snack.show();
     }
@@ -240,6 +241,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static void turnInFavorites(FilmInApp film) {
         viewModel.turnInFavorites(film);
     }
-
 
 }

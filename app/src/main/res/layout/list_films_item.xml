@@ -24,18 +24,18 @@
         tools:context=".activities.MainActivity">
 
         <ImageView
-            android:id="@+id/likedStar"
+            android:id="@+id/listLiked"
             android:layout_width="@dimen/serviceIconSize"
             android:layout_height="@dimen/serviceIconSize"
             android:layout_marginEnd="@dimen/detailsMarginSides"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/listName"
             tools:ignore="ContentDescription">
 
         </ImageView>
 
         <ImageView
-            android:id="@+id/picture"
+            android:id="@+id/listPicture"
             android:layout_width="@dimen/recyclerImageWidth"
             android:layout_height="@dimen/recyclerImageHeight"
             android:layout_marginStart="@dimen/recyclerHalfGap"
@@ -45,47 +45,47 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/favoritePicture"
+            android:id="@+id/listFavorite"
             android:layout_width="@dimen/serviceIconSize"
             android:layout_height="@dimen/serviceIconSize"
             android:layout_marginEnd="@dimen/detailsMarginSides"
             android:alpha="0.5"
             android:src="@drawable/ic_favorite"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/picture" />
+            app:layout_constraintTop_toTopOf="@id/listPicture" />
 
         <TextView
-            android:id="@+id/detailsButton"
+            android:id="@+id/listDetailsButton"
             style="@style/Recycler.ButtonDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/detailsMarginSides"
             android:text="@string/details_button_name"
-            app:layout_constraintBottom_toBottomOf="@id/picture"
+            app:layout_constraintBottom_toBottomOf="@id/listPicture"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/details"
+            android:id="@+id/listDetails"
             style="@style/Recycler.Details"
             android:layout_width="0dp"
             android:layout_height="@dimen/recyclerImageHeight"
             android:layout_margin="@dimen/recyclerHalfGap"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/picture"
-            app:layout_constraintEnd_toEndOf="@id/detailsButton"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toTopOf="@id/picture">
+            app:layout_constraintBottom_toBottomOf="@id/listPicture"
+            app:layout_constraintEnd_toEndOf="@id/listDetailsButton"
+            app:layout_constraintStart_toEndOf="@id/listPicture"
+            app:layout_constraintTop_toTopOf="@id/listPicture">
 
         </TextView>
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/listName"
             style="@style/Recycler.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/recyclerHalfGap"
-            app:layout_constraintEnd_toStartOf="@id/likedStar"
-            app:layout_constraintStart_toEndOf="@+id/picture"
+            app:layout_constraintEnd_toStartOf="@id/listLiked"
+            app:layout_constraintStart_toEndOf="@+id/listPicture"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
