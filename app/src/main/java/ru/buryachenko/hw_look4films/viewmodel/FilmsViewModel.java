@@ -80,7 +80,7 @@ public class FilmsViewModel extends AndroidViewModel {
         return favorites.contains(film.getFilmId());
     }
 
-    private FilmInApp loadSavedSelected() {
+    public FilmInApp loadSavedSelected() {
         if ((films == null) || (films.isEmpty()))
             return null;
         Context context = getApplication();
@@ -121,5 +121,9 @@ public class FilmsViewModel extends AndroidViewModel {
         if (selectedId == null)
             return null;
         return films.get(selectedId);
+    }
+
+    public int whoWasChanged(FilmInApp film) {
+        return getList().indexOf(film);
     }
 }
