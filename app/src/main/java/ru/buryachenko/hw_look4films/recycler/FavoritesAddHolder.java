@@ -33,8 +33,8 @@ class FavoritesAddHolder extends RecyclerView.ViewHolder {
         addButton.setOnClickListener((view) -> {
             if (selectedFilm != null) {
                 viewModel.addInFavorites(selectedFilm);
-                doAnimationPressPicture(view);
             }
+            doAnimationPressPicture(view);
         });
     }
 
@@ -42,6 +42,11 @@ class FavoritesAddHolder extends RecyclerView.ViewHolder {
         spinnerAdapter = new ArrayAdapter<>(layout.getContext(), android.R.layout.simple_spinner_item, viewModel.getNonFavorites());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        if (spinnerAdapter.getCount() == 0) {
+            addButton.setAlpha(0.5F);
+            return;
+        }
+        addButton.setAlpha(1F);
         AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

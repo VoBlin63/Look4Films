@@ -19,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recyclerFavoritesItemHeight"
-        android:background="@drawable/recycler_border"
+        android:background="@drawable/recycler_list_films_back"
         tools:context=".activities.MainActivity">
 
         <ImageView

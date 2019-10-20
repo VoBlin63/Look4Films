@@ -56,6 +56,7 @@ public class FragmentFavorites extends Fragment {
             if (viewModel.isFavorite(film)) {
                 oldFilms.add(0, film);
                 adapter.notifyItemInserted(0);
+                recyclerView.scrollToPosition(0);
             }
         } else {
             if (viewModel.isFavorite(film)) {

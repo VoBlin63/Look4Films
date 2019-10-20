@@ -19,6 +19,12 @@ public class FilmInApp extends Film implements Serializable {
     private boolean disclosed;
     private static Integer selectedFilmId = null;
 
+    public boolean equals(FilmInApp other) {
+        return liked == other.liked
+                && details.equals(other.details)
+                && comment.equals(other.comment);
+    }
+
     public FilmInApp(String name, Integer pictureResource, String details, int filmId) {
         super(name);
         this.details = details;

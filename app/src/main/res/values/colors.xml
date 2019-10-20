@@ -5,6 +5,7 @@
     <color name="colorAccent">#4CAF50</color>
     <color name="ordinaryText">#141010</color>
     <color name="recyclerBack">#F7F1F1</color>
+    <color name="recyclerAddFavoritesBack">#9AAAA5</color>
     <color name="recyclerSelectedBack">#DBD5D5</color>
     <color name="widgetBack">#88C4BEBE</color>
     <color name="recyclerSelectedBorder">#C4C4C4</color>

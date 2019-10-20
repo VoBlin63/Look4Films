@@ -7,7 +7,6 @@
     android:layout_marginTop="@dimen/recyclerHalfGap"
     android:layout_marginEnd="@dimen/recyclerGap"
     android:layout_marginBottom="@dimen/recyclerHalfGap"
-    app:cardBackgroundColor="@color/recyclerBack"
     app:cardCornerRadius="@dimen/recyclerFavoritesCornerRadius"
     app:cardElevation="@dimen/recyclerElevation"
     app:cardPreventCornerOverlap="true"
@@ -19,29 +18,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recyclerFavoritesItemHeight"
-        android:background="@drawable/recycler_border"
+        android:background="@drawable/recycler_add_favorites_back"
         tools:context=".activities.MainActivity">
 
         <ImageView
             android:id="@+id/favoritesAddButton"
             android:layout_width="37dp"
             android:layout_height="37dp"
-            android:layout_marginStart="23dp"
-            android:layout_marginTop="21dp"
+            android:layout_marginTop="@dimen/recyclerHalfGap"
+            android:layout_marginEnd="@dimen/recyclerFavoritesCornerRadius"
             android:src="@drawable/ic_to_favorite"
-            app:layout_constraintStart_toEndOf="@id/favoritesAddSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle">
 
         </ImageView>
 
         <Spinner
             android:id="@+id/favoritesAddSpinner"
+            style="@style/Recycler.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="21dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle">
+            android:layout_marginEnd="@dimen/recyclerFavoritesCornerRadius"
+            app:layout_constraintEnd_toStartOf="@id/favoritesAddButton"
+            app:layout_constraintTop_toTopOf="@id/favoritesAddButton">
 
         </Spinner>
 
