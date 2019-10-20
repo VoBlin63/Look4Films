@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.recycler.FavoritesAdapter;
+import ru.buryachenko.hw_look4films.recycler.FavoritesItemAnimator;
 import ru.buryachenko.hw_look4films.recycler.FavoritesTouch;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
@@ -47,6 +48,9 @@ public class FragmentFavorites extends Fragment {
         recyclerView.setAdapter(adapter);
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, film -> notifyChanges(adapter, film));
+
+        RecyclerView.ItemAnimator itemAnimator = new FavoritesItemAnimator();
+        recyclerView.setItemAnimator(itemAnimator);
     }
 
     private void notifyChanges(FavoritesAdapter adapter, FilmInApp film) {

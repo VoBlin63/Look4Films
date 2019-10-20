@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
-import ru.buryachenko.hw_look4films.recycler.ListFilmsAnimator;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 import ru.buryachenko.hw_look4films.recycler.ListFilmsAdapter;
 
@@ -46,9 +45,6 @@ public class FragmentListFilms extends Fragment {
 
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, film -> notifyChanges(adapter, film));
-
-        RecyclerView.ItemAnimator itemAnimator = new ListFilmsAnimator();
-        recyclerView.setItemAnimator(itemAnimator);
     }
 
     private void notifyChanges(ListFilmsAdapter adapter, FilmInApp film) {
@@ -57,7 +53,6 @@ public class FragmentListFilms extends Fragment {
             Log.d(LOGTAG, "viewModel.whoWasChanged(film) = Upssssssssssssssss!");
             //не должно такого быть
         } else {
-            Log.d(LOGTAG, "Changed " + film);
             adapter.notifyItemChanged(position);
         }
     }
