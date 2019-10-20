@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
-import ru.buryachenko.hw_look4films.viewmodel.FavoritesAdapter;
-import ru.buryachenko.hw_look4films.viewmodel.FavoritesTouch;
+import ru.buryachenko.hw_look4films.recycler.FavoritesAdapter;
+import ru.buryachenko.hw_look4films.recycler.FavoritesTouch;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 public class FragmentFavorites extends Fragment {

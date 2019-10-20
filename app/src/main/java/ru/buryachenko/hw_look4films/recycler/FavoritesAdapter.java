@@ -1,4 +1,4 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.recycler;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 public class FavoritesAdapter extends RecyclerView.Adapter {
     static final int HOLDER_ITEM = 0;

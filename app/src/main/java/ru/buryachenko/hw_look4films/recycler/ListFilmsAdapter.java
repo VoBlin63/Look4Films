@@ -1,4 +1,4 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.recycler;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.activities.MainActivity.FRAGMENT_DETAILS;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.callFragment;

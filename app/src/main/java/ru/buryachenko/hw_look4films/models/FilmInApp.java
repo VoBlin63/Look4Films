@@ -60,11 +60,7 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public void setSelected() {
-        Integer previousSelected = selectedFilmId;
         selectedFilmId = filmId;
-        if (!selectedFilmId.equals(previousSelected)) {
-            //saveSelectedFilm(context);
-        }
     }
 
     public static void clearSelected() {

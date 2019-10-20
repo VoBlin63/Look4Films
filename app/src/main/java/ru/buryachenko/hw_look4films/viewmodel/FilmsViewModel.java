@@ -56,7 +56,7 @@ public class FilmsViewModel extends AndroidViewModel {
         }
     }
 
-    List<FilmInApp> getList() {
+    public List<FilmInApp> getList() {
         return new ArrayList<>(films.values());
     }
 
@@ -74,7 +74,7 @@ public class FilmsViewModel extends AndroidViewModel {
         }
     }
 
-    List<FilmInApp> getFavorites() {
+    public List<FilmInApp> getFavorites() {
         ArrayList<FilmInApp> res = new ArrayList<>();
         for (FilmInApp film : films.values()) {
             if (isFavorite(film))
@@ -83,7 +83,7 @@ public class FilmsViewModel extends AndroidViewModel {
         return res;
     }
 
-    List<FilmInApp> getNonFavorites() {
+    public List<FilmInApp> getNonFavorites() {
         ArrayList<FilmInApp> res = new ArrayList<>();
         for (FilmInApp film : films.values()) {
             if (!isFavorite(film))

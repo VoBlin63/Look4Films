@@ -1,10 +1,10 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.recycler;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static ru.buryachenko.hw_look4films.viewmodel.FavoritesAdapter.HOLDER_ITEM;
+import static ru.buryachenko.hw_look4films.recycler.FavoritesAdapter.HOLDER_ITEM;
 
 
 public class FavoritesTouch extends ItemTouchHelper.Callback {

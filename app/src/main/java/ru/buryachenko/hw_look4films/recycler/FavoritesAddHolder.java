@@ -1,4 +1,4 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.recycler;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.utils.SomeAnimation.doAnimationPressPicture;
 

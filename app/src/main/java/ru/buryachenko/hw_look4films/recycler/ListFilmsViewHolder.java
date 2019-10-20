@@ -1,4 +1,4 @@
-package ru.buryachenko.hw_look4films.viewmodel;
+package ru.buryachenko.hw_look4films.recycler;
 
 import android.view.View;
 import android.widget.ImageView;
