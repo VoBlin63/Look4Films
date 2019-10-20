@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.getRightSide;
 import static ru.buryachenko.hw_look4films.activities.MainActivity.isFavorite;
+import static ru.buryachenko.hw_look4films.utils.SomeAnimation.doAnimationDetails;
+import static ru.buryachenko.hw_look4films.utils.SomeAnimation.doAnimationPushRight;
 
 class ListFilmsViewHolder extends RecyclerView.ViewHolder {
 
@@ -36,7 +39,6 @@ class ListFilmsViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(FilmInApp film) {
-        //itemView.setSelected(film.isSelected());
         card.setSelected(film.isSelected());
         name.setText(film.getName());
         picture.setImageDrawable(film.getPicture(layout.getContext()));
@@ -44,8 +46,8 @@ class ListFilmsViewHolder extends RecyclerView.ViewHolder {
         card.setCardElevation(film.isSelected() ? 0F : card.getMaxCardElevation());
         details.setText(film.getDetails());
         favorite.setVisibility(isFavorite(film) ? View.VISIBLE : View.GONE);
-        ListFilmsAdapter.doAnimationPushRight(!film.isDisclosed(), liked, name, detailsButton);
-        ListFilmsAdapter.doAnimationDetails(!film.isDisclosed(), details);
+        doAnimationPushRight(!film.isDisclosed(), getRightSide(),  liked, name, detailsButton);
+        doAnimationDetails(!film.isDisclosed(), details);
     }
 
 }

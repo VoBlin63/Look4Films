@@ -151,6 +151,6 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public String toString() {
-        return " id" + filmId + " liked=" + liked + " selected=" + selectedFilmId + " name=" + getName();
+        return getName();
     }
 }

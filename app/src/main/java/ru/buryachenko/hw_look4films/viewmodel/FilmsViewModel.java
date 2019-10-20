@@ -60,17 +60,33 @@ public class FilmsViewModel extends AndroidViewModel {
         return new ArrayList<>(films.values());
     }
 
-    public void turnInFavorites(FilmInApp film) {
-        if (isFavorite(film))
-            favorites.remove(film.getFilmId());
-        else
+    public void addInFavorites(FilmInApp film) {
+        if (!isFavorite(film)) {
             favorites.add(film.getFilmId());
+            putFilm(film);
+        }
+    }
+
+    public void removeFromFavorites(FilmInApp film) {
+        if (isFavorite(film)) {
+            favorites.remove(film.getFilmId());
+            putFilm(film);
+        }
     }
 
     List<FilmInApp> getFavorites() {
         ArrayList<FilmInApp> res = new ArrayList<>();
         for (FilmInApp film : films.values()) {
             if (isFavorite(film))
+                res.add(film);
+        }
+        return res;
+    }
+
+    List<FilmInApp> getNonFavorites() {
+        ArrayList<FilmInApp> res = new ArrayList<>();
+        for (FilmInApp film : films.values()) {
+            if (!isFavorite(film))
                 res.add(film);
         }
         return res;
@@ -85,7 +101,7 @@ public class FilmsViewModel extends AndroidViewModel {
             return null;
         Context context = getApplication();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        if(settings.contains(PREFERENCES_SELECTED_FILM)) {
+        if (settings.contains(PREFERENCES_SELECTED_FILM)) {
             String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
             if ((savedData == null) || (savedData.isEmpty()))
                 return null;
@@ -126,4 +142,5 @@ public class FilmsViewModel extends AndroidViewModel {
     public int whoWasChanged(FilmInApp film) {
         return getList().indexOf(film);
     }
+
 }

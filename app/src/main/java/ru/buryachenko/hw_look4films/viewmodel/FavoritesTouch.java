@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static ru.buryachenko.hw_look4films.viewmodel.FavoritesAdapter.HOLDER_ITEM;
+
 
 public class FavoritesTouch extends ItemTouchHelper.Callback {
 
@@ -15,9 +17,14 @@ public class FavoritesTouch extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-        return makeMovementFlags(dragFlags, swipeFlags);
+        if (viewHolder.getItemViewType() == HOLDER_ITEM) {
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        } else {
+            return makeMovementFlags(0,0);
+        }
+
     }
 
     @Override
@@ -27,6 +34,8 @@ public class FavoritesTouch extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        adapter.removeItem(viewHolder.getAdapterPosition());
+        if (viewHolder.getItemViewType() == HOLDER_ITEM) {
+            adapter.removeItem(viewHolder.getAdapterPosition());
+        }
     }
 }

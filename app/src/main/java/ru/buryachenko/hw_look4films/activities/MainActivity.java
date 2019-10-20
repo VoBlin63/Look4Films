@@ -4,13 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String FRAGMENT_CREATE = "CreateNew.F";
     public static final String FRAGMENT_SAVER = "Saver.F";
     public static final String FRAGMENT_FAVORITES = "Favorites.F";
+    private static int rightSide = 0;
+
 
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
@@ -79,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             drawerNavigation.getHeaderView(0).setBackgroundColor(Color.CYAN);
         }
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        rightSide = size.x;
+
     }
 
     @Override
@@ -238,8 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return viewModel.isFavorite(film);
     }
 
-    public static void turnInFavorites(FilmInApp film) {
-        viewModel.turnInFavorites(film);
+    public static int getRightSide() {
+        return rightSide;
     }
-
 }

@@ -22,7 +22,6 @@ import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
 public class FragmentListFilms extends Fragment {
 
-    //private ListFilmsAdapter adapterRecyclerFilms;
     private FilmsViewModel viewModel;
     private View layout;
     private RecyclerView recyclerView;
@@ -45,9 +44,7 @@ public class FragmentListFilms extends Fragment {
         recyclerView.setAdapter(adapter);
 
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
-        changedFilm.observe(this, film -> {
-            notifyChanges(adapter, viewModel.whoWasChanged(film));
-        });
+        changedFilm.observe(this, film -> notifyChanges(adapter, viewModel.whoWasChanged(film)));
     }
 
     private void notifyChanges(ListFilmsAdapter adapter, int position) {

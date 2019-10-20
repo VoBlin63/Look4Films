@@ -23,24 +23,39 @@
         tools:context=".activities.MainActivity">
 
         <ImageView
-            android:id="@+id/favoritesPicture"
-            android:layout_width="@dimen/recyclerFavoritesImage"
-            android:layout_height="@dimen/recyclerFavoritesImage"
-            android:layout_marginStart="@dimen/recyclerFavoritesItemHeight"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/favoritesAddButton"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/ic_to_favorite"
+            app:layout_constraintStart_toEndOf="@id/favoritesAddSpinner"
+            app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle">
+
+        </ImageView>
+
+        <Spinner
+            android:id="@+id/favoritesAddSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="21dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle">
+
+        </Spinner>
 
         <TextView
-            android:id="@+id/favoritesName"
+            android:id="@+id/favoritesAddTitle"
             style="@style/Recycler.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/favoritesPicture"
+            android:text="@string/favoritesAddTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/favoritesPicture"
-            app:layout_constraintTop_toTopOf="@id/favoritesPicture">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

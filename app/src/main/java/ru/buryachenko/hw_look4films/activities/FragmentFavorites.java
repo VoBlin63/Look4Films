@@ -5,14 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FavoritesAdapter;
 import ru.buryachenko.hw_look4films.viewmodel.FavoritesTouch;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
@@ -33,6 +37,7 @@ public class FragmentFavorites extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         layout = view;
+
         viewModel = ViewModelProviders.of(getActivity()).get(FilmsViewModel.class);
         recyclerView = layout.findViewById(R.id.recyclerFavorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(layout.getContext()));
@@ -40,11 +45,28 @@ public class FragmentFavorites extends Fragment {
         ItemTouchHelper touch = new ItemTouchHelper(new FavoritesTouch(adapter));
         touch.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
+        LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
+        changedFilm.observe(this, film -> notifyChanges(adapter, film));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //могли быть изменения из основного списка
+    private void notifyChanges(FavoritesAdapter adapter, FilmInApp film) {
+        List<FilmInApp> oldFilms = adapter.getFavoritesFromAdapter();
+        int position = oldFilms.indexOf(film);
+        if (position < 0) {
+            if (viewModel.isFavorite(film)) {
+                oldFilms.add(0, film);
+                adapter.notifyItemInserted(0);
+            }
+        } else {
+            if (viewModel.isFavorite(film)) {
+                adapter.notifyItemChanged(position + 1);
+            } else {
+                adapter.notifyItemRemoved(position+1);
+                adapter.notifyItemChanged(0);
+                //TODO как отсюда добраться до Spinner ? по идее нужно только его обновить
+                oldFilms.remove(position);
+            }
+        }
     }
+
 }
