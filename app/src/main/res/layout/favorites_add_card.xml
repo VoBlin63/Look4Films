@@ -1,5 +1,6 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardRecycler"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +16,7 @@
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/recyclerFavoritesItemHeight"
         android:background="@drawable/recycler_add_favorites_back"
@@ -29,7 +30,8 @@
             android:layout_marginEnd="@dimen/recyclerFavoritesCornerRadius"
             android:src="@drawable/ic_to_favorite"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle">
+            app:layout_constraintTop_toBottomOf="@id/favoritesAddTitle"
+            tools:ignore="ContentDescription">
 
         </ImageView>
 
@@ -38,8 +40,10 @@
             style="@style/Recycler.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/recyclerFavoritesCornerRadius"
+            android:layout_marginStart="@dimen/favoritesSpinnerGap"
+            android:layout_marginEnd="@dimen/favoritesSpinnerGap"
             app:layout_constraintEnd_toStartOf="@id/favoritesAddButton"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/favoritesAddButton">
 
         </Spinner>

@@ -37,5 +37,6 @@
     <dimen name="collapsingTBLMarginStart">48dp</dimen>
     <dimen name="widgetMargin">17dp</dimen>
     <dimen name="serviceIconSize">24dp</dimen>
+    <dimen name="favoritesSpinnerGap">17dp</dimen>
 
 </resources>
