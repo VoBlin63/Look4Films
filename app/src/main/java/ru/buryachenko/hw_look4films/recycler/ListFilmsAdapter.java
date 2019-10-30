@@ -75,7 +75,7 @@ public class ListFilmsAdapter extends RecyclerView.Adapter<ListFilmsViewHolder> 
 
     private void callDetails(int position) {
         if (position != RecyclerView.NO_POSITION) {
-            Integer previousSelected;
+            Long previousSelected;
             if (!viewModel.getList().get(position).isSelected()) {
                 previousSelected = FilmInApp.getSelected();
                 if (previousSelected != null) {
