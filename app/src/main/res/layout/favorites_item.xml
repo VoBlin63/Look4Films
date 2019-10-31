@@ -36,6 +36,8 @@
             style="@style/Recycler.Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="200dp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@id/favoritesPicture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/favoritesPicture"

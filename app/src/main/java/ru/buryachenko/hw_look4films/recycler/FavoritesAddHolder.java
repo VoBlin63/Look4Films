@@ -19,7 +19,7 @@ class FavoritesAddHolder extends RecyclerView.ViewHolder {
     private Spinner spinner;
     private View layout;
     private FilmsViewModel viewModel;
-    private ArrayAdapter spinnerAdapter;
+    private SpinnerCustomAdapter spinnerAdapter;
     private ImageView addButton;
 
     private FilmInApp selectedFilm = null;
@@ -39,7 +39,7 @@ class FavoritesAddHolder extends RecyclerView.ViewHolder {
     }
 
     void bind() {
-        spinnerAdapter = new ArrayAdapter<>(layout.getContext(), android.R.layout.simple_spinner_item, viewModel.getNonFavorites());
+        spinnerAdapter = new SpinnerCustomAdapter(layout.getContext(), android.R.layout.simple_spinner_item, viewModel.getNonFavorites());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
         if (spinnerAdapter.getCount() == 0) {

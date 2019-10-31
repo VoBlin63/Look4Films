@@ -1,6 +1,7 @@
 package ru.buryachenko.hw_look4films.activities;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -21,8 +22,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
-
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,13 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
-import ru.buryachenko.hw_look4films.api.responce.FilmJson;
-import ru.buryachenko.hw_look4films.api.responce.WholeResponce;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
@@ -53,16 +46,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String FRAGMENT_CREATE = "CreateNew.F";
     public static final String FRAGMENT_SAVER = "Saver.F";
     public static final String FRAGMENT_FAVORITES = "Favorites.F";
-    private static int rightSide = 0;
 
-    private static final String apiKey = "c3e17ff26735628669886b00d573ab4d";
-    private static final String query = "whiplash";
-    private static final String language = "ru-RU";
-    private static final String region = "RU";
+    private static int rightSide = 0;
 
     private static FilmsViewModel viewModel;
     private static FragmentManager fragmentManager;
     public static BottomNavigationView bottomNavigation;
+    private static ProgressDialog busyIndicator;
     private static View mainView;
 
     @Override
@@ -72,29 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mainView = findViewById(R.id.mainLayout);
 
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
-
-
-        App.getInstance().service.getFilms(apiKey,query,language,region).enqueue(new Callback<WholeResponce>() {
-            @Override
-            public void onResponse(Call<WholeResponce> call, Response<WholeResponce> response) {
-                if (response.isSuccessful()) {
-                    viewModel.clear();
-
-                    for (FilmJson filmJson : response.body().getResults()) {
-//                        Log.d(LOGTAG,filmJson.getTitle().toString());
-                        viewModel.putFilm(new FilmInApp(filmJson));
-                    }
-//                    recyclerView.getAdapter().notifyDataSetChanged();
-                } else {
-                    Log.d(LOGTAG, "Что-то пошло не так : response.message() = " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WholeResponce> call, Throwable throwable) {
-                Log.d(LOGTAG, "Что-то пошло не так : onFailure throwable = " + throwable.getMessage());
-            }
-        });
 
         fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -124,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Point size = new Point();
         display.getSize(size);
         rightSide = size.x;
-
     }
 
     @Override
@@ -147,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(LOGTAG,"topMenuQuit");
+        Log.d(LOGTAG, "topMenuQuit");
         switch (item.getItemId()) {
             case R.id.topMenuQuit:
                 tryToExit(this);
@@ -286,5 +252,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static int getRightSide() {
         return rightSide;
+    }
+
+    private static void showBusy(String text) {
+        if (busyIndicator == null) {
+            try {
+                busyIndicator = ProgressDialog.show(mainView.getContext(), "", text);
+                busyIndicator.setCancelable(false);
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    private static void hideBusy() {
+        if (busyIndicator != null) {
+            busyIndicator.dismiss();
+            busyIndicator = null;
+        }
+    }
+
+    public static void showBusy(boolean isBusy) {
+        if (isBusy)
+            showBusy("Скачиваются данные...");
+        else
+            hideBusy();
     }
 }

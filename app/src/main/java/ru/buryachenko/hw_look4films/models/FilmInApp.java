@@ -1,35 +1,29 @@
 package ru.buryachenko.hw_look4films.models;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
-
-import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.api.responce.FilmJson;
-import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String separator = "&";
     private static Long selectedFilmId = null;
 
-    private static final AtomicLong NEXT_ID = new AtomicLong(0);
+    private static final AtomicLong NEXT_ID = new AtomicLong(1);
 
     private Boolean liked;
     private String details;
     private String comment;
-    private Integer pictureResource;
+    private String imageUrl;
     private long filmId;
     private boolean disclosed;
 
-    public FilmInApp(String name, Integer pictureResource, String details, int filmId) {
+    public FilmInApp(String name, String imageUrl, String details, int filmId) {
         super(name);
         this.details = details;
         this.liked = false;
         this.comment = "";
-        this.pictureResource = pictureResource;
+        this.imageUrl = imageUrl;
         this.filmId = NEXT_ID.getAndIncrement();
         this.disclosed = false;
     }
@@ -40,7 +34,7 @@ public class FilmInApp extends Film implements Serializable {
         details = filmJson.getOverview();
         comment = "";
         this.filmId = NEXT_ID.getAndIncrement();
-        pictureResource = null;
+        imageUrl = "https://image.tmdb.org/t/p/w500/" + filmJson.getPosterPath();
         disclosed = false;
     }
 
@@ -49,7 +43,7 @@ public class FilmInApp extends Film implements Serializable {
         liked = previous.liked;
         details = previous.details;
         comment = previous.comment;
-        pictureResource = previous.pictureResource;
+        imageUrl = previous.imageUrl;
         filmId = previous.filmId;
         disclosed = previous.disclosed;
     }
@@ -94,14 +88,6 @@ public class FilmInApp extends Film implements Serializable {
         return comment;
     }
 
-    public Drawable getPicture(Context context) {
-        if (pictureResource == null) {
-            return RandomPicture.make(context.getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth), context.getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight));
-        } else {
-            return context.getResources().getDrawable(pictureResource);
-        }
-    }
-
     public void setLiked(Boolean liked) {
         this.liked = liked;
     }
@@ -131,28 +117,24 @@ public class FilmInApp extends Film implements Serializable {
         this.disclosed = disclosed;
     }
 
-    public void setPictureResource(Integer pictureResource) {
-        this.pictureResource = pictureResource;
-    }
-
     public void setFilmId(long filmId) {
         this.filmId = filmId;
     }
 
     public String toWidgetString() {
-        return filmId + separator + (pictureResource == null ? 0 : pictureResource) + separator + liked;
+        return filmId + separator + (imageUrl == null ? 0 : imageUrl) + separator + liked;
     }
 
-    public static int filmIdFromWidgetString(String str) {
+    public static Long filmIdFromWidgetString(String str) {
         if (str.isEmpty())
-            return 0;
-        return Integer.parseInt(str.split(separator)[0]);
+            return 0L;
+        return Long.parseLong(str.split(separator)[0]);
     }
 
-    public static int pictureResourceFromWidgetString(String str) {
+    public static String imageUrlFromWidgetString(String str) {
         if (str.isEmpty())
-            return 0;
-        return Integer.parseInt(str.split(separator)[1]);
+            return "";
+        return str.split(separator)[1];
     }
 
     public static boolean likedFromWidgetString(String str) {
@@ -165,4 +147,7 @@ public class FilmInApp extends Film implements Serializable {
         return getName();
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

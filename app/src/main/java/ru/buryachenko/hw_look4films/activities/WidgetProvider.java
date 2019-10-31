@@ -15,6 +15,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.AppWidgetTarget;
+import com.bumptech.glide.request.transition.Transition;
+
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
@@ -126,12 +130,25 @@ public class WidgetProvider extends AppWidgetProvider {
         for (int widgetId : allWidgetIds) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_like);
             remoteViews.setImageViewResource(R.id.widgetLiked, FilmInApp.likedFromWidgetString(widgetData) ? R.drawable.liked : R.drawable.notliked);
-            int picture = FilmInApp.pictureResourceFromWidgetString(widgetData);
-            if (picture == 0) {
+            String pictureUrl = FilmInApp.imageUrlFromWidgetString(widgetData);
+            if (pictureUrl.isEmpty()) {
                 Drawable p = RandomPicture.make(context.getResources().getDimensionPixelSize(R.dimen.recyclerImageWidth), context.getResources().getDimensionPixelSize(R.dimen.recyclerImageHeight));
                 remoteViews.setImageViewBitmap(R.id.widgetPicture, drawableToBitmap(p));
-            } else
-                remoteViews.setImageViewResource(R.id.widgetPicture, picture);
+            } else {
+                AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, R.id.widgetPicture, remoteViews, appWidgetIds) {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        super.onResourceReady(resource, transition);
+                    }
+                };
+                Glide.with(context)
+                        .asBitmap()
+                        .load(pictureUrl)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .error(R.drawable.ic_favorite)
+                        .into(appWidgetTarget);
+            }
             remoteViews.setOnClickPendingIntent(R.id.widgetLiked, new PendingInner(WIDGET_ACTION_CHANGE_LIKED, widgetId).result());
             remoteViews.setOnClickPendingIntent(R.id.widgetPicture, new PendingInner(WIDGET_ACTION_CHANGE_LIKED, widgetId).result());
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
