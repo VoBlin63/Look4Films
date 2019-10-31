@@ -27,6 +27,7 @@ import ru.buryachenko.hw_look4films.api.responce.WholeResponse;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_FAVORITES_LIST;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_FILM;
 
 public class FilmsViewModel extends AndroidViewModel {
@@ -116,6 +117,32 @@ public class FilmsViewModel extends AndroidViewModel {
     public boolean isFavorite(FilmInApp film) {
         return favorites.contains(film.getFilmId());
     }
+
+    public void saveFavorites() {
+        Context context = getApplication();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        StringBuffer listStr = new StringBuffer("");
+        for (Long id : favorites) {
+            listStr = listStr.append(id).append(FilmInApp.separator);
+        }
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PREFERENCES_FAVORITES_LIST, listStr.toString());
+        editor.apply();
+    }
+
+    public void loadFavorites() {
+        Context context = getApplication();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        if (settings.contains(PREFERENCES_FAVORITES_LIST)) {
+            String savedList = settings.getString(PREFERENCES_FAVORITES_LIST, "");
+            favorites.clear();
+            for (String tmp : savedList.split(FilmInApp.separator)) {
+                if (!tmp.isEmpty())
+                    favorites.add(Long.parseLong(tmp));
+            }
+        }
+    }
+
 
     public FilmInApp loadSavedSelected() {
         if ((films == null) || (films.isEmpty()))

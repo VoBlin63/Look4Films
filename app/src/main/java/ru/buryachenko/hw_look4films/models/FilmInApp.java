@@ -6,7 +6,7 @@ import ru.buryachenko.hw_look4films.api.responce.FilmJson;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String separator = "&";
+    public static final String separator = "&";
     private static Long selectedFilmId = null;
 
     private static final AtomicLong NEXT_ID = new AtomicLong(1);
