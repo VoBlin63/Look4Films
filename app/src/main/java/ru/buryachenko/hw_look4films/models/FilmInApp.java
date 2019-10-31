@@ -24,7 +24,10 @@ public class FilmInApp extends Film implements Serializable {
         this.liked = false;
         this.comment = "";
         this.imageUrl = imageUrl;
-        this.filmId = NEXT_ID.getAndIncrement();
+        if (filmId < 0)
+            this.filmId = NEXT_ID.getAndIncrement();
+        else
+            this.filmId = filmId;
         this.disclosed = false;
     }
 
@@ -33,7 +36,7 @@ public class FilmInApp extends Film implements Serializable {
         liked = false;
         details = filmJson.getOverview();
         comment = "";
-        this.filmId = NEXT_ID.getAndIncrement();
+        this.filmId = filmJson.getId();
         imageUrl = "https://image.tmdb.org/t/p/w500/" + filmJson.getPosterPath();
         disclosed = false;
     }
