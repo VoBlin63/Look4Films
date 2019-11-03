@@ -32,7 +32,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -352,5 +351,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
         }
     }
+
 
 }

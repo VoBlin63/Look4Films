@@ -40,5 +40,6 @@
     <string name="messageNoSelectedFilm">Еще не было выбранных фильмов</string>
     <string name="favoritesAddTitle">добавить в любимые</string>
     <string name="bottomNavMap">Карта</string>
+    <string name="googleMapApiKey">AIzaSyCFk2IMcvePV7bJg8FH2JhxR33W35-vSX0</string>
 
 </resources>
