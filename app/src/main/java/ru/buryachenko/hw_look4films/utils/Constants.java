@@ -8,4 +8,5 @@ public class Constants {
     public static final String PREFERENCES_FAVORITES_LIST = "RU.BURYACHENKO.PREFERENCES_FAVORITES_LIST";
     public static final int PERMISSIONS_REQUEST_FINE_LOCATION = 5;
     public static final long REFRESH_POSITION_PERIOD = 15000L;
+    public  static final int DISTANCE_LOOK_FOR_CINEMAS = 10000;
 }

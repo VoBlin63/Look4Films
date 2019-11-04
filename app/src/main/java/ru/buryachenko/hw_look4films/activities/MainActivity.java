@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,6 +44,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static View mainView;
     private FusedLocationProviderClient fusedLocationClient;
     private long lastPositionTimeGet = 0L;
-    public static LatLng lastPosition;
+    public static MutableLiveData<LatLng> lastPosition = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,7 +268,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toCall = new FragmentFavorites();
                 break;
             case FRAGMENT_MAP:
-                toCall = new FragmentMap();
+                if (ContextCompat.checkSelfPermission(App.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    toCall = new FragmentMap();
+                } else {
+                    snackMessage(App.getInstance().getString(R.string.needGPSMessage));
+                }
                 break;
             default:
                 toCall = null;
@@ -321,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static void showBusy(boolean isBusy) {
         if (isBusy)
-            showBusy("Скачиваются данные...");
+            showBusy("Получаем данные...");
         else
             hideBusy();
     }
@@ -329,28 +334,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void requestLastLocation() {
         Log.d(LOGTAG, "Вызов определения позиции");
         if ((new Date()).getTime() - lastPositionTimeGet < REFRESH_POSITION_PERIOD) {
-            //такая ситуация может возникнуть если последняя позиция еще не получена или получалась длительное время - под землей, ждали разрешения, тогда не стоит дергаться
-            //или мы не смотрим карту - не будем обновлять
+            //такая ситуация может возникнуть если последняя позиция еще не получена или получалась длительное время
             return;
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            lastPositionTimeGet = (new Date()).getTime();
-                            if (location != null) {
-                                lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                                Log.d(LOGTAG, "Установлена позиция: (" + location.getLatitude() + ',' + location.getLongitude() + ')');
-                            } else {
-                                Log.d(LOGTAG, "Позиция не установлена!");
-                            }
+                    .addOnSuccessListener(this, location -> {
+                        lastPositionTimeGet = (new Date()).getTime();
+                        if (location != null) {
+                            lastPosition.setValue(new LatLng(location.getLatitude(), location.getLongitude()));
+                            Log.d(LOGTAG, "Установлена позиция: (" + location.getLatitude() + ',' + location.getLongitude() + ')');
+                        } else {
+                            Log.d(LOGTAG, "Позиция не установлена!");
                         }
                     });
         }
     }
 
+    public static float distance(LatLng src, LatLng dest) {
+        if ((src == null) || (dest == null))
+            return 0F;
+        Location a = new Location("A");
+        a.setLatitude(src.latitude);
+        a.setLongitude(src.longitude);
+        Location b = new Location("B");
+        b.setLatitude(dest.latitude);
+        b.setLongitude(dest.longitude);
+        return a.distanceTo(b);
+    }
 
 }

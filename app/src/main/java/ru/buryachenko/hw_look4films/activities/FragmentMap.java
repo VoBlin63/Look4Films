@@ -9,30 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.DirectionsApi;
 import com.google.maps.NearbySearchRequest;
-import com.google.maps.PendingResult;
-import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsResult;
-//import com.google.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
+import com.google.maps.model.TravelMode;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.ColorInt;
@@ -45,8 +40,16 @@ import androidx.fragment.app.Fragment;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
 
+import static ru.buryachenko.hw_look4films.activities.MainActivity.distance;
+import static ru.buryachenko.hw_look4films.activities.MainActivity.lastPosition;
+import static ru.buryachenko.hw_look4films.utils.Constants.DISTANCE_LOOK_FOR_CINEMAS;
+
+//import com.google.maps.model.LatLng;
+
 
 public class FragmentMap extends Fragment implements OnMapReadyCallback {
+
+    private GoogleMap ourMap;
 
     @Nullable
     @Override
@@ -60,6 +63,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lastPosition.observe(this, newPosition -> setMyPosition(newPosition));
     }
 
     /**
@@ -73,51 +77,70 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (MainActivity.lastPosition != null) {
-            googleMap.clear();
-            LatLng start = MainActivity.lastPosition;
-            //ищем куда идем
-            LatLng finish = new com.google.android.gms.maps.model.LatLng(start.latitude + 0.09 * (Math.random() - 0.5), start.longitude + 0.09 * (Math.random() - 0.5));
-            NearbySearchRequest lookForCinema  = new NearbySearchRequest(App.getInstance().geoApiContext)
-                        .location(new com.google.maps.model.LatLng(start.latitude,start.longitude))
-                    .radius(7000)
-                    .keyword("cinema");
-            List<com.google.maps.model.LatLng> cinemas = new ArrayList<>();
-            try {
-                PlacesSearchResponse res = lookForCinema.await();
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + res.toString());
-                for (PlacesSearchResult r : res.results) {
-                    cinemas.add(new com.google.maps.model.LatLng(r.geometry.location.lat,r.geometry.location.lng));
-                }
+        ourMap = googleMap;
+        LatLng currentPos = lastPosition.getValue();
+        if (currentPos != null) {
+            setMyPosition(currentPos);
+        }
+        ourMap.setBuildingsEnabled(true);
+    }
 
-            } catch (ApiException | InterruptedException | IOException e) {
-                e.printStackTrace();
-            }
-            //строим маршрут
-            DirectionsResult way = null;
-            try {
-                //TODO здесь com.google.maps.model.LatLng и com.google.android.gms.maps.model.LatLng - как эту фигню свести к одному ?!
-                way = DirectionsApi.newRequest(App.getInstance().geoApiContext)
-                        .origin(new com.google.maps.model.LatLng(start.latitude,start.longitude))
-                        .destination(cinemas.get(0)).await();
-            } catch (ApiException | InterruptedException | IOException e) {
-                e.printStackTrace();
-            }
-            if (way != null) {
-                List<com.google.maps.model.LatLng> path = way.routes[0].overviewPolyline.decodePath();
-                PolylineOptions line = new PolylineOptions();
-                LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
-                for (int i = 0; i < path.size(); i++) {
-                    line.add(new com.google.android.gms.maps.model.LatLng(path.get(i).lat, path.get(i).lng));
-                    latLngBuilder.include(new com.google.android.gms.maps.model.LatLng(path.get(i).lat, path.get(i).lng));
+    private void setMyPosition(LatLng position) {
+        if ((ourMap == null) || (position == null))
+            return;
+        ourMap.clear();
+        LatLng finish = null;
+        NearbySearchRequest lookForCinema = new NearbySearchRequest(App.getInstance().geoApiContext)
+                .location(new com.google.maps.model.LatLng(position.latitude, position.longitude))
+                .radius(DISTANCE_LOOK_FOR_CINEMAS)
+                .keyword("cinema");
+        try {
+            PlacesSearchResponse responce = lookForCinema.await();
+            float distance = DISTANCE_LOOK_FOR_CINEMAS + 1;
+            for (PlacesSearchResult cinemas : responce.results) {
+                LatLng dest = new LatLng(cinemas.geometry.location.lat, cinemas.geometry.location.lng);
+                if (distance(position, dest) < distance) {
+                    finish = dest;
+                    distance = distance(position, dest);
                 }
-                line.width(11F).color(Color.BLUE);
-                googleMap.addPolyline(line);
+                ourMap.addMarker(new MarkerOptions()
+                        .position(dest)
+                        .icon(vectorToBitmap(R.drawable.ic_route_finish, Color.GREEN))
+                        .title(cinemas.name));
             }
-            googleMap.addMarker(new MarkerOptions().position(start).icon(vectorToBitmap(R.drawable.ic_home, Color.RED)).title("Вы тут"));
-            googleMap.addMarker(new MarkerOptions().position(finish).icon(vectorToBitmap(R.drawable.ic_favorite, Color.RED)).title("Вам сюда"));
-            googleMap.setBuildingsEnabled(true);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MainActivity.lastPosition,13F));
+
+        } catch (ApiException | InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+        addRoute(position, finish);
+        ourMap.addMarker(new MarkerOptions().position(position)
+                .icon(vectorToBitmap(R.drawable.ic_route_start, Color.RED))
+                .title("Вы тут"));
+        ourMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 11F));
+    }
+
+    private void addRoute(LatLng start, LatLng finish) {
+        if ((start == null) || (finish == null))
+            return;
+        DirectionsResult way = null;
+        try {
+            way = DirectionsApi.newRequest(App.getInstance().geoApiContext)
+                    .origin(new com.google.maps.model.LatLng(start.latitude, start.longitude))
+                    .mode(TravelMode.WALKING)
+                    .destination(new com.google.maps.model.LatLng(finish.latitude, finish.longitude)).await();
+        } catch (ApiException | InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+        if (way != null) {
+            List<com.google.maps.model.LatLng> path = way.routes[0].overviewPolyline.decodePath();
+            PolylineOptions line = new PolylineOptions();
+            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+            for (int i = 0; i < path.size(); i++) {
+                line.add(new com.google.android.gms.maps.model.LatLng(path.get(i).lat, path.get(i).lng));
+                latLngBuilder.include(new com.google.android.gms.maps.model.LatLng(path.get(i).lat, path.get(i).lng));
+            }
+            line.width(9F).color(Color.BLUE);
+            ourMap.addPolyline(line);
         }
     }
 
