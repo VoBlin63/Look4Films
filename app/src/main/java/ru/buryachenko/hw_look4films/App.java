@@ -2,8 +2,6 @@ package ru.buryachenko.hw_look4films;
 
 import android.app.Application;
 
-import com.google.maps.GeoApiContext;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -13,7 +11,6 @@ import ru.buryachenko.hw_look4films.api.FilmsApiService;
 
 public class App extends Application {
     public FilmsApiService service;
-    public GeoApiContext geoApiContext;
 
     private static App instance;
 
@@ -22,7 +19,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         initRetrofit();
-        initGeoApi();
     }
 
     public static App getInstance() {
@@ -49,10 +45,5 @@ public class App extends Application {
         service = retrofit.create(FilmsApiService.class);
     }
 
-    private void initGeoApi() {
-        GeoApiContext.Builder builder = new GeoApiContext.Builder();
-        builder.apiKey(getString(R.string.googleMapApiKey));
-        geoApiContext = builder
-                .build();
-    }
+
 }
