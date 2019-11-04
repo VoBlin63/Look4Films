@@ -91,16 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Point size = new Point();
         display.getSize(size);
         rightSide = size.x;
-
-        viewModel.loadFavorites(); //если там окажутся еще не скащенные - все нормально отработает
     }
-
-    @Override
-    protected void onDestroy() {
-        viewModel.saveFavorites();
-        super.onDestroy();
-    }
-
 
     @Override
     public void onBackPressed() {
