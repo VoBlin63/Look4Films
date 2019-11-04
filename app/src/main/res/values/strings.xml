@@ -41,6 +41,5 @@
     <string name="favoritesAddTitle">добавить в любимые</string>
     <string name="bottomNavMap">Карта</string>
     <string name="googleMapApiKey">AIzaSyCFk2IMcvePV7bJg8FH2JhxR33W35-vSX0</string>
-    <string name="needGPSMessage">Для работы с картой необходимо разрешить приложению доступ к геолокации!</string>
 
 </resources>
