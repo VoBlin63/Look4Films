@@ -24,17 +24,12 @@ import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_
 
 public class FilmsViewModel extends AndroidViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
-    private Map<Long, FilmInApp> films;
-    private Set<Long> favorites = new HashSet<>();
+    private Map<Integer, FilmInApp> films;
+    private Set<Integer> favorites = new HashSet<>();
 
     public FilmsViewModel(@NonNull Application application) {
         super(application);
         init();
-    }
-
-    public void clear() {
-        favorites.clear();
-        films.clear();
     }
 
     private void init() {
@@ -124,7 +119,7 @@ public class FilmsViewModel extends AndroidViewModel {
 
     public void putFilm(FilmInApp film) {
         if (film.getFilmId() < 0) {
-            long newId = Collections.max(films.keySet()) + 1;
+            int newId = Collections.max(films.keySet()) + 1;
             film.setFilmId(newId);
         }
         films.put(film.getFilmId(), film);
@@ -138,7 +133,7 @@ public class FilmsViewModel extends AndroidViewModel {
     public FilmInApp getSelected() {
         if ((films == null) || (films.isEmpty()))
             return null;
-        Long selectedId = FilmInApp.getSelected();
+        Integer selectedId = FilmInApp.getSelected();
         if (selectedId == null)
             return null;
         return films.get(selectedId);

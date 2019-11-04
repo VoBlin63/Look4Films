@@ -4,25 +4,26 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
 
 import ru.buryachenko.hw_look4films.R;
-import ru.buryachenko.hw_look4films.api.responce.FilmJson;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
 
 public class FilmInApp extends Film implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String separator = "&";
-    private static Long selectedFilmId = null;
-
-    private static final AtomicLong NEXT_ID = new AtomicLong(0);
-
     private Boolean liked;
     private String details;
     private String comment;
     private Integer pictureResource;
-    private long filmId;
+    private int filmId;
     private boolean disclosed;
+    private static Integer selectedFilmId = null;
+
+    public boolean equals(FilmInApp other) {
+        return liked == other.liked
+                && details.equals(other.details)
+                && comment.equals(other.comment);
+    }
 
     public FilmInApp(String name, Integer pictureResource, String details, int filmId) {
         super(name);
@@ -30,18 +31,8 @@ public class FilmInApp extends Film implements Serializable {
         this.liked = false;
         this.comment = "";
         this.pictureResource = pictureResource;
-        this.filmId = NEXT_ID.getAndIncrement();
+        this.filmId = filmId;
         this.disclosed = false;
-    }
-
-    public FilmInApp(FilmJson filmJson) {
-        super(filmJson.getTitle());
-        liked = false;
-        details = filmJson.getOverview();
-        comment = "";
-        this.filmId = NEXT_ID.getAndIncrement();
-        pictureResource = null;
-        disclosed = false;
     }
 
     public FilmInApp(FilmInApp previous) {
@@ -82,7 +73,7 @@ public class FilmInApp extends Film implements Serializable {
         selectedFilmId = null;
     }
 
-    public static Long getSelected() {
+    public static Integer getSelected() {
         return selectedFilmId;
     }
 
@@ -114,7 +105,7 @@ public class FilmInApp extends Film implements Serializable {
         this.comment = comment;
     }
 
-    public long getFilmId() {
+    public int getFilmId() {
         return filmId;
     }
 
@@ -135,7 +126,7 @@ public class FilmInApp extends Film implements Serializable {
         this.pictureResource = pictureResource;
     }
 
-    public void setFilmId(long filmId) {
+    public void setFilmId(int filmId) {
         this.filmId = filmId;
     }
 
@@ -164,5 +155,4 @@ public class FilmInApp extends Film implements Serializable {
     public String toString() {
         return getName();
     }
-
 }
