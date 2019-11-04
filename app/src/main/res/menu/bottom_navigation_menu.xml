@@ -18,9 +18,5 @@
         android:id="@+id/bottomNavFavorite"
         android:icon="@drawable/ic_favorite"
         android:title="@string/bottomNavigationFavorites" />
-    <item
-        android:id="@+id/bottomNavMap"
-        android:icon="@drawable/ic_navigation"
-        android:title="@string/bottomNavMap" />
 
 </menu>
