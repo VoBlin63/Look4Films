@@ -38,10 +38,10 @@
         <Spinner
             android:id="@+id/favoritesAddSpinner"
             style="@style/Recycler.Name"
-            android:layout_width="0dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/favoritesSpinnerGap"
-            android:layout_marginEnd="7dp"
+            android:layout_marginEnd="@dimen/favoritesSpinnerGap"
             app:layout_constraintEnd_toStartOf="@id/favoritesAddButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/favoritesAddButton">

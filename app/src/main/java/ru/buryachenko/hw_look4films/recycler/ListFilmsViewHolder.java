@@ -4,13 +4,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
@@ -45,12 +41,7 @@ class ListFilmsViewHolder extends RecyclerView.ViewHolder {
     void bind(FilmInApp film) {
         card.setSelected(film.isSelected());
         name.setText(film.getName());
-        Glide.with(itemView.getContext())
-                .load(film.getImageUrl())
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_favorite)
-                .into(picture);
+        picture.setImageDrawable(film.getPicture(layout.getContext()));
         liked.setImageResource(film.getLiked() ? R.drawable.liked : R.drawable.notliked);
         card.setCardElevation(film.isSelected() ? 0F : card.getMaxCardElevation());
         details.setText(film.getDetails());

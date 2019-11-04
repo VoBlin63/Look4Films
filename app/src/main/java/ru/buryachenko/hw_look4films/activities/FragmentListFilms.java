@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
-import ru.buryachenko.hw_look4films.recycler.ListFilmsAdapter;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
+import ru.buryachenko.hw_look4films.recycler.ListFilmsAdapter;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 
@@ -39,26 +39,12 @@ public class FragmentListFilms extends Fragment {
         layout = view;
 
         recyclerView = layout.findViewById(R.id.recyclerListFilms);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(layout.getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(layout.getContext()));
         ListFilmsAdapter adapter = new ListFilmsAdapter(LayoutInflater.from(layout.getContext()), viewModel);
         recyclerView.setAdapter(adapter);
 
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, film -> notifyChanges(adapter, film));
-
-        LiveData<Boolean> isBusy = viewModel.getIsBusy();
-        isBusy.observe(this, busy -> MainActivity.showBusy(busy));
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (layoutManager.findFirstCompletelyVisibleItemPosition() > viewModel.getList().size() - 5) {
-                    viewModel.loadNext();
-                }
-            }
-        });
     }
 
     private void notifyChanges(ListFilmsAdapter adapter, FilmInApp film) {

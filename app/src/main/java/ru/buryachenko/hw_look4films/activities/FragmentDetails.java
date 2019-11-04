@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -60,12 +58,7 @@ public class FragmentDetails extends Fragment {
         ((TextView) layout.findViewById(R.id.details)).setText(film.getDetails());
         ((TextView) layout.findViewById(R.id.name)).setText(film.getName());
         ((EditText) layout.findViewById(R.id.comment)).setText(film.getComment());
-        Glide.with(layout.getContext())
-                .load(film.getImageUrl())
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_favorite)
-                .into((ImageView)layout.findViewById(R.id.picture));
+        ((ImageView) layout.findViewById(R.id.picture)).setImageDrawable(film.getPicture(getActivity()));
     }
 
     private void doSaveDetails(View view, FilmInApp film) {
