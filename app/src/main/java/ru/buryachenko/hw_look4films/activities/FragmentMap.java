@@ -56,7 +56,6 @@ import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_POSITION_PERI
 public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap ourMap;
-    private LatLng lastPosition = null;
 
     @Nullable
     @Override
@@ -103,9 +102,6 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         ourMap = googleMap;
-        if (lastPosition != null) {
-            setMyPosition(lastPosition);
-        }
         ourMap.getUiSettings().setZoomControlsEnabled(true);
         ourMap.getUiSettings().setZoomGesturesEnabled(true);
         ourMap.setBuildingsEnabled(true);
@@ -219,8 +215,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private void showLocation(Location location) {
         if (location == null)
             return;
-        lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-        setMyPosition(lastPosition);
+        setMyPosition(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     private static float distance(LatLng src, LatLng dest) {
