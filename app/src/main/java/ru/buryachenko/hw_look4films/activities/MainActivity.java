@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,16 +21,9 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -44,7 +37,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
@@ -53,7 +45,6 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PERMISSIONS_REQUEST_FINE_LOCATION;
-import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_POSITION_PERIOD;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static BottomNavigationView bottomNavigation;
     private static ProgressDialog busyIndicator;
     private static View mainView;
-    private FusedLocationProviderClient fusedLocationClient;
-    private long lastPositionTimeGet = 0L;
-    public static MutableLiveData<LatLng> lastPosition = new MutableLiveData<>();
+    public static LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,21 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModel.loadFavorites(); //если там окажутся еще не скачанные - все нормально отработает
 
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSIONS_REQUEST_FINE_LOCATION);
-
-        fusedLocationClient = LocationServices
-                .getFusedLocationProviderClient(App.getInstance());
-
-        requestLastLocation();
-        //таймер пусть щелкает всегда - если наблюдения не нужно, то requestLastLocation() ничего не делает
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                requestLastLocation();
-            }
-        }, 0, REFRESH_POSITION_PERIOD);
     }
 
     @Override
@@ -230,7 +204,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 callFragment(FRAGMENT_FAVORITES);
                 break;
             case R.id.bottomNavMap:
-                callFragment(FRAGMENT_MAP);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST_FINE_LOCATION);
+                if (ContextCompat.checkSelfPermission(App.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                    callFragment(FRAGMENT_MAP);
+                } else {
+                    snackMessage(getString(R.string.needGPSMessage));
+                }
                 break;
         }
         return true;
@@ -268,12 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toCall = new FragmentFavorites();
                 break;
             case FRAGMENT_MAP:
-                if (ContextCompat.checkSelfPermission(App.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    toCall = new FragmentMap();
-                } else {
-                    snackMessage(App.getInstance().getString(R.string.needGPSMessage));
-                }
+                toCall = new FragmentMap();
                 break;
             default:
                 toCall = null;
@@ -309,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static void showBusy(String text) {
         if (busyIndicator == null) {
             try {
-                busyIndicator = ProgressDialog.show(mainView.getContext(), "", text);
+                busyIndicator = ProgressDialog.show(App.getInstance(), "", text);
                 busyIndicator.setCancelable(false);
             } catch (Exception e) {
 
@@ -330,38 +308,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
             hideBusy();
     }
-
-    public void requestLastLocation() {
-        Log.d(LOGTAG, "Вызов определения позиции");
-        if ((new Date()).getTime() - lastPositionTimeGet < REFRESH_POSITION_PERIOD) {
-            //такая ситуация может возникнуть если последняя позиция еще не получена или получалась длительное время
-            return;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, location -> {
-                        lastPositionTimeGet = (new Date()).getTime();
-                        if (location != null) {
-                            lastPosition.setValue(new LatLng(location.getLatitude(), location.getLongitude()));
-                            Log.d(LOGTAG, "Установлена позиция: (" + location.getLatitude() + ',' + location.getLongitude() + ')');
-                        } else {
-                            Log.d(LOGTAG, "Позиция не установлена!");
-                        }
-                    });
-        }
-    }
-
-    public static float distance(LatLng src, LatLng dest) {
-        if ((src == null) || (dest == null))
-            return 0F;
-        Location a = new Location("A");
-        a.setLatitude(src.latitude);
-        a.setLongitude(src.longitude);
-        Location b = new Location("B");
-        b.setLatitude(dest.latitude);
-        b.setLongitude(dest.longitude);
-        return a.distanceTo(b);
-    }
-
 }

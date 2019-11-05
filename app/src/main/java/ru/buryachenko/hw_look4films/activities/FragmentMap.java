@@ -1,10 +1,17 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,16 +47,16 @@ import androidx.fragment.app.Fragment;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
 
-import static ru.buryachenko.hw_look4films.activities.MainActivity.distance;
-import static ru.buryachenko.hw_look4films.activities.MainActivity.lastPosition;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static ru.buryachenko.hw_look4films.utils.Constants.DISTANCE_LOOK_FOR_CINEMAS;
-
-//import com.google.maps.model.LatLng;
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_POSITION_PERIOD;
 
 
 public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap ourMap;
+    private LatLng lastPosition = null;
 
     @Nullable
     @Override
@@ -57,13 +64,31 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         View res = inflater.inflate(R.layout.fragment_map, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        return res; //inflater.inflate(R.layout.fragment_map, container, false);
+        return res;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lastPosition.observe(this, newPosition -> setMyPosition(newPosition));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(App.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+        MainActivity.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                REFRESH_POSITION_PERIOD, 10, locationListener);
+        checkEnabled();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainActivity.locationManager.removeUpdates(locationListener);
     }
 
     /**
@@ -78,10 +103,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         ourMap = googleMap;
-        LatLng currentPos = lastPosition.getValue();
-        if (currentPos != null) {
-            setMyPosition(currentPos);
+        if (lastPosition != null) {
+            setMyPosition(lastPosition);
         }
+        ourMap.getUiSettings().setZoomControlsEnabled(true);
+        ourMap.getUiSettings().setZoomGesturesEnabled(true);
         ourMap.setBuildingsEnabled(true);
     }
 
@@ -95,9 +121,9 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                 .radius(DISTANCE_LOOK_FOR_CINEMAS)
                 .keyword("cinema");
         try {
-            PlacesSearchResponse responce = lookForCinema.await();
+            PlacesSearchResponse response = lookForCinema.await();
             float distance = DISTANCE_LOOK_FOR_CINEMAS + 1;
-            for (PlacesSearchResult cinemas : responce.results) {
+            for (PlacesSearchResult cinemas : response.results) {
                 LatLng dest = new LatLng(cinemas.geometry.location.lat, cinemas.geometry.location.lng);
                 if (distance(position, dest) < distance) {
                     finish = dest;
@@ -153,6 +179,60 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         DrawableCompat.setTint(vectorDrawable, color);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    private LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            showLocation(location);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            checkEnabled();
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            checkEnabled();
+            if (checkSelfPermission(App.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            showLocation(MainActivity.locationManager.getLastKnownLocation(provider));
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            if (provider.equals(LocationManager.GPS_PROVIDER)) {
+                Log.d(LOGTAG, " GPS Status: " + status);
+            }
+        }
+    };
+
+    private void checkEnabled() {
+        if (!MainActivity.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            MainActivity.snackMessage(App.getInstance().getString(R.string.fragmentMapNoGPS));
+        }
+    }
+
+    private void showLocation(Location location) {
+        if (location == null)
+            return;
+        lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
+        setMyPosition(lastPosition);
+    }
+
+    private static float distance(LatLng src, LatLng dest) {
+        if ((src == null) || (dest == null))
+            return 0F;
+        Location a = new Location("A");
+        a.setLatitude(src.latitude);
+        a.setLongitude(src.longitude);
+        Location b = new Location("B");
+        b.setLatitude(dest.latitude);
+        b.setLongitude(dest.longitude);
+        return a.distanceTo(b);
     }
 
 }
