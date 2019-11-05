@@ -52,11 +52,11 @@ public class FilmsViewModel extends AndroidViewModel {
             return;
         }
         isBusy.setValue(true);
-        page = page + 1;
         App.getInstance().service.getFilms(apiKey, page, language, region).enqueue(new Callback<WholeResponse>() {
             @Override
             public void onResponse(Call<WholeResponse> call, Response<WholeResponse> response) {
                 if (response.isSuccessful()) {
+                    page = page + 1;
                     for (FilmJson filmJson : response.body().getResults()) {
                         putFilm(new FilmInApp(filmJson));
                     }

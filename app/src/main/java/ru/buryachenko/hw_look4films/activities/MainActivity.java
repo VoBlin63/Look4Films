@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static void showBusy(String text) {
         if (busyIndicator == null) {
             try {
-                busyIndicator = ProgressDialog.show(App.getInstance(), "", text);
+                busyIndicator = ProgressDialog.show(mainView.getContext(), "", text);
                 busyIndicator.setCancelable(false);
             } catch (Exception e) {
 
