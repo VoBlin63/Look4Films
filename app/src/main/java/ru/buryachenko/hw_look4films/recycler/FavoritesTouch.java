@@ -22,7 +22,7 @@ public class FavoritesTouch extends ItemTouchHelper.Callback {
             int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
             return makeMovementFlags(dragFlags, swipeFlags);
         } else {
-            return makeMovementFlags(0,0);
+            return makeMovementFlags(0, 0);
         }
 
     }

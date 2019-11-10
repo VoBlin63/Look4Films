@@ -22,11 +22,14 @@ import ru.buryachenko.hw_look4films.recycler.FavoritesItemAnimator;
 import ru.buryachenko.hw_look4films.recycler.FavoritesTouch;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
+
 public class FragmentFavorites extends Fragment {
+
 
     private FilmsViewModel viewModel;
     private RecyclerView recyclerView;
     private View layout;
+    private ItemTouchHelper touch;
 
     @Nullable
     @Override
@@ -43,7 +46,7 @@ public class FragmentFavorites extends Fragment {
         recyclerView = layout.findViewById(R.id.recyclerFavorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(layout.getContext()));
         FavoritesAdapter adapter = new FavoritesAdapter(LayoutInflater.from(layout.getContext()), viewModel);
-        ItemTouchHelper touch = new ItemTouchHelper(new FavoritesTouch(adapter));
+        touch = new ItemTouchHelper(new FavoritesTouch(adapter));
         touch.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
@@ -66,10 +69,11 @@ public class FragmentFavorites extends Fragment {
             if (viewModel.isFavorite(film)) {
                 adapter.notifyItemChanged(position + 1);
             } else {
-                adapter.notifyItemRemoved(position+1);
+                touch.attachToRecyclerView(null);
+                adapter.notifyItemRemoved(position + 1);
                 adapter.notifyItemChanged(0);
-                //TODO как отсюда добраться до Spinner ? по идее нужно только его обновить
                 oldFilms.remove(position);
+                touch.attachToRecyclerView(recyclerView);
             }
         }
     }

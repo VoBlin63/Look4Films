@@ -12,7 +12,7 @@ import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 public class FavoritesAdapter extends RecyclerView.Adapter {
-    static final int HOLDER_ITEM = 0;
+    public static final int HOLDER_ITEM = 0;
     private static final int HOLDER_ADD_NEW = 1;
     List<FilmInApp> films;
 
@@ -47,10 +47,9 @@ public class FavoritesAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FavoritesViewHolder) {
-            ((FavoritesViewHolder)holder).bind(films.get(position-1));
-        }
-        else  {
-            ((FavoritesAddHolder)holder).bind();
+            ((FavoritesViewHolder) holder).bind(films.get(position - 1));
+        } else {
+            ((FavoritesAddHolder) holder).bind();
         }
     }
 
