@@ -38,6 +38,27 @@ public class SomeAnimation {
         set.start();
     }
 
+    public static AnimatorSet doAnimationFly(View view, boolean isArrive) {
+        float from = 0.0F;
+        float to = 1F;
+        if (!isArrive) {
+            float tmp = from;
+            from = to;
+            to = tmp;
+        }
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, View.SCALE_X, from, to);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, View.SCALE_Y, from, to);
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(view, View.ROTATION, 0, 360 * (isArrive ? 1 : -1));
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(DURATION_DETAILS_ANIMAYION*2);
+        animatorSet.playTogether(scaleX, scaleY, rotate);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(animatorSet);
+        return set;
+    }
+
     public static void doAnimationDetails(boolean returnBack, View view) {
         float from = 1F;
         float to = 0F;
