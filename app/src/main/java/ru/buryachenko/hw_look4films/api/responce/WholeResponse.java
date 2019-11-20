@@ -24,32 +24,16 @@ public class WholeResponse {
         return page;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
     public Integer getTotalResults() {
         return totalResults;
-    }
-
-    public void setTotalResults(Integer totalResults) {
-        this.totalResults = totalResults;
     }
 
     public Integer getTotalPages() {
         return totalPages;
     }
 
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
-    }
-
     public List<FilmJson> getResults() {
         return results;
-    }
-
-    public void setResults(List<FilmJson> results) {
-        this.results = results;
     }
 
 }

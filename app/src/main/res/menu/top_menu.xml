@@ -4,5 +4,9 @@
         android:id="@+id/topMenuQuit"
         android:icon="@drawable/ic_back"
         android:title="@string/topMenuQuit" />
+    <item
+        android:id="@+id/startService"
+        android:icon="@drawable/ic_back"
+        android:title="Service" />
 
 </menu>

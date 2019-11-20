@@ -2,16 +2,15 @@ package ru.buryachenko.hw_look4films.activities;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -40,10 +39,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.db.ServiceDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static FilmsViewModel viewModel;
     public static FragmentManager fragmentManager;
     public static BottomNavigationView bottomNavigation;
-    private static ProgressDialog busyIndicator;
     private static View mainView;
     public static LocationManager locationManager;
 
@@ -129,13 +127,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(LOGTAG, "topMenuQuit");
         switch (item.getItemId()) {
             case R.id.topMenuQuit:
                 tryToExit(this);
                 break;
+            case R.id.startService:
+                callService();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void callService() {
+        Intent startService = new Intent(this, ServiceDb.class);
+        startService(startService);
     }
 
     @Override
@@ -284,28 +289,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return rightSide;
     }
 
-    private static void showBusy(String text) {
-        if (busyIndicator == null) {
-            try {
-                busyIndicator = ProgressDialog.show(mainView.getContext(), "", text);
-                busyIndicator.setCancelable(false);
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    private static void hideBusy() {
-        if (busyIndicator != null) {
-            busyIndicator.dismiss();
-            busyIndicator = null;
-        }
-    }
-
-    public static void showBusy(boolean isBusy) {
-        if (isBusy)
-            showBusy("Получаем данные...");
-        else
-            hideBusy();
-    }
 }

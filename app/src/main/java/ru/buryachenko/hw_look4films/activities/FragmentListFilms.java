@@ -47,18 +47,6 @@ public class FragmentListFilms extends Fragment {
         LiveData<FilmInApp> changedFilm = viewModel.getChangedFilm();
         changedFilm.observe(this, film -> notifyChanges(adapter, film));
 
-        LiveData<Boolean> isBusy = viewModel.getIsBusy();
-        isBusy.observe(this, busy -> MainActivity.showBusy(busy));
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (layoutManager.findFirstCompletelyVisibleItemPosition() > viewModel.getList().size() - 5) {
-                    viewModel.loadNext();
-                }
-            }
-        });
     }
 
     private void notifyChanges(ListFilmsAdapter adapter, FilmInApp film) {
@@ -80,5 +68,4 @@ public class FragmentListFilms extends Fragment {
             viewModel.putFilm(saved);
         }
     }
-
 }

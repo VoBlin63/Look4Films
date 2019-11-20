@@ -3,8 +3,9 @@ package ru.buryachenko.hw_look4films.models;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 import ru.buryachenko.hw_look4films.api.responce.FilmJson;
+import ru.buryachenko.hw_look4films.db.FilmInDb;
 
-public class FilmInApp extends Film implements Serializable {
+public class FilmInApp implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String separator = "&";
     private static Long selectedFilmId = null;
@@ -12,6 +13,7 @@ public class FilmInApp extends Film implements Serializable {
     private static final AtomicLong NEXT_ID = new AtomicLong(1);
 
     private Boolean liked;
+    private String name;
     private String details;
     private String comment;
     private String imageUrl;
@@ -19,7 +21,7 @@ public class FilmInApp extends Film implements Serializable {
     private boolean disclosed;
 
     public FilmInApp(String name, String imageUrl, String details, int filmId) {
-        super(name);
+        this.name = name;
         this.details = details;
         this.liked = false;
         this.comment = "";
@@ -32,7 +34,7 @@ public class FilmInApp extends Film implements Serializable {
     }
 
     public FilmInApp(FilmJson filmJson) {
-        super(filmJson.getTitle());
+        name = filmJson.getTitle();
         liked = false;
         details = filmJson.getOverview();
         comment = "";
@@ -40,9 +42,18 @@ public class FilmInApp extends Film implements Serializable {
         imageUrl = "https://image.tmdb.org/t/p/w500/" + filmJson.getPosterPath();
         disclosed = false;
     }
+    public FilmInApp(FilmInDb filmDb) {
+        name = filmDb.getTitle();
+        liked = false;
+        details = filmDb.getOverview();
+        comment = "";
+        imageUrl = filmDb.getPosterPath();
+        filmId = filmDb.getId();
+        disclosed = false;
+    }
 
     public FilmInApp(FilmInApp previous) {
-        super(previous.getName());
+        name = previous.getName();
         liked = previous.liked;
         details = previous.details;
         comment = previous.comment;
@@ -152,5 +163,9 @@ public class FilmInApp extends Film implements Serializable {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getName() {
+        return name;
     }
 }

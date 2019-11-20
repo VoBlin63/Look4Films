@@ -3,8 +3,11 @@ package ru.buryachenko.hw_look4films.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.bumptech.glide.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,17 +16,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import ru.buryachenko.hw_look4films.App;
-import ru.buryachenko.hw_look4films.api.responce.FilmJson;
-import ru.buryachenko.hw_look4films.api.responce.WholeResponse;
+import ru.buryachenko.hw_look4films.db.FilmInDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
@@ -32,54 +32,40 @@ import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_SELECTED_
 
 public class FilmsViewModel extends AndroidViewModel {
     private MutableLiveData<FilmInApp> changedFilm = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isBusy = new MutableLiveData<>();
     private Map<Long, FilmInApp> films = new HashMap<>();
     private Set<Long> favorites = new HashSet<>();
 
-    private static final String apiKey = "c3e17ff26735628669886b00d573ab4d";
-    private static final String language = "ru-RU";
-    private static final String region = "RU";
-    private static int page = 1;
-
     public FilmsViewModel(@NonNull Application application) {
         super(application);
-        isBusy.setValue(false);
-        loadNext();
+        loadFilms();
     }
 
-    public void loadNext() {
-        if (isBusy.getValue() == null || isBusy.getValue()) {
-            return;
-        }
-        isBusy.setValue(true);
-        App.getInstance().service.getFilms(apiKey, page, language, region).enqueue(new Callback<WholeResponse>() {
-            @Override
-            public void onResponse(Call<WholeResponse> call, Response<WholeResponse> response) {
-                if (response.isSuccessful()) {
-                    page = page + 1;
-                    for (FilmJson filmJson : response.body().getResults()) {
-                        putFilm(new FilmInApp(filmJson));
-                    }
-                    FilmInApp saved = loadSavedSelected();
-                    if (saved != null) {
-                        films.put(saved.getFilmId(), saved);
-                    }
-                } else {
-                    Log.d(LOGTAG, "Что-то пошло не так : response.message() = " + response.message());
-                }
-                isBusy.setValue(false);
-            }
 
+    private void loadFilms() {
+        Executors.newCachedThreadPool().submit(new Runnable() {
             @Override
-            public void onFailure(Call<WholeResponse> call, Throwable throwable) {
-                Log.d(LOGTAG, "Что-то пошло не так : onFailure throwable = " + throwable.getMessage());
-                isBusy.setValue(false);
+            public void run() {
+                films.clear();
+                for (FilmInDb filmDb : App.getInstance().filmsDb.daoFilm().getAll()) {
+                    films.put(filmDb.getId().longValue(), new FilmInApp(filmDb));
+                }
+                FilmInApp saved = loadSavedSelected();
+                if (saved != null) {
+                    films.put(saved.getFilmId(), saved);
+                }
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOGTAG, "We have " + films.size() + " records in DB");
+                }
             }
         });
     }
 
     public List<FilmInApp> getList() {
-        return new ArrayList<>(films.values());
+        ArrayList<FilmInApp> res = new ArrayList<>(films.values());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            res.sort((f1, f2) -> f1.getName().compareTo(f2.getName()));
+        }
+        return res;
     }
 
     public void addInFavorites(FilmInApp film) {
@@ -191,7 +177,4 @@ public class FilmsViewModel extends AndroidViewModel {
         return getList().indexOf(film);
     }
 
-    public MutableLiveData<Boolean> getIsBusy() {
-        return isBusy;
-    }
 }
