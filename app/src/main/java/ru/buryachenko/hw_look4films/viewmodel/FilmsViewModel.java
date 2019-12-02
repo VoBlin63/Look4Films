@@ -1,10 +1,7 @@
 package ru.buryachenko.hw_look4films.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.bumptech.glide.BuildConfig;
@@ -25,6 +22,7 @@ import androidx.lifecycle.MutableLiveData;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.db.FilmInDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
+import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_FAVORITES_LIST;
@@ -105,27 +103,19 @@ public class FilmsViewModel extends AndroidViewModel {
     }
 
     public void saveFavorites() {
-        Context context = getApplication();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         StringBuffer listStr = new StringBuffer("");
         for (Long id : favorites) {
             listStr = listStr.append(id).append(FilmInApp.separator);
         }
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PREFERENCES_FAVORITES_LIST, listStr.toString());
-        editor.apply();
+        SharedPreferencesOperation.save(PREFERENCES_FAVORITES_LIST, listStr.toString());
     }
 
     public void loadFavorites() {
-        Context context = getApplication();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        if (settings.contains(PREFERENCES_FAVORITES_LIST)) {
-            String savedList = settings.getString(PREFERENCES_FAVORITES_LIST, "");
-            favorites.clear();
-            for (String tmp : savedList.split(FilmInApp.separator)) {
-                if (!tmp.isEmpty())
-                    favorites.add(Long.parseLong(tmp));
-            }
+        String savedList = SharedPreferencesOperation.load(PREFERENCES_FAVORITES_LIST, "");
+        favorites.clear();
+        for (String tmp : savedList.split(FilmInApp.separator)) {
+            if (!tmp.isEmpty())
+                favorites.add(Long.parseLong(tmp));
         }
     }
 
@@ -133,20 +123,16 @@ public class FilmsViewModel extends AndroidViewModel {
     public FilmInApp loadSavedSelected() {
         if ((films == null) || (films.isEmpty()))
             return null;
-        Context context = getApplication();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        if (settings.contains(PREFERENCES_SELECTED_FILM)) {
-            String savedData = settings.getString(PREFERENCES_SELECTED_FILM, "");
-            if ((savedData == null) || (savedData.isEmpty()))
-                return null;
-            Long filmId = FilmInApp.filmIdFromWidgetString(savedData);
-            boolean liked = FilmInApp.likedFromWidgetString(savedData);
-            if (films.containsKey(filmId)) {
-                FilmInApp res = new FilmInApp(films.get(filmId));
-                res.setSelected();
-                res.setLiked(liked);
-                return res;
-            }
+        String savedData = SharedPreferencesOperation.load(PREFERENCES_SELECTED_FILM, "");
+        if ((savedData == null) || (savedData.isEmpty()))
+            return null;
+        Long filmId = FilmInApp.filmIdFromWidgetString(savedData);
+        boolean liked = FilmInApp.likedFromWidgetString(savedData);
+        if (films.containsKey(filmId)) {
+            FilmInApp res = new FilmInApp(films.get(filmId));
+            res.setSelected();
+            res.setLiked(liked);
+            return res;
         }
         return null;
     }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "439159334448",
+    "firebase_url": "https://l4f-test.firebaseio.com",
+    "project_id": "l4f-test",
+    "storage_bucket": "l4f-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439159334448:android:66ee1e8f90e19856132ff5",
+        "android_client_info": {
+          "package_name": "ru.buryachenko.hw_look4films"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439159334448-8fm06l8c2foimg88v4ooagcg9klvnn7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ZiawxhjCd5e5XHA3Q8GdWoHYht7KQqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439159334448-8fm06l8c2foimg88v4ooagcg9klvnn7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,13 +6,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.utils.RandomPicture;
+import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
 import static android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE;
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
@@ -33,7 +32,6 @@ public class WidgetProvider extends AppWidgetProvider {
 
     final static String WIDGET_ACTION_CHANGE_LIKED = "widgetChangeLiked";
     final static String WIDGET_ACTION_PICTURE = "widgetPicturePressed";
-    private SharedPreferences settings;
     private String widgetData = "";
 
     @Override
@@ -83,32 +81,23 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
     }
 
-    private void loadWidgetData(Context context) {
-        if (settings == null)
-            settings = PreferenceManager.getDefaultSharedPreferences(context);
-        widgetData = "";
-        if (settings.contains(PREFERENCES_SELECTED_FILM)) {
-            widgetData = settings.getString(PREFERENCES_SELECTED_FILM, "");
-        }
+    private void loadWidgetData() {
+        widgetData = SharedPreferencesOperation.load(PREFERENCES_SELECTED_FILM, "");
     }
 
     private void changeLikedAndSaveWidgetData(Context context) {
-        if (settings == null)
-            settings = PreferenceManager.getDefaultSharedPreferences(context);
-        loadWidgetData(context);
+        loadWidgetData();
         if (!widgetData.isEmpty()) {
             boolean newVal = FilmInApp.likedFromWidgetString(widgetData);
             widgetData = widgetData.replace(Boolean.toString(newVal), Boolean.toString(!newVal));
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(PREFERENCES_SELECTED_FILM, widgetData);
-            editor.apply();
+            SharedPreferencesOperation.save(PREFERENCES_SELECTED_FILM, widgetData);
         }
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        loadWidgetData(context);
+        loadWidgetData();
         class PendingInner {
             private PendingIntent pendingIntent;
 

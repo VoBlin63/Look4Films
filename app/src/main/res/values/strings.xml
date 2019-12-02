@@ -43,5 +43,11 @@
     <string name="googleMapApiKey">AIzaSyCFk2IMcvePV7bJg8FH2JhxR33W35-vSX0</string>
     <string name="needGPSMessage">Для работы с картой необходимо разрешить приложению доступ к геолокации!</string>
     <string name="fragmentMapNoGPS">Отсутсвует сигнал GPS</string>
+    <string name="notificationChannelName">Информация о фильмах</string>
+    <string name="notificationChannelDescription">Тут появляются всякие сообщения о завершении загрузки, о обнаружении новых фильмов</string>
+    <string name="notificationChannelFinishTitle">Обновление данных</string>
+    <string name="notificationChannelFinishBodyPart1">Загружено и записано</string>
+    <string name="notificationChannelFinishBodyPart2">записей в базу данных</string>
+    <string name="senderIdFCM">439159334448</string>
 
 </resources>

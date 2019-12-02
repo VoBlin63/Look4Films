@@ -10,17 +10,29 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.BuildConfig;
+import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.api.responce.FilmJson;
 import ru.buryachenko.hw_look4films.api.responce.WholeResponse;
+import ru.buryachenko.hw_look4films.utils.FilmNotification;
+import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
+import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
+import static ru.buryachenko.hw_look4films.utils.Constants.FCM_KEY_MESSAGE;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_TIME_TO_UPDATE;
+import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_DB_PERIOD;
 
 
 public class ServiceDb extends Service {
@@ -42,9 +54,18 @@ public class ServiceDb extends Service {
         @Override
         public void handleMessage(@NonNull Message msg) {
             Log.d(LOGTAG, "handleMessage, msg.arg1:[" + msg.arg1 + "]");
-            pushFilmsInDb(apiKey, language, region);
-            // Stop the service using the startId, so that we don't stop
-            // the service in the middle of handling another job
+
+            long timeToRefresh = Long.parseLong(SharedPreferencesOperation.load(PREFERENCES_TIME_TO_UPDATE,"0"));
+            if (new Date().getTime() >= timeToRefresh)  {
+                onStartUpdate();
+                int resultCount = pushFilmsInDb(apiKey, language, region);
+                SharedPreferencesOperation.save(PREFERENCES_TIME_TO_UPDATE, Long.toString(new Date().getTime() + REFRESH_DB_PERIOD));
+                onFinishUpdate(resultCount);
+            } else {
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOGTAG, "Пропускаем обновление БД - еще рано");
+                }
+            }
             stopSelf(msg.arg1);
         }
     }
@@ -103,9 +124,10 @@ public class ServiceDb extends Service {
     private int pushFilmsInDb(String apiKey, String language, String region) {
         int res = 0;
         int page = 1;
-        WholeResponse data = null;
+        WholeResponse data;
         do {
             data =  getPage(apiKey, page, language, region);
+            res += getCount(data);
             App.getInstance().filmsDb.daoFilm().insert(getFilmsFromPage(data));
             Log.d(LOGTAG, "Записана " + page + " страница из " + getPagesQuantity(data));
             try {
@@ -148,4 +170,29 @@ public class ServiceDb extends Service {
         return res;
     }
 
+    private int getCount(WholeResponse page) {
+        return page.getResults().size();
+    }
+
+    private void onStartUpdate() {
+        if (BuildConfig.DEBUG) {
+            Log.d(LOGTAG, "Запускаем обновление БД");
+        }
+    }
+
+    private void onFinishUpdate(int count) {
+        sendNotificationThrowFCM(getString(R.string.notificationChannelFinishBodyPart1) + count + " " + getString(R.string.notificationChannelFinishBodyPart2));
+//        FilmNotification.pushMessage(getString(R.string.notificationChannelFinishTitle), getString(R.string.notificationChannelFinishBodyPart1) + count + " " + getString(R.string.notificationChannelFinishBodyPart2));
+        if (BuildConfig.DEBUG) {
+            Log.d(LOGTAG, "Обновление БД завершено");
+        }
+    }
+
+    private void sendNotificationThrowFCM(String message) {
+        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+        fm.send(new RemoteMessage.Builder(App.getInstance().getString(R.string.senderIdFCM) + "@gcm.googleapis.com")
+                .setMessageId("FINISH" + new Date().getTime())
+                .addData(FCM_KEY_MESSAGE, message)
+                .build());
+    }
 }

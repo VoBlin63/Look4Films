@@ -1,9 +1,7 @@
 package ru.buryachenko.hw_look4films.activities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,6 +9,7 @@ import android.graphics.Point;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,12 +19,23 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -43,6 +53,7 @@ import ru.buryachenko.hw_look4films.db.ServiceDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         viewModel.loadFavorites(); //если там окажутся еще не скачанные - все нормально отработает
 
+        callServiceDbUpdate();
     }
 
     @Override
@@ -131,14 +143,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.topMenuQuit:
                 tryToExit(this);
                 break;
-            case R.id.startService:
-                callService();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void callService() {
+    private void callServiceDbUpdate() {
         Intent startService = new Intent(this, ServiceDb.class);
         startService(startService);
     }
@@ -172,20 +181,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void tryToExit(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        DialogInterface.OnClickListener listener =
-                (dialog, which) -> {
-                    if (which == Dialog.BUTTON_POSITIVE) {
-                        finish();
-                    }
-                    dialog.dismiss();
-                };
-        builder.setMessage(context.getString(R.string.exitDialogQuestion));
-        builder.setNegativeButton(context.getString(R.string.exitDialogKeep), listener);
-        builder.setPositiveButton(context.getString(R.string.exitDialogExit), listener);
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.show();
+        HashMap<String, String> tmp = new HashMap<>();
+        tmp.put("key1", "ewrwer");
+
+        sendPushToSingleInstance(this,   tmp, "AIzaSyBIq7LcdjYHRCrGUnMrbV7B_aQV9sVGy7M");
+
+//        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+//        fm.send(new RemoteMessage.Builder( "439159334448"+ "@gcm.googleapis.com")
+//                .setMessageId(Integer.toString(976966541))
+//                .addData("my_message", "Hello World")
+//                .addData("my_action","SAY_HELLO")
+//                .build());
+        Log.d(LOGTAG, "<<<<<<<sent mess");
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        DialogInterface.OnClickListener listener =
+//                (dialog, which) -> {
+//                    if (which == Dialog.BUTTON_POSITIVE) {
+//                        finish();
+//                    }
+//                    dialog.dismiss();
+//                };
+//        builder.setMessage(context.getString(R.string.exitDialogQuestion));
+//        builder.setNegativeButton(context.getString(R.string.exitDialogKeep), listener);
+//        builder.setPositiveButton(context.getString(R.string.exitDialogExit), listener);
+//        AlertDialog dialog = builder.create();
+//        dialog.setCancelable(false);
+//        dialog.show();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavigationListener
@@ -289,4 +311,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return rightSide;
     }
 
+    public static void sendPushToSingleInstance(final Context activity, final HashMap dataValue /*your data from the activity*/, final String instanceIdToken /*firebase instance token you will find in documentation that how to get this*/) {
+
+
+        final String url = "https://fcm.googleapis.com/fcm/send";
+        StringRequest myReq = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(activity, "Bingo Success", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "Oops error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            public byte[] getBody() throws com.android.volley.AuthFailureError {
+                Map<String, String> rawParameters = new Hashtable<String, String>();
+                rawParameters.put("data", new JSONObject(dataValue).toString());
+                rawParameters.put("to", instanceIdToken);
+                return new JSONObject(rawParameters).toString().getBytes();
+            }
+
+            ;
+
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "key=" + "1:439159334448:android:66ee1e8f90e19856132ff5");
+                return headers;
+            }
+
+        };
+
+        Volley.newRequestQueue(activity).add(myReq);
+    }
+
+
 }
+
+

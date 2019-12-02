@@ -1,6 +1,9 @@
 package ru.buryachenko.hw_look4films;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 
 import com.google.maps.GeoApiContext;
 
@@ -13,6 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ru.buryachenko.hw_look4films.api.FilmsApiService;
 import ru.buryachenko.hw_look4films.db.FilmsDatabase;
 
+import static ru.buryachenko.hw_look4films.utils.Constants.NOTIFICATION_CHANNEL_ID;
+
 public class App extends Application {
     public FilmsApiService service;
     public GeoApiContext geoApiContext;
@@ -24,6 +29,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        initNotificationChannel();
         initRetrofit();
         initGeoApi();
         initFilmsDb();
@@ -75,4 +81,17 @@ public class App extends Application {
         geoApiContext = builder
                 .build();
     }
+
+    private void initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notificationChannelName);
+            String description = getString(R.string.notificationChannelDescription);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 }
+
