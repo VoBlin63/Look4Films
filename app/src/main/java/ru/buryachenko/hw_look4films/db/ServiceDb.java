@@ -10,7 +10,6 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -20,12 +19,13 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.BuildConfig;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.api.responce.FilmJson;
 import ru.buryachenko.hw_look4films.api.responce.WholeResponse;
-import ru.buryachenko.hw_look4films.utils.FilmNotification;
 import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
@@ -40,10 +40,20 @@ public class ServiceDb extends Service {
     private static final String apiKey = "c3e17ff26735628669886b00d573ab4d";
     private static final String language = "ru-RU";
     private static final String region = "RU";
+
+    public static final String STATUS_SERVICE_IDLE = "lkesrjlksfgnsf";
+    public static final String STATUS_SERVICE_BUSY = "3indflnglmfdnf";
+
     private static final long sleepBetweenPages = 60001L;
+    private static final PublishSubject<String> status = PublishSubject.create();
 
     private Looper serviceLooper;
     private ServiceHandler serviceHandler;
+
+
+    public static Observable<String> getStatus() {
+        return status;
+    }
 
     // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
@@ -175,6 +185,7 @@ public class ServiceDb extends Service {
     }
 
     private void onStartUpdate() {
+        status.onNext(STATUS_SERVICE_BUSY);
         if (BuildConfig.DEBUG) {
             Log.d(LOGTAG, "Запускаем обновление БД");
         }
@@ -186,6 +197,7 @@ public class ServiceDb extends Service {
         if (BuildConfig.DEBUG) {
             Log.d(LOGTAG, "Обновление БД завершено");
         }
+        status.onNext(STATUS_SERVICE_IDLE);
     }
 
     private void sendNotificationThrowFCM(String message) {

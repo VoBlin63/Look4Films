@@ -80,18 +80,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
         callFragment("");
 
-        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
         NavigationView drawerNavigation = findViewById(R.id.navigation_view);
         //TODO не работает листенер этот - почему ?
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void callServiceDbUpdate() {
+    public void callServiceDbUpdate() {
         Intent startService = new Intent(this, ServiceDb.class);
         startService(startService);
     }
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HashMap<String, String> tmp = new HashMap<>();
         tmp.put("key1", "ewrwer");
 
-        sendPushToSingleInstance(this,   tmp, "AIzaSyBIq7LcdjYHRCrGUnMrbV7B_aQV9sVGy7M");
+//        sendPushToSingleInstance(this,   tmp, "AIzaSyBIq7LcdjYHRCrGUnMrbV7B_aQV9sVGy7M");
 
 //        FirebaseMessaging fm = FirebaseMessaging.getInstance();
 //        fm.send(new RemoteMessage.Builder( "439159334448"+ "@gcm.googleapis.com")
@@ -309,50 +309,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static int getRightSide() {
         return rightSide;
-    }
-
-    public static void sendPushToSingleInstance(final Context activity, final HashMap dataValue /*your data from the activity*/, final String instanceIdToken /*firebase instance token you will find in documentation that how to get this*/) {
-
-
-        final String url = "https://fcm.googleapis.com/fcm/send";
-        StringRequest myReq = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(activity, "Bingo Success", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(activity, "Oops error", Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-
-            @Override
-            public byte[] getBody() throws com.android.volley.AuthFailureError {
-                Map<String, String> rawParameters = new Hashtable<String, String>();
-                rawParameters.put("data", new JSONObject(dataValue).toString());
-                rawParameters.put("to", instanceIdToken);
-                return new JSONObject(rawParameters).toString().getBytes();
-            }
-
-            ;
-
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "key=" + "1:439159334448:android:66ee1e8f90e19856132ff5");
-                return headers;
-            }
-
-        };
-
-        Volley.newRequestQueue(activity).add(myReq);
     }
 
 

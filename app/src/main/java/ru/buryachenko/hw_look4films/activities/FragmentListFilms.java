@@ -1,25 +1,40 @@
 package ru.buryachenko.hw_look4films.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.google.android.material.snackbar.Snackbar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
+import ru.buryachenko.hw_look4films.db.ServiceDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.recycler.ListFilmsAdapter;
+import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_TIME_TO_UPDATE;
+import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_DB_PERIOD;
 
 public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -27,6 +42,8 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
     private View layout;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefresher;
+
+    private Observable<String> serviceUpdateStatus;
 
     @Nullable
     @Override
@@ -61,20 +78,47 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
          * Showing Swipe Refresh animation on activity create
          * As animation won't start on onCreate, post runnable is used
          */
-        swipeRefresher.post(() -> {
-            swipeRefresher.setRefreshing(true);
-            callDbUpdateService();
-        });
+        serviceUpdateStatus = ServiceDb.getStatus();
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                if (ServiceDb.STATUS_SERVICE_BUSY.equals(s)) {
+                    swipeRefresher.setRefreshing(true);
+                } else {
+                    swipeRefresher.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        serviceUpdateStatus.subscribe(observer);
+
+//        swipeRefresher.post(() -> {
+//            swipeRefresher.setRefreshing(true);
+//            callDbUpdateService();
+//        });
     }
 
-    @Override
-    public void onRefresh() {
-        callDbUpdateService();
-    }
-
-    private void callDbUpdateService() {
-        Log.d(LOGTAG, "callDbUpdateService");
-    }
+//    @Override
+//    public void onRefresh() {
+////        swipeRefresher.setRefreshing(true);
+//        callDbUpdateService();
+////        swipeRefresher.setRefreshing(false);
+//    }
 
     private void notifyChanges(ListFilmsAdapter adapter, FilmInApp film) {
         int position = viewModel.whoWasChanged(film);
@@ -94,5 +138,31 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
         if (saved != null) {
             viewModel.putFilm(saved);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        DialogInterface.OnClickListener listener =
+                (dialog, which) -> {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        callDbUpdateService();
+                    } else {
+                        swipeRefresher.setRefreshing(false);
+                    }
+                    dialog.dismiss();
+                };
+        builder.setMessage(App.getInstance().getString(R.string.confirmationUpdateDbText));
+        builder.setNegativeButton(App.getInstance().getString(R.string.confirmationUpdateDbCancel), listener);
+        builder.setPositiveButton(App.getInstance().getString(R.string.confirmationUpdateDbYes), listener);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void callDbUpdateService()
+    {
+        SharedPreferencesOperation.save(PREFERENCES_TIME_TO_UPDATE, "0"); //сбрасываем время запланированного обновления
+        ((MainActivity)getActivity()).callServiceDbUpdate();
     }
 }
