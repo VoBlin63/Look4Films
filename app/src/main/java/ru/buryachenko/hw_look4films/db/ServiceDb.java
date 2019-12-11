@@ -26,13 +26,15 @@ import ru.buryachenko.hw_look4films.BuildConfig;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.api.responce.FilmJson;
 import ru.buryachenko.hw_look4films.api.responce.WholeResponse;
+import ru.buryachenko.hw_look4films.utils.FilmNotification;
 import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
-import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 import static ru.buryachenko.hw_look4films.utils.Constants.FCM_KEY_MESSAGE;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_TIME_TO_UPDATE;
 import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_DB_PERIOD;
+import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_BUSY;
+import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_IDLE;
 
 
 public class ServiceDb extends Service {
@@ -40,9 +42,6 @@ public class ServiceDb extends Service {
     private static final String apiKey = "c3e17ff26735628669886b00d573ab4d";
     private static final String language = "ru-RU";
     private static final String region = "RU";
-
-    public static final String STATUS_SERVICE_IDLE = "lkesrjlksfgnsf";
-    public static final String STATUS_SERVICE_BUSY = "3indflnglmfdnf";
 
     private static final long sleepBetweenPages = 60001L;
     private static final PublishSubject<String> status = PublishSubject.create();
@@ -55,7 +54,6 @@ public class ServiceDb extends Service {
         return status;
     }
 
-    // Handler that receives messages from the thread
     private final class ServiceHandler extends Handler {
         ServiceHandler(Looper looper) {
             super(looper);
@@ -65,8 +63,8 @@ public class ServiceDb extends Service {
         public void handleMessage(@NonNull Message msg) {
             Log.d(LOGTAG, "handleMessage, msg.arg1:[" + msg.arg1 + "]");
 
-            long timeToRefresh = Long.parseLong(SharedPreferencesOperation.load(PREFERENCES_TIME_TO_UPDATE,"0"));
-            if (new Date().getTime() >= timeToRefresh)  {
+            long timeToRefresh = Long.parseLong(SharedPreferencesOperation.load(PREFERENCES_TIME_TO_UPDATE, "0"));
+            if (new Date().getTime() >= timeToRefresh) {
                 onStartUpdate();
                 int resultCount = pushFilmsInDb(apiKey, language, region);
                 SharedPreferencesOperation.save(PREFERENCES_TIME_TO_UPDATE, Long.toString(new Date().getTime() + REFRESH_DB_PERIOD));
@@ -82,23 +80,13 @@ public class ServiceDb extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(LOGTAG, "onCreate()");
-        // Start up the thread running the service.  Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block.  We also make it
-        // background priority so CPU-intensive work will not disrupt our UI.
-        HandlerThread thread = new HandlerThread(LOGTAG,
-                Process.THREAD_PRIORITY_BACKGROUND){
+        HandlerThread thread = new HandlerThread(LOGTAG, Process.THREAD_PRIORITY_BACKGROUND) {
             @Override
             public void run() {
-                Log.d(LOGTAG, "run()");
                 super.run();
-                Log.d(LOGTAG, "super.run()");
             }
         };
         thread.start();
-
-        // Get the HandlerThread's Looper and use it for our Handler
         serviceLooper = thread.getLooper();
         serviceHandler = new ServiceHandler(serviceLooper);
     }
@@ -106,14 +94,9 @@ public class ServiceDb extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOGTAG, "onStartCommand()");
-
-        // For each start request, send a message to start a job and deliver the
-        // start ID so we know which request we're stopping when we finish the job
         Message msg = serviceHandler.obtainMessage();
         msg.arg1 = startId;
         serviceHandler.sendMessage(msg);
-
-        // If we get killed, after returning from here, restart
         return START_STICKY;
     }
 
@@ -123,8 +106,7 @@ public class ServiceDb extends Service {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         if (BuildConfig.DEBUG) {
             Log.d(LOGTAG, "Service DB destroyed");
         }
@@ -136,7 +118,7 @@ public class ServiceDb extends Service {
         int page = 1;
         WholeResponse data;
         do {
-            data =  getPage(apiKey, page, language, region);
+            data = getPage(apiKey, page, language, region);
             res += getCount(data);
             App.getInstance().filmsDb.daoFilm().insert(getFilmsFromPage(data));
             Log.d(LOGTAG, "Записана " + page + " страница из " + getPagesQuantity(data));
@@ -158,17 +140,16 @@ public class ServiceDb extends Service {
                 Log.d(LOGTAG, "Ошибка получения страницы с фильмами: " + e);
             }
         }
-        return  res;
+        return res;
     }
-
 
     private List<FilmInDb> getFilmsFromPage(WholeResponse page) {
         List<FilmInDb> res = new ArrayList<>();
         if (page != null) {
-                for (FilmJson filmJson : page.getResults()) {
-                    res.add(new FilmInDb(filmJson));
-                }
+            for (FilmJson filmJson : page.getResults()) {
+                res.add(new FilmInDb(filmJson));
             }
+        }
         return res;
     }
 
@@ -192,8 +173,9 @@ public class ServiceDb extends Service {
     }
 
     private void onFinishUpdate(int count) {
-        sendNotificationThrowFCM(getString(R.string.notificationChannelFinishBodyPart1) + count + " " + getString(R.string.notificationChannelFinishBodyPart2));
-//        FilmNotification.pushMessage(getString(R.string.notificationChannelFinishTitle), getString(R.string.notificationChannelFinishBodyPart1) + count + " " + getString(R.string.notificationChannelFinishBodyPart2));
+        String text = getString(R.string.notificationChannelFinishBodyPart1) + " " + count + " " + getString(R.string.notificationChannelFinishBodyPart2);
+        sendNotificationThrowFCM(text);
+        FilmNotification.pushMessage("", text);
         if (BuildConfig.DEBUG) {
             Log.d(LOGTAG, "Обновление БД завершено");
         }
@@ -202,9 +184,13 @@ public class ServiceDb extends Service {
 
     private void sendNotificationThrowFCM(String message) {
         FirebaseMessaging fm = FirebaseMessaging.getInstance();
+//        fm.setAutoInitEnabled(true);
         fm.send(new RemoteMessage.Builder(App.getInstance().getString(R.string.senderIdFCM) + "@gcm.googleapis.com")
                 .setMessageId("FINISH" + new Date().getTime())
                 .addData(FCM_KEY_MESSAGE, message)
                 .build());
+        if (BuildConfig.DEBUG) {
+            Log.d(LOGTAG, "FCM sent: " + message);
+        }
     }
 }

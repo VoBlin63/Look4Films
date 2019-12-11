@@ -4,40 +4,22 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -47,16 +29,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import ru.buryachenko.hw_look4films.App;
 import ru.buryachenko.hw_look4films.R;
 import ru.buryachenko.hw_look4films.db.ServiceDb;
 import ru.buryachenko.hw_look4films.models.FilmInApp;
 import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
-import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PERMISSIONS_REQUEST_FINE_LOCATION;
+import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_IDLE;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_LIST = "ListOfFilm.F";
     public static final String FRAGMENT_DETAILS = "Details.F";
@@ -70,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static BottomNavigationView bottomNavigation;
     private static View mainView;
     public static LocationManager locationManager;
+    private Observable<String> serviceUpdateStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,28 +66,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel = ViewModelProviders.of(this).get(FilmsViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNavigationListener);
 
         callFragment("");
 
-//        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-        NavigationView drawerNavigation = findViewById(R.id.navigation_view);
-        //TODO не работает листенер этот - почему ?
-        drawerNavigation.setNavigationItemSelectedListener(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            drawerNavigation.getHeaderView(0).setBackgroundColor(this.getApplicationContext().getColor(R.color.drawerHead));
-        } else {
-            drawerNavigation.getHeaderView(0).setBackgroundColor(Color.CYAN);
-        }
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -109,6 +79,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rightSide = size.x;
 
         viewModel.loadFavorites(); //если там окажутся еще не скачанные - все нормально отработает
+
+        serviceUpdateStatus = ServiceDb.getStatus();
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(String s) {
+                if (STATUS_SERVICE_IDLE.equals(s)) {
+                    viewModel.loadFilms();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+        serviceUpdateStatus.subscribe(observer);
 
         callServiceDbUpdate();
     }
@@ -137,36 +130,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.topMenuQuit:
-                tryToExit(this);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void callServiceDbUpdate() {
         Intent startService = new Intent(this, ServiceDb.class);
         startService(startService);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.mainScreen:
-                callFragment(FRAGMENT_LIST);
-                break;
-            case R.id.aboutApplication:
-                showToast(getApplicationContext().getString(R.string.messageAboutApp));
-                break;
-            case R.id.exitApp:
-                tryToExit(getApplicationContext());
-        }
-        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     public void showToast(String message) {
@@ -180,36 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toast.show();
     }
 
-    public void tryToExit(Context context) {
-        HashMap<String, String> tmp = new HashMap<>();
-        tmp.put("key1", "ewrwer");
-
-//        sendPushToSingleInstance(this,   tmp, "AIzaSyBIq7LcdjYHRCrGUnMrbV7B_aQV9sVGy7M");
-
-//        FirebaseMessaging fm = FirebaseMessaging.getInstance();
-//        fm.send(new RemoteMessage.Builder( "439159334448"+ "@gcm.googleapis.com")
-//                .setMessageId(Integer.toString(976966541))
-//                .addData("my_message", "Hello World")
-//                .addData("my_action","SAY_HELLO")
-//                .build());
-        Log.d(LOGTAG, "<<<<<<<sent mess");
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        DialogInterface.OnClickListener listener =
-//                (dialog, which) -> {
-//                    if (which == Dialog.BUTTON_POSITIVE) {
-//                        finish();
-//                    }
-//                    dialog.dismiss();
-//                };
-//        builder.setMessage(context.getString(R.string.exitDialogQuestion));
-//        builder.setNegativeButton(context.getString(R.string.exitDialogKeep), listener);
-//        builder.setPositiveButton(context.getString(R.string.exitDialogExit), listener);
-//        AlertDialog dialog = builder.create();
-//        dialog.setCancelable(false);
-//        dialog.show();
-    }
-
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavigationListener
             = item -> {
         switch (item.getItemId()) {
@@ -218,10 +154,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.bottomNavLookDetails:
                 FilmInApp selectedFilm = viewModel.getSelected();
-                if (selectedFilm == null) {
-                    snackMessage(mainView.getResources().getString(R.string.messageNoSelectedFilm));
-                } else {
-                    callFragment(FRAGMENT_DETAILS);
+                if (viewModel.getList().contains(selectedFilm)) {
+                    if (selectedFilm == null) {
+                        snackMessage(mainView.getResources().getString(R.string.messageNoSelectedFilm));
+                    } else {
+                        callFragment(FRAGMENT_DETAILS);
+                    }
                 }
                 break;
             case R.id.bottomNavAddFilm:
@@ -311,7 +249,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return rightSide;
     }
 
-
 }
-
-

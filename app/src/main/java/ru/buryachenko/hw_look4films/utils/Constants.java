@@ -13,4 +13,7 @@ public class Constants {
     public  static final int DISTANCE_LOOK_FOR_CINEMAS = 10000;
     public static final String NOTIFICATION_CHANNEL_ID = "RU.BURYACHENKO.NOTIFICATION_CHANNEL";
     public static final String FCM_KEY_MESSAGE = "RU.BURYACHENKO.FCM_KEY";
+    public static final String STATUS_SERVICE_IDLE = "RU.BURYACHENKO.STATUS_SERVICE_IDLE";
+    public static final String STATUS_SERVICE_BUSY = "RU.BURYACHENKO.STATUS_SERVICE_BUSY";
+
 }

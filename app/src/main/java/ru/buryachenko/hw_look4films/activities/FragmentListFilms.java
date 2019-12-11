@@ -8,13 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -34,7 +30,7 @@ import ru.buryachenko.hw_look4films.viewmodel.FilmsViewModel;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_TIME_TO_UPDATE;
-import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_DB_PERIOD;
+import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_BUSY;
 
 public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -87,7 +83,7 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
 
             @Override
             public void onNext(String s) {
-                if (ServiceDb.STATUS_SERVICE_BUSY.equals(s)) {
+                if (STATUS_SERVICE_BUSY.equals(s)) {
                     swipeRefresher.setRefreshing(true);
                 } else {
                     swipeRefresher.setRefreshing(false);
@@ -107,18 +103,7 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
 
         serviceUpdateStatus.subscribe(observer);
 
-//        swipeRefresher.post(() -> {
-//            swipeRefresher.setRefreshing(true);
-//            callDbUpdateService();
-//        });
     }
-
-//    @Override
-//    public void onRefresh() {
-////        swipeRefresher.setRefreshing(true);
-//        callDbUpdateService();
-////        swipeRefresher.setRefreshing(false);
-//    }
 
     private void notifyChanges(ListFilmsAdapter adapter, FilmInApp film) {
         int position = viewModel.whoWasChanged(film);
@@ -160,9 +145,8 @@ public class FragmentListFilms extends Fragment implements SwipeRefreshLayout.On
         dialog.show();
     }
 
-    private void callDbUpdateService()
-    {
+    private void callDbUpdateService() {
         SharedPreferencesOperation.save(PREFERENCES_TIME_TO_UPDATE, "0"); //сбрасываем время запланированного обновления
-        ((MainActivity)getActivity()).callServiceDbUpdate();
+        ((MainActivity) getActivity()).callServiceDbUpdate();
     }
 }

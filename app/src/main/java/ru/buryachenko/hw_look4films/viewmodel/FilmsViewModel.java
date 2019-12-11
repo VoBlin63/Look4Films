@@ -39,7 +39,7 @@ public class FilmsViewModel extends AndroidViewModel {
     }
 
 
-    private void loadFilms() {
+    public void loadFilms() {
         Executors.newCachedThreadPool().submit(new Runnable() {
             @Override
             public void run() {
