@@ -125,7 +125,7 @@ public class ServiceDb extends Service {
             if (BuildConfig.DEBUG) {
                 Log.d(LOGTAG, "Записана " + page + " страница (" + res + " записей ) из " + getPagesQuantity(data));
             }
-            if (res >= MAX_RECORDS_TO_LOAD) {
+            if ((MAX_RECORDS_TO_LOAD > 0) && (res >= MAX_RECORDS_TO_LOAD)) {
                 break;
             }
             try {
