@@ -180,7 +180,7 @@ public class ServiceDb extends Service {
 
     private void onFinishUpdate(int count) {
         String text = getString(R.string.notificationChannelFinishBodyPart1) + " " + count + " " + getString(R.string.notificationChannelFinishBodyPart2);
-        sendNotificationThrowFCM(text);
+        sendNotificationThrowFCM("FCM => " + text);
         FilmNotification.pushMessage("", text);
         if (BuildConfig.DEBUG) {
             Log.d(LOGTAG, "Обновление БД завершено");

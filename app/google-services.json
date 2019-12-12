@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "439159334448-5mhstcnl4t4skhpoj7ouob9b038c4ltn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.buryachenko.hw_look4films",
+            "certificate_hash": "73d98d660fcb8e75a6840bba335785076f2910ef"
+          }
+        },
+        {
           "client_id": "439159334448-8fm06l8c2foimg88v4ooagcg9klvnn7u.apps.googleusercontent.com",
           "client_type": 3
         }

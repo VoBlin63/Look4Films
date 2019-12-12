@@ -33,8 +33,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <service android:name=".db.ServiceDb" />
-        <service android:name=".api.FilmFirebaseMessagingService"
-            android:permission="TODO">
+        <service android:name=".api.FilmFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

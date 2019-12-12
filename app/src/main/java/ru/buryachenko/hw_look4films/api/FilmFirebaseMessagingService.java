@@ -31,4 +31,11 @@ public class FilmFirebaseMessagingService extends FirebaseMessagingService {
              }
         }
     }
+
+
+    @Override
+    public void onNewToken(String token) {
+        Log.d(LOGTAG, "Refreshed token: " + token);
+        //sendRegistrationToServer(token);
+    }
 }
