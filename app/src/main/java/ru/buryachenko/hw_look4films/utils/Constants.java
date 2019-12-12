@@ -15,5 +15,6 @@ public class Constants {
     public static final String FCM_KEY_MESSAGE = "RU.BURYACHENKO.FCM_KEY";
     public static final String STATUS_SERVICE_IDLE = "RU.BURYACHENKO.STATUS_SERVICE_IDLE";
     public static final String STATUS_SERVICE_BUSY = "RU.BURYACHENKO.STATUS_SERVICE_BUSY";
-
+    public static final int MAX_RECORDS_TO_LOAD = 50;
+    public static final long SLEEP_INTERVAL_BETWEEN_LOAD_PAGES = 15000L;
 }

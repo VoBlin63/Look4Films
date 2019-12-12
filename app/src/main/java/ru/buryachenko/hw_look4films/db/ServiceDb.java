@@ -31,10 +31,12 @@ import ru.buryachenko.hw_look4films.utils.SharedPreferencesOperation;
 
 import static ru.buryachenko.hw_look4films.utils.Constants.FCM_KEY_MESSAGE;
 import static ru.buryachenko.hw_look4films.utils.Constants.LOGTAG;
+import static ru.buryachenko.hw_look4films.utils.Constants.MAX_RECORDS_TO_LOAD;
 import static ru.buryachenko.hw_look4films.utils.Constants.PREFERENCES_TIME_TO_UPDATE;
 import static ru.buryachenko.hw_look4films.utils.Constants.REFRESH_DB_PERIOD;
 import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_BUSY;
 import static ru.buryachenko.hw_look4films.utils.Constants.STATUS_SERVICE_IDLE;
+import static ru.buryachenko.hw_look4films.utils.Constants.SLEEP_INTERVAL_BETWEEN_LOAD_PAGES;
 
 
 public class ServiceDb extends Service {
@@ -43,7 +45,6 @@ public class ServiceDb extends Service {
     private static final String language = "ru-RU";
     private static final String region = "RU";
 
-    private static final long sleepBetweenPages = 60001L;
     private static final PublishSubject<String> status = PublishSubject.create();
 
     private Looper serviceLooper;
@@ -121,13 +122,18 @@ public class ServiceDb extends Service {
             data = getPage(apiKey, page, language, region);
             res += getCount(data);
             App.getInstance().filmsDb.daoFilm().insert(getFilmsFromPage(data));
-            Log.d(LOGTAG, "Записана " + page + " страница из " + getPagesQuantity(data));
+            if (BuildConfig.DEBUG) {
+                Log.d(LOGTAG, "Записана " + page + " страница (" + res + " записей ) из " + getPagesQuantity(data));
+            }
+            if (res >= MAX_RECORDS_TO_LOAD) {
+                break;
+            }
             try {
-                Thread.sleep(sleepBetweenPages);
+                Thread.sleep(SLEEP_INTERVAL_BETWEEN_LOAD_PAGES);
             } catch (InterruptedException e) {
                 break;
             }
-        } while ((data != null) && (page++ <= 52));//getPagesQuantity(data)));
+        } while ((data != null) && (page++ <= getPagesQuantity(data)));
         return res;
     }
 
